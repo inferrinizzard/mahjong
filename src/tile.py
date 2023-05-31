@@ -8,7 +8,7 @@ class Suit(Enum):
     HONOR = 'HONOR'
     WIND = 'WIND'
     FLOWER = 'FLOWER'
-    BIRD = 'BIRD'
+    SEASON = 'SEASON'
 
 
 class Wind(Enum):
@@ -22,6 +22,20 @@ class Honor(Enum):
     RED = 1
     GREEN = 2
     WHITE = 3
+
+
+class Season(Enum):
+    SPRING = 'EAST'
+    SUMMER = 'SOUTH'
+    AUTUMN = 'WEST'
+    WINTER = 'NORTH'
+
+
+class Flower(Enum):
+    PLUM = 'EAST'
+    LILY = 'SOUTH'
+    CHRYSANTHEMUM = 'WEST'
+    BAMBOO = 'NORTH'
 
 
 class Tile():
