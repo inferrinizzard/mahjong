@@ -1,7 +1,10 @@
+from random import shuffle
+
+from mahjong_types import Deck
 from . import tile
 
 
-def build_deck(include_bonus=False):
+def build_deck(include_bonus=False) -> Deck:
     tile_types = {k.lower(): v for k, v in tile.__dict__.items()
                   if not k.startswith('_')}
 
@@ -21,4 +24,9 @@ def build_deck(include_bonus=False):
             for _ in range(0, copies):
                 deck.append(tile.Tile(suit=suit, value=value))
 
-    print(deck, len(deck))
+    return deck
+
+
+def shuffle_deck(deck: Deck) -> Deck:
+    shuffle(deck)
+    return deck

@@ -46,5 +46,8 @@ class Tile():
         self.suit = suit
         self.value = value
 
+    def __str__(self) -> str:
+        return '{value}_{suit}'.format(value=self.value, suit=self.suit.value)
+
     def __repr__(self) -> str:
         return '{value} OF {suit}'.format(value=self.value, suit=self.suit)
