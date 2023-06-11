@@ -1,8 +1,6 @@
-from typing import Dict, List
+from typing import List
 
 from src.tile import Tile
 
 
 Deck = List[Tile]
-
-Hand = Dict[str, int]
