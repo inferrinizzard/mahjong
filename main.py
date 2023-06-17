@@ -23,8 +23,27 @@ def main():
     (deck, hands) = deal_hands(deck)
     print([str(hand) for hand in hands])
 
+    turn = 0
+    mod_turn = 0
+
+    discard = [[], [], [], []]
+
     while True:
         line = stdin.readline().strip()
+
+        if line == 'deal':
+            mod_turn = turn % 4
+
+            hand = hands[mod_turn]
+
+            tile = hand.draw(deck)
+
+            print(hand.__repr__(), tile)
+
+            hand.play(tile)
+            discard[mod_turn].append(tile)
+
+            turn += 1
 
         if line == 'done':
             break
