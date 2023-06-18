@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Union
 
 
 class Suit(Enum):
@@ -86,11 +87,17 @@ UNICODE_LOOKUP = {
 
 class Tile():
     suit: Suit
-    value: int
+    value: Union[int, Wind, Honor, Season, Flower]
     string: str
     unicode: str
 
-    def __init__(self, suit: Suit, value: int):
+    # flags
+    is_numeric: bool
+    # is_terminal: bool
+    # is_green: bool
+    # is_symmetric: bool
+
+    def __init__(self, suit: Suit, value: Union[int, Wind, Honor, Season, Flower]):
         self.suit = suit
         self.value = value
 
@@ -98,21 +105,33 @@ class Tile():
             value=self.value, suit=self.suit.value)
         self.unicode = UNICODE_LOOKUP[self.string]
 
+        self.is_numeric = type(self.value) == int
+
     def __str__(self) -> str:
         return '{unicode}  {string}'.format(unicode=self.unicode, string=self.string)
 
     def __repr__(self) -> str:
-        return '{value} OF {suit}'.format(value=self.value, suit=self.suit)
+        return self.string
 
-    def next(self):
-        next_value = self.value
-        value_type = type(self.value)
+    @staticmethod
+    def next(tile):
+        next_value = tile.value
+        value_type = type(tile.value)
 
         if value_type == int:
-            next_value = (self.value + 1) % 9
+            next_value = (tile.value + 1) % 9
         elif issubclass(value_type, Enum):
-            next_value = value_type((self.value.value + 1) % len(value_type))
+            next_value = value_type((tile.value.value + 1) % len(value_type))
         else:  # flower and season
             return None
 
-        return '{value}_{suit}'.format(value=next_value, suit=self.suit.value)
+        return '{value}_{suit}'.format(value=next_value, suit=tile.suit.value)
+
+    @staticmethod
+    def next_from_str(tile: str):
+        return Tile.next(Tile.from_str(tile))
+
+    @staticmethod
+    def from_str(tile: str):
+        value, suit = tile.split('_')
+        return Tile(suit=Suit(suit), value=int(value) if value.isdigit() else value)
