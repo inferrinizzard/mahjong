@@ -8,6 +8,8 @@ def build_deck(include_bonus=False) -> Deck:
     tile_types = {k.lower(): v for k, v in tile.__dict__.items()
                   if not k.startswith('_')}
 
+    # print(Suit._member_map_)
+
     deck = []
     for suit in tile.Suit:
         suit_name = suit.name.lower()
