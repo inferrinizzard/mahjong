@@ -1,5 +1,5 @@
+from collections import OrderedDict
 from enum import Enum
-from typing import Dict
 
 from mahjong_types import Deck
 
@@ -13,7 +13,7 @@ class GlobalWind(Enum):
 
 class Hand():
     wind: GlobalWind
-    tiles: Dict[str, int]
+    tiles: OrderedDict[str, int]
     name: str
 
     def __init__(self, wind: GlobalWind, name: str = 'PLAYER'):
@@ -28,7 +28,7 @@ class Hand():
         return self.__str__() + ' ' + str(self.tiles)
 
     def draw(self, deck: Deck) -> str:
-        tile = str(deck.pop())
+        tile = repr(deck.pop())
         self.tiles[tile] = self.tiles.get(tile, 0) + 1
         return tile
 
@@ -36,3 +36,11 @@ class Hand():
         self.tiles[tile] -= 1
         if self.tiles[tile] == 0:
             del self.tiles[tile]
+
+    def sort(self):
+        # default unicode order: MAN, TONG, BAMBOO
+
+        pass
+
+    def is_wait(self):
+        pass

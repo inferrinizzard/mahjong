@@ -114,22 +114,23 @@ class Tile():
         return self.string
 
     @staticmethod
-    def next(tile):
+    def next(tile, step=1):
         next_value = tile.value
         value_type = type(tile.value)
 
         if value_type == int:
-            next_value = (tile.value + 1) % 9
+            next_value = (tile.value + step) % 9
         elif issubclass(value_type, Enum):
-            next_value = value_type((tile.value.value + 1) % len(value_type))
+            next_value = value_type(
+                (tile.value.value + step) % len(value_type))
         else:  # flower and season
             return None
 
         return '{value}_{suit}'.format(value=next_value, suit=tile.suit.value)
 
     @staticmethod
-    def next_from_str(tile: str):
-        return Tile.next(Tile.from_str(tile))
+    def next_from_str(tile: str, step=1):
+        return Tile.next(Tile.from_str(tile), step)
 
     @staticmethod
     def from_str(tile: str):
