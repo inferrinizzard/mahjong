@@ -4,6 +4,8 @@ from typing import Dict, List, Tuple
 from src.tile import Tile
 from src.util import take
 
+Tileset = Dict[str, int]
+
 
 def is_win(hand):
     combos = []
@@ -12,36 +14,21 @@ def is_win(hand):
     # for each numeric suit:
     # find longest chain, determine number of possible ambiguities
     # find highest scoring (most pairs / triples along with sequences)
-    numeric_tiles: Dict[str, int] = {tile: count for tile,
-                                     count in hand.tiles.items() if re.search(r'\d', tile)}
+    numeric_tiles: Tileset = {tile: count for tile,
+                              count in hand.tiles.items() if re.search(r'\d', tile)}
     suits = set([key.split('_')[1] for key in numeric_tiles.keys()])
     print(suits)
     for suit in suits:
-        index = 1
-        filtered_hand: Dict[str, int] = {tile: count for tile,
-                                         count in numeric_tiles.items() if suit in tile}
-        sequences: List[Tuple[str, int]] = []
+        filtered_hand: Tileset = {tile: count for tile,
+                                  count in numeric_tiles.items() if suit in tile}
 
-        while index < 9:
-            length = 1
-            tile = f'{index}_{suit}'
-            if tile in numeric_tiles:
-                length = find_longest_sequence(tile, numeric_tiles)
-                # print(tile, length)
-
-                if length >= 3:
-                    sequences.append((tile, length))
-            index += length
-
-        print(sequences)
-
-        res = find_sequences(filtered_hand, sequences, length)
+        res = find_sequences(filtered_hand, suit)
         print(res)
 
     # for others:
     # find triples / pairs
-    char_tiles: Dict[str, int] = {tile: count for tile,
-                                  count in hand.tiles.items() if not re.search(r'\d', tile)}
+    char_tiles: Tileset = {tile: count for tile,
+                           count in hand.tiles.items() if not re.search(r'\d', tile)}
     for tile, count in char_tiles.items():
         if count == 3:
             combos.append(('TRIPLE', tile))
@@ -51,7 +38,7 @@ def is_win(hand):
     pass
 
 
-def find_longest_sequence(tile: str, hand: Dict[str, int]):
+def find_longest_sequence(tile: str, hand: Tileset):
     if tile.split('_')[0] == 9:
         return 1
 
@@ -64,11 +51,38 @@ def find_longest_sequence(tile: str, hand: Dict[str, int]):
     return length
 
 
-def find_sequences(hand: Dict[str, int], sequences, length: int):
+def find_chains(hand: Tileset, suit: str):
+    chains: List[Tuple[str, int]] = []
+    index = 1
+
+    print(hand)
+
+    while index < 9:
+        length = 1
+        tile = f'{index}_{suit}'
+        if tile in hand:
+            length = find_longest_sequence(tile, hand)
+            # print(tile, length)
+
+            if length >= 3:
+                chains.append((tile, length))
+        index += length
+
+    print('chains:', chains)
+
+    return chains
+
+
+def find_sequences(hand: Tileset, suit: str):
+    chains = find_chains(hand, suit)
+
+    if not chains:
+        return ([], calculate_hand_points(hand), len(hand) == 0)
+
     final_sequences = []
     all_used = False
 
-    for tile, length in sequences:
+    for tile, length in chains:
         num = length % 3 + 1
         best = 0
 
@@ -86,27 +100,35 @@ def find_sequences(hand: Dict[str, int], sequences, length: int):
                 points += 3 if len(cur_sequences) == 1 else 4 * \
                     len(cur_sequences)
 
+            # calculate points for all existing combos, deducting for orphans
+            points += calculate_hand_points(temp_hand)
             for tile, count in temp_hand.items():
-                if count == 1:
-                    points -= 1
-                    continue
-                temp_sequences.append([tile] * count)
-                points += count
+                if count > 1:
+                    temp_sequences.append([tile] * count)
 
+            # find remaining tiles not used in combos
             orphans = [tile for tile, count in temp_hand.items() if count == 1]
 
             print('Remaining hand:', temp_hand)
-            print('sequences', temp_sequences, points)
+            print('combos', temp_sequences, points)
 
             if points > best:
                 best = points
                 final_sequences = temp_sequences
                 all_used = len(orphans) == 0
 
-    return (final_sequences, all_used)
+    return (final_sequences, best, all_used)
 
 
-def take_sequence(hand: Dict[str, int], start: str):
+def calculate_hand_points(hand: Tileset) -> int:
+    points = 0
+    for count in hand.values():
+        value = -1 if count == 1 else count
+        points += value
+    return points
+
+
+def take_sequence(hand: Tileset, start: str):
     sequences: List[List[str]] = []
 
     first = start
