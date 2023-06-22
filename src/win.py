@@ -7,9 +7,18 @@ from src.util import take
 Tileset = Dict[str, int]
 
 
+class TileSlice():
+    tiles: Dict[str, int]
+    suit: str
+
+    def __init__(self, tiles, suit) -> None:
+        self.tiles = tiles
+        self.suit = suit
+
+
 def is_win(hand):
     combos = []
-    pair = None
+    pairs = []
 
     # for each numeric suit:
     # find longest chain, determine number of possible ambiguities
@@ -19,11 +28,27 @@ def is_win(hand):
     suits = set([key.split('_')[1] for key in numeric_tiles.keys()])
     print(suits)
     for suit in suits:
-        filtered_hand: Tileset = {tile: count for tile,
-                                  count in numeric_tiles.items() if suit in tile}
+        hand_slice = TileSlice(
+            tiles={tile: count for tile, count in numeric_tiles.items() if suit in tile}, suit=suit)
 
-        res = find_sequences(filtered_hand, suit)
-        print(res)
+        (sequences, _) = find_sequences(hand_slice)
+        # remove sequences from hand
+        for sequence in sequences:
+            combos.append(tuple(sequence))
+            for tile in sequence:
+                take(hand.tiles, tile)
+
+        for tile, count in hand.tiles.items():
+            if count == 1:
+                return False
+            if count == 2:
+                pairs.append((tile, tile))
+            if count == 3:
+                combos.append(('TRIPLE', tile))
+            if count == 4:
+                combos.append(('QUAD', tile))
+
+        print(sequences, hand.tiles)
 
     # for others:
     # find triples / pairs
@@ -35,100 +60,67 @@ def is_win(hand):
         elif count == 4:
             combos.append(('QUAD', tile))
 
-    pass
+    print(combos)
+    return len(combos) == 4 and len(pairs) == 1
 
 
-def find_longest_sequence(tile: str, hand: Tileset):
-    if tile.split('_')[0] == 9:
-        return 1
+def find_sequences(hand: TileSlice, start=1):
+    base_points = calculate_hand_points(hand.tiles)
 
-    length = 1
-    next_tile = Tile.next_from_str(tile)
-    while next_tile and next_tile in hand:
-        length += 1
-        next_tile = Tile.next_from_str(next_tile)
+    best = base_points
+    best_sequences = []
 
-    return length
+    for i in range(start, 10):
+        num = num_sequences(hand, i) + 1
 
+        sequences_to_add = []
 
-def find_chains(hand: Tileset, suit: str):
-    chains: List[Tuple[str, int]] = []
-    index = 1
+        for j in range(0, num):
+            copy = hand.tiles.copy()
+            sequences = take_sequence(copy, f'{i}_{hand.suit}', j)
 
-    print(hand)
+            if j == 0:
+                continue
 
-    while index < 9:
-        length = 1
-        tile = f'{index}_{suit}'
-        if tile in hand:
-            length = find_longest_sequence(tile, hand)
-            # print(tile, length)
-
-            if length >= 3:
-                chains.append((tile, length))
-        index += length
-
-    print('chains:', chains)
-
-    return chains
-
-
-def find_sequences(hand: Tileset, suit: str):
-    chains = find_chains(hand, suit)
-
-    if not chains:
-        return ([], calculate_hand_points(hand), len(hand) == 0)
-
-    final_sequences = []
-    all_used = False
-
-    for tile, length in chains:
-        num = length % 3 + 1
-        best = 0
-
-        for i in range(0, num):
-            points = 0
-            temp_hand = hand.copy()
-            temp_sequences = []
-
-            cur_tile = Tile.next_from_str(tile, i)
-
-            num_sequences = (length / 3).__floor__()
-            for _ in range(0, num_sequences):
-                (cur_sequences, cur_tile) = take_sequence(temp_hand, cur_tile)
-                temp_sequences.extend(cur_sequences)
-                points += 3 if len(cur_sequences) == 1 else 4 * \
-                    len(cur_sequences)
-
-            # calculate points for all existing combos, deducting for orphans
-            points += calculate_hand_points(temp_hand)
-            for tile, count in temp_hand.items():
-                if count > 1:
-                    temp_sequences.append([tile] * count)
-
-            # find remaining tiles not used in combos
-            orphans = [tile for tile, count in temp_hand.items() if count == 1]
-
-            print('Remaining hand:', temp_hand)
-            print('combos', temp_sequences, points)
+            (cur_sequences, cur_points) = find_sequences(
+                TileSlice(tiles=copy, suit=hand.suit), i+1)
+            points = (3 if len(sequences) == 1 else 4 *
+                      len(sequences)) + cur_points
 
             if points > best:
                 best = points
-                final_sequences = temp_sequences
-                all_used = len(orphans) == 0
+                sequences_to_add = [*sequences, *cur_sequences]
+            elif points == best:
+                print('fuck')
+                print(hand.tiles, best, points, cur_points,
+                      sequences,  cur_sequences, best_sequences)
 
-    return (final_sequences, best, all_used)
+        best_sequences.extend(sequences_to_add)
+
+    return (best_sequences, best)
+
+
+def num_sequences(hand: TileSlice, index: int):
+    first = f'{index}_{hand.suit}'
+    second = f'{index + 1}_{hand.suit}'
+    third = f'{index + 2}_{hand.suit}'
+
+    if first in hand.tiles and second in hand.tiles and third in hand.tiles:
+        return min(hand.tiles[first], hand.tiles[second], hand.tiles[third])
+    return 0
 
 
 def calculate_hand_points(hand: Tileset) -> int:
     points = 0
     for count in hand.values():
-        value = -1 if count == 1 else count
+        value = -2 if count == 1 else count
         points += value
     return points
 
 
-def take_sequence(hand: Tileset, start: str):
+def take_sequence(tiles: Tileset, start: str, times=1):
+    if times == 0:
+        return ([], None)
     sequences: List[List[str]] = []
 
     first = start
@@ -136,11 +128,10 @@ def take_sequence(hand: Tileset, start: str):
     third = Tile.next_from_str(second)
     sequence = [first, second, third]
 
-    count = min(hand[first], hand[second], hand[third])
+    count = min(tiles[first], tiles[second], tiles[third], times)
     for _ in range(0, count):
         for tile in sequence:
-            take(hand, tile)
+            take(tiles, tile)
         sequences.append(sequence)
 
-    next_tile = Tile.next_from_str(third)
-    return (sequences, next_tile)
+    return sequences

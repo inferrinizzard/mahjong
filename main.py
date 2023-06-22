@@ -67,5 +67,5 @@ if __name__ == '__main__':
     for _ in range(0, len(temp_deck)):
         temp_hand.draw(temp_deck)
 
-    is_win(temp_hand)
+    print(is_win(temp_hand))
     # main()
