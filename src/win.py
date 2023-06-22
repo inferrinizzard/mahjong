@@ -19,6 +19,7 @@ class TileSlice():
 def is_win(hand):
     combos = []
     pairs = []
+    orphans = []
 
     # for each numeric suit:
     # find longest chain, determine number of possible ambiguities
@@ -40,7 +41,7 @@ def is_win(hand):
 
         for tile, count in hand.tiles.items():
             if count == 1:
-                return False
+                orphans.append(tile)
             if count == 2:
                 pairs.append((tile, tile))
             if count == 3:
@@ -61,7 +62,10 @@ def is_win(hand):
             combos.append(('QUAD', tile))
 
     print(combos)
-    return len(combos) == 4 and len(pairs) == 1
+    return (
+        len(orphans) == 0 and len(combos) == 4 and len(pairs) == 1,
+        {'combos':  combos, 'pairs': pairs, 'orphans': orphans}
+    )
 
 
 def find_sequences(hand: TileSlice, start=1):
