@@ -1,10 +1,9 @@
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
+from mahjong_types import Tileset
 from src.tile import Tile
 from src.util import take
-
-Tileset = Dict[str, int]
 
 
 class TileSlice():

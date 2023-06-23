@@ -4,8 +4,6 @@ from typing import List, Tuple
 from mahjong_types import Deck
 from src.deck import build_deck, shuffle_deck
 from src.hand import GlobalWind, Hand
-from src.tile import Suit, Tile
-from src.win import is_win
 
 
 def deal_hands(deck: Deck) -> Tuple[Deck, List[Hand]]:
@@ -52,20 +50,4 @@ def main():
 
 
 if __name__ == '__main__':
-    temp_hand = Hand(name='TEMP', wind=GlobalWind.EAST)
-    temp_deck = [
-        Tile(Suit.MAN, 1),
-        Tile(Suit.MAN, 1),
-        Tile(Suit.MAN, 1),
-        Tile(Suit.MAN, 1),
-        Tile(Suit.MAN, 2),
-        Tile(Suit.MAN, 2),
-        Tile(Suit.MAN, 3),
-        Tile(Suit.MAN, 3),
-        Tile(Suit.MAN, 4),
-    ]
-    for _ in range(0, len(temp_deck)):
-        temp_hand.draw(temp_deck)
-
-    print(is_win(temp_hand))
-    # main()
+    main()
