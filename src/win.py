@@ -26,7 +26,6 @@ def is_win(hand):
     numeric_tiles: Tileset = {tile: count for tile,
                               count in hand.tiles.items() if re.search(r'\d', tile)}
     suits = set([key.split('_')[1] for key in numeric_tiles.keys()])
-    print(suits)
     for suit in suits:
         hand_slice = TileSlice(
             tiles={tile: count for tile, count in numeric_tiles.items() if suit in tile}, suit=suit)
@@ -48,8 +47,6 @@ def is_win(hand):
             if count == 4:
                 combos.append(('QUAD', tile))
 
-        print(sequences, hand.tiles)
-
     # for others:
     # find triples / pairs
     char_tiles: Tileset = {tile: count for tile,
@@ -60,7 +57,6 @@ def is_win(hand):
         elif count == 4:
             combos.append(('QUAD', tile))
 
-    print(combos)
     return (
         len(orphans) == 0 and len(combos) == 4 and len(pairs) == 1,
         {'combos':  combos, 'pairs': pairs, 'orphans': orphans}
@@ -76,8 +72,6 @@ def find_sequences(hand: TileSlice, start=1):
     for i in range(start, 10):
         num = num_sequences(hand, i) + 1
 
-        sequences_to_add = []
-
         for j in range(0, num):
             copy = hand.tiles.copy()
             sequences = take_sequence(copy, f'{i}_{hand.suit}', j)
@@ -92,13 +86,11 @@ def find_sequences(hand: TileSlice, start=1):
 
             if points > best:
                 best = points
-                sequences_to_add = [*sequences, *cur_sequences]
+                best_sequences = [*sequences, *cur_sequences]
             elif points == best:
                 print('fuck')
                 print(hand.tiles, best, points, cur_points,
                       sequences,  cur_sequences, best_sequences)
-
-        best_sequences.extend(sequences_to_add)
 
     return (best_sequences, best)
 
