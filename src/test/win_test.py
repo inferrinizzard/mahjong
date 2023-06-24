@@ -63,7 +63,7 @@ class TestWinCheck(unittest.TestCase):
             res['combos'],
             [with_suit([1, 2, 3]), with_suit([1, 2, 3])]
         )
-        self.assertEqual(res['orphans'], [4])
+        self.assertEqual(res['orphans'], [f'{4}_MAN'])
 
     def test_sequence_with_ambiguous_triple(self):
         test_hand = create_test_hand([1, 1, 1, 2, 2, 3, 3, 4])

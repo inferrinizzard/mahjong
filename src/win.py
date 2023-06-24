@@ -87,10 +87,6 @@ def find_sequences(hand: TileSlice, start=1):
             if points > best:
                 best = points
                 best_sequences = [*sequences, *cur_sequences]
-            elif points == best:
-                print('fuck')
-                print(hand.tiles, best, points, cur_points,
-                      sequences,  cur_sequences, best_sequences)
 
     return (best_sequences, best)
 
