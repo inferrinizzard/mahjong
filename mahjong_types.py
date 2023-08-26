@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from src.tile import Tile
+from py.tile import Tile
 
 
 Deck = List[Tile]

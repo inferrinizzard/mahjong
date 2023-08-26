@@ -1,9 +1,9 @@
 from typing import List
 import unittest
 
-from src.hand import GlobalWind, Hand
-from src.tile import Suit, Tile
-from src.win import is_win
+from py.hand import GlobalWind, Hand
+from py.tile import Suit, Tile
+from py.win import is_win
 
 
 def create_test_hand(nums: List[int], suit=Suit.MAN):
