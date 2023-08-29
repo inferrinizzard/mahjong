@@ -2,6 +2,7 @@ import re
 from typing import Dict, List
 
 from mahjong_types import Tileset
+from src.hand import Hand
 from src.tile import Tile
 from src.util import take
 
@@ -15,7 +16,7 @@ class TileSlice():
         self.suit = suit
 
 
-def is_win(hand):
+def is_win(hand: Hand):
     combos = []
     pairs = []
     orphans = []

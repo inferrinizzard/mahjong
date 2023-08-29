@@ -2,8 +2,8 @@ from sys import stdin
 from typing import List, Tuple
 
 from mahjong_types import Deck
-from src.deck import build_deck, shuffle_deck
-from src.hand import GlobalWind, Hand
+from py.deck import build_deck, shuffle_deck
+from py.hand import GlobalWind, Hand
 
 
 def deal_hands(deck: Deck) -> Tuple[Deck, List[Hand]]:
