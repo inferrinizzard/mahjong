@@ -2,9 +2,9 @@ import re
 from typing import Dict, List
 
 from mahjong_types import Tileset
-from py.hand import Hand
-from py.tile import Tile
-from py.util import take
+from src.hand import Hand
+from src.tile import Tile
+from src.util import take
 
 
 class TileSlice():
