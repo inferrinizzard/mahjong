@@ -1,10 +1,9 @@
 import { UnicodeTileLookup, type Wind } from "./constants/tiles";
-import { type TileString } from "./tile";
-import { type Count, type BitMap } from "./types";
+import { type BitMap, type TileMap } from "./types/tile";
 
 export class Hand {
   wind: keyof typeof Wind;
-  tileMap: Record<TileString, Count>;
+  tileMap: TileMap;
   tileBitMap: BitMap;
   name: string;
 
@@ -14,7 +13,7 @@ export class Hand {
 
     this.tileMap = Object.fromEntries(
       Object.keys(UnicodeTileLookup).map((key) => [key, 0])
-    ) as typeof this.tileMap;
+    ) as TileMap;
     this.tileBitMap = Object.values(this.tileMap) as BitMap;
   }
 }

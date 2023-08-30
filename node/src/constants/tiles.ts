@@ -2,7 +2,7 @@ export const Suit = Object.freeze({
   BAMBOO: "BAMBOO",
   MAN: "MAN",
   TONG: "TONG",
-  HONOR: "HONOR",
+  DRAGON: "DRAGON",
   WIND: "WIND",
   FLOWER: "FLOWER",
   SEASON: "SEASON",
@@ -15,7 +15,7 @@ export const Wind = Object.freeze({
   NORTH: "NORTH",
 } as const);
 
-export const Honor = Object.freeze({
+export const Dragon = Object.freeze({
   RED: "RED",
   GREEN: "GREEN",
   WHITE: "WHITE",
@@ -63,9 +63,9 @@ export const UnicodeTileLookup = Object.freeze({
   "7_TONG": "\u{0001F01F}",
   "8_TONG": "\u{0001F020}",
   "9_TONG": "\u{0001F021}",
-  RED_HONOR: "\u{0001F004}",
-  GREEN_HONOR: "\u{0001F005}",
-  WHITE_HONOR: "\u{0001F006}",
+  RED_DRAGON: "\u{0001F004}",
+  GREEN_DRAGON: "\u{0001F005}",
+  WHITE_DRAGON: "\u{0001F006}",
   EAST_WIND: "\u{0001F000}",
   SOUTH_WIND: "\u{0001F001}",
   WEST_WIND: "\u{0001F002}",

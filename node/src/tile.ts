@@ -1,29 +1,6 @@
-import {
-  UnicodeTileLookup,
-  type Suit,
-  type Honor,
-  type Season,
-  type Flower,
-  type Wind,
-} from "./constants/tiles";
+import { UnicodeTileLookup, type Suit } from "./constants/tiles";
+import { type TileValue, type TileString } from "./types/tile";
 import { type ValueOf } from "./types/util";
-
-export type TileString = keyof typeof UnicodeTileLookup;
-
-export type TileValue =
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | keyof typeof Wind
-  | keyof typeof Honor
-  | keyof typeof Season
-  | keyof typeof Flower;
 
 export class Tile {
   suit: keyof typeof Suit;
