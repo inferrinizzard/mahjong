@@ -4,20 +4,20 @@ import {
   type Dragon,
   type Season,
   type Flower,
+  type Suit,
 } from "../constants/tiles";
+
+export type NumericSuit =
+  | typeof Suit.MAN
+  | typeof Suit.TONG
+  | typeof Suit.BAMBOO;
 
 export type TileString = keyof typeof UnicodeTileLookup;
 
+export type TileNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
 export type TileValue =
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
+  | TileNumber
   | keyof typeof Wind
   | keyof typeof Dragon
   | keyof typeof Season
