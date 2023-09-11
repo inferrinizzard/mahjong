@@ -1,5 +1,3 @@
-import { type TileNumber } from "../types/tile";
-
 export type Kernel =
   | readonly [0 | 1, 0 | 1, 0 | 1]
   | readonly [0 | 1, 0 | 1, 0 | 1, 0 | 1];
@@ -9,18 +7,23 @@ export const matchesKernel = (
   start: keyof typeof arr & number,
   kernel: Kernel
 ) => {
-  let total = 0;
+  let res = new Array(kernel.length).fill(0);
 
   if (start + kernel.length > arr.length) {
     return 0;
   }
 
   for (let i = 0; i < kernel.length; i++) {
-    total += arr[start + i] * kernel[i];
+    const matches = !kernel[i] || !!kernel[i] === !!arr[start + i];
+    if (!matches) {
+      return 0;
+    }
+
+    res[i] = arr[start + i];
   }
 
   // return # of copies
-  return Math.floor(total / kernel.length);
+  return res.reduce((min, n) => (n ? Math.min(min, n) : min));
 };
 
 export const pairAt = (i: number): [number, number] => [i, i];
