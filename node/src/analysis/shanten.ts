@@ -5,12 +5,11 @@ import {
   type Count,
   type NumericSuit,
 } from "../types/tile";
+import { ParseBranch } from "./branch";
 import { SuitChecker } from "./suitChecker";
 
 export class Shanten {
   tiles: TileMap;
-
-  // suitChecker: SuitChecker;
 
   wildcards: number = 0;
 
@@ -21,7 +20,19 @@ export class Shanten {
   find() {
     const { man, tong, bamboo, honor } = this.splitIntoSuits(this.tiles);
 
-    this.checkSuit(man);
+    const manBranches = this.checkSuit(man);
+    const tongBranches = this.checkSuit(tong);
+    const bambooBranches = this.checkSuit(bamboo);
+    const honorBranch = this.parseHonors(honor);
+
+    const comboes: ParseBranch[][] = [];
+    manBranches.forEach((man) =>
+      tongBranches.forEach((tong) =>
+        bambooBranches.forEach((bamboo) =>
+          comboes.push([man, tong, bamboo, honorBranch])
+        )
+      )
+    );
   }
 
   splitIntoSuits(tilemap: TileMap) {
@@ -61,6 +72,21 @@ export class Shanten {
     const tileArr = Object.values(slice);
 
     const suitChecker = new SuitChecker(tileArr);
-    return suitChecker.check();
+    return suitChecker.findBest();
   }
+
+  parseHonors = <
+    HonorSlice extends Pick<
+      TileMap,
+      | `${keyof typeof Wind}_${typeof Suit.WIND}`
+      | `${keyof typeof Dragon}_${typeof Suit.DRAGON}`
+    >
+  >(
+    slice: HonorSlice
+  ) => {
+    const tileArr = Object.values(slice);
+
+    const suitChecker = new SuitChecker(tileArr);
+    return suitChecker.parseHonors();
+  };
 }

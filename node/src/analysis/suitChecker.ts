@@ -49,7 +49,7 @@ export class SuitChecker {
     }
   };
 
-  check() {
+  parseBranches() {
     while (this.branches.length) {
       this.curBranch = this.branches.shift()!;
       const start = this.curBranch.hand.findIndex((n) => n);
@@ -180,4 +180,36 @@ export class SuitChecker {
       );
     });
   }
+
+  findBest = () => {
+    const leaves = this.parseBranches();
+
+    const best = leaves.reduce(
+      (best, leaf) =>
+        leaf.score === best.score
+          ? { score: best.score, branches: [...best.branches, leaf] }
+          : best,
+      { score: 0, branches: [] as ParseBranch[] }
+    );
+
+    return best.branches;
+  };
+
+  parseHonors = () => {
+    const branch = this.branches.pop()!;
+
+    for (let i = 0; i < branch.hand.length; i++) {
+      if (branch.hand[i] === 4) {
+        branch.addSet(quadAt(i));
+      } else if (branch.hand[i] === 3) {
+        branch.addSet(tripleAt(i));
+      } else if (branch.hand[i] === 2) {
+        branch.addSet(pairAt(i));
+      } else {
+        branch.addSingle(i);
+      }
+    }
+
+    return branch;
+  };
 }
