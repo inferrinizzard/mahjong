@@ -54,11 +54,16 @@ export class ParseBranch {
     return this.hand.length === 0 || this.hand.every((count) => count === 0);
   };
 
-  addItem = <ItemType extends Exclude<BranchItem, "singles">>(
+  addItem = <ItemType extends BranchItem>(
     itemType: ItemType,
     item: this[ItemType][number]
   ) => {
-    for (let i of item) {
+    if (itemType === "singles") {
+      this.addSingle(item as number);
+      return;
+    }
+
+    for (let i of item as number[]) {
       this.hand[i]--;
     }
 

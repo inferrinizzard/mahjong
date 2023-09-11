@@ -38,11 +38,7 @@ export class SuitChecker {
 
     for (const key in items) {
       for (const item of items[key]) {
-        if (key === "singles") {
-          newBranch.addSingle(item);
-        } else {
-          newBranch.addItem(key as Exclude<BranchItem, "singles">, item);
-        }
+        newBranch.addItem(key as BranchItem, item);
       }
     }
 
