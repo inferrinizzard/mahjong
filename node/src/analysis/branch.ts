@@ -12,6 +12,7 @@ export class ParseBranch {
   pairs: [number, number][] = [];
   tatsu: [number, number][] = [];
   singles: number[] = [];
+  score: number | null = null;
 
   constructor(
     hand: Count[],
@@ -38,6 +39,7 @@ export class ParseBranch {
 
   toString() {
     return `
+	score: ${this.score}
 	hand: [ ${this.hand.join(", ")} ]
 	sets: [ ${this.sets.map((item) => `(${item.join(",")})`).join(" ")} ] 
 	pairs: [ ${this.pairs.map((item) => `(${item.join(",")})`).join(" ")} ] 
@@ -52,6 +54,17 @@ export class ParseBranch {
       throw new Error(this.toString());
     }
     return this.hand.length === 0 || this.hand.every((count) => count === 0);
+  };
+
+  calculateScore = () => {
+    let sum = 0;
+    sum += this.sets.length * 3;
+    sum += this.pairs.length * 2;
+    sum += this.tatsu.length * 1;
+    sum -= this.singles.length * 1;
+
+    this.score = sum;
+    return sum;
   };
 
   addItem = <ItemType extends BranchItem>(

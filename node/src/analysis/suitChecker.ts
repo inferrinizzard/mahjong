@@ -161,5 +161,23 @@ export class SuitChecker {
         }
       }
     }
+
+    this.sortBranches();
+    return this.leaves;
+  }
+
+  sortBranches() {
+    this.leaves = this.leaves.sort((a, b) => {
+      const aScore = a.score || a.calculateScore();
+      const bScore = b.score || b.calculateScore();
+
+      return (
+        bScore - aScore ||
+        b.sets.length - a.sets.length ||
+        b.pairs.length - a.pairs.length ||
+        b.tatsu.length - a.tatsu.length ||
+        a.singles.length - b.singles.length
+      );
+    });
   }
 }
