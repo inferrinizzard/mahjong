@@ -7,6 +7,7 @@ export type BranchItemMap<ItemType extends BranchItem = BranchItem> =
   ItemType extends ItemType ? Record<ItemType, ParseBranch[ItemType]> : never;
 
 export class ParseBranch {
+  numTiles: number = 0;
   hand: Count[]; // use Uint8Array
   sets: number[][] = [];
   pairs: [number, number][] = [];
@@ -22,6 +23,7 @@ export class ParseBranch {
     singles?: number[]
   ) {
     this.hand = hand;
+    this.numTiles = hand.reduce((sum, count) => sum + count, 0 as number);
 
     if (sets) {
       this.sets = sets;
