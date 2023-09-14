@@ -60,6 +60,7 @@ export class SuitChecker {
     }
 
     if (newBranch.isEmpty()) {
+      newBranch.calculateScore();
       this.leaves.push(newBranch);
     } else {
       this.branches.push(newBranch);
@@ -184,18 +185,14 @@ export class SuitChecker {
   }
 
   sortBranches() {
-    this.leaves = this.leaves.sort((a, b) => {
-      const aScore = a.score || a.calculateScore();
-      const bScore = b.score || b.calculateScore();
-
-      return (
-        bScore - aScore ||
+    this.leaves = this.leaves.sort(
+      (a, b) =>
+        b.score! - a.score! ||
         b.sets.length - a.sets.length ||
         b.pairs.length - a.pairs.length ||
         b.tatsu.length - a.tatsu.length ||
         a.singles.length - b.singles.length
-      );
-    });
+    );
   }
 
   findBest = () => {
@@ -203,12 +200,12 @@ export class SuitChecker {
 
     const best = this.leaves.reduce(
       (best, leaf) =>
-        leaf.score! > best.score
+        leaf.score! > best.score!
           ? { score: leaf.score!, branches: [leaf] }
           : leaf.score === best.score
           ? { score: best.score, branches: [...best.branches, leaf] }
           : best,
-      { score: 0, branches: [] as ParseBranch[] }
+      { score: this.leaves[0].score, branches: [] as ParseBranch[] }
     );
 
     return best.branches;
