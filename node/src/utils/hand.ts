@@ -23,7 +23,7 @@ export const EmptyHand = Object.fromEntries(
 ) as TileMap;
 
 export const parseHandString = (hand: string): TileMap => {
-  let tileMap = {};
+  let tileMap: Partial<TileMap> = {};
 
   const man = hand.matchAll(/\d+m/g);
   const pin = hand.matchAll(/\d+p/g);
@@ -32,11 +32,12 @@ export const parseHandString = (hand: string): TileMap => {
 
   for (const suit of [man, pin, sou]) {
     for (const match of suit) {
-      const suitString = suitLookup[match[0].split("").pop()!];
+      const suitString =
+        suitLookup[match[0].split("").pop()! as keyof typeof suitLookup];
       for (const char of match[0].replace(/\w$/, "").split("")) {
-        const tileString = `${char}_${suitString}`;
+        const tileString = `${char}_${suitString}` as keyof TileMap;
         if (tileString in tileMap) {
-          tileMap[tileString]++;
+          tileMap[tileString]!++;
         } else {
           tileMap[tileString] = 1;
         }
@@ -46,9 +47,9 @@ export const parseHandString = (hand: string): TileMap => {
 
   for (const match of honor) {
     for (const char of match[0].replace(/\w$/, "").split("")) {
-      const tileString = `${char}_${honorList[+char]}`;
+      const tileString = `${char}_${honorList[+char]}` as keyof TileMap;
       if (tileString in tileMap) {
-        tileMap[tileString]++;
+        tileMap[tileString]!++;
       } else {
         tileMap[tileString] = 1;
       }

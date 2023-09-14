@@ -31,9 +31,13 @@ export class SuitChecker {
   static from = (suit: NumericSuit | "HONOR", tileMap: TileMap) => {
     let tiles;
     if (suit === "HONOR") {
-      tiles = new Array(7).fill(0).map((_, i) => tileMap[honorList[i + 1]]);
+      tiles = new Array(7)
+        .fill(0)
+        .map((_, i) => tileMap[honorList[i + 1] as keyof TileMap]);
     } else {
-      tiles = new Array(9).fill(0).map((_, i) => tileMap[`${i + 1}_${suit}`]);
+      tiles = new Array(9)
+        .fill(0)
+        .map((_, i) => tileMap[`${i + 1}_${suit}` as keyof TileMap]);
     }
 
     return new SuitChecker(tiles);
@@ -49,6 +53,7 @@ export class SuitChecker {
     );
 
     for (const key in items) {
+      // @ts-expect-error
       for (const item of items[key]) {
         newBranch.addItem(key as BranchItem, item);
       }
