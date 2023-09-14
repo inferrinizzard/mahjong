@@ -194,11 +194,13 @@ export class SuitChecker {
   }
 
   findBest = () => {
-    const leaves = this.parseBranches();
+    this.parseBranches();
 
-    const best = leaves.reduce(
+    const best = this.leaves.reduce(
       (best, leaf) =>
-        leaf.score === best.score
+        leaf.score! > best.score
+          ? { score: leaf.score!, branches: [leaf] }
+          : leaf.score === best.score
           ? { score: best.score, branches: [...best.branches, leaf] }
           : best,
       { score: 0, branches: [] as ParseBranch[] }
