@@ -28,6 +28,9 @@ export class Shanten {
         )
       )
     );
+
+    this.calculateShanten();
+    return this.shanten;
   }
 
   calculateShanten = () => {
