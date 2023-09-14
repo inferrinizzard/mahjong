@@ -23,9 +23,9 @@ export class Shanten {
   find() {
     const { man, tong, bamboo, honor } = this.splitIntoSuits(this.tiles);
 
-    const manBranches = this.checkSuit(man);
-    const tongBranches = this.checkSuit(tong);
-    const bambooBranches = this.checkSuit(bamboo);
+    const manBranches = SuitChecker.from(Suit.MAN, this.tiles).findBest();
+    const tongBranches = SuitChecker.from(Suit.MAN, this.tiles).findBest();
+    const bambooBranches = SuitChecker.from(Suit.MAN, this.tiles).findBest();
     const honorBranch = this.parseHonors(honor);
 
     manBranches.forEach((man) =>

@@ -1,4 +1,4 @@
-import { Count } from "../types/tile";
+import { Count, NumericSuit, TileMap } from "../types/tile";
 import { ParseBranch, BranchItemMap, BranchItem } from "./branch";
 import {
   matchesKernel,
@@ -26,6 +26,14 @@ export class SuitChecker {
     this.branches = [new ParseBranch(tiles)];
     this.leaves = [];
   }
+
+  static from = (suit: NumericSuit, tileMap: TileMap) => {
+    const tiles = new Array(9)
+      .fill(0)
+      .map((_, i) => tileMap[`${i + 1}_${suit}`]);
+
+    return new SuitChecker(tiles);
+  };
 
   splitBranch = (items: BranchItemMap) => {
     const newBranch = new ParseBranch(
