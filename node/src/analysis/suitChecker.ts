@@ -1,4 +1,5 @@
 import { Count, NumericSuit, TileMap } from "../types/tile";
+import { honorList } from "../utils/hand";
 import { ParseBranch, BranchItemMap, BranchItem } from "./branch";
 import {
   matchesKernel,
@@ -27,10 +28,13 @@ export class SuitChecker {
     this.leaves = [];
   }
 
-  static from = (suit: NumericSuit, tileMap: TileMap) => {
-    const tiles = new Array(9)
-      .fill(0)
-      .map((_, i) => tileMap[`${i + 1}_${suit}`]);
+  static from = (suit: NumericSuit | "HONOR", tileMap: TileMap) => {
+    let tiles;
+    if (suit === "HONOR") {
+      tiles = new Array(7).fill(0).map((_, i) => tileMap[honorList[i + 1]]);
+    } else {
+      tiles = new Array(9).fill(0).map((_, i) => tileMap[`${i + 1}_${suit}`]);
+    }
 
     return new SuitChecker(tiles);
   };
