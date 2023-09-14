@@ -47,7 +47,7 @@ export const parseHandString = (hand: string): TileMap => {
 
   for (const match of honor) {
     for (const char of match[0].replace(/\w$/, "").split("")) {
-      const tileString = `${char}_${honorList[+char]}` as keyof TileMap;
+      const tileString = honorList[+char] as keyof TileMap;
       if (tileString in tileMap) {
         tileMap[tileString]!++;
       } else {

@@ -25,5 +25,12 @@ describe("suitChecker", () => {
 
       console.log("leaves", "" + branches);
     });
+
+    it("checks HONOR", () => {
+      const suitChecker = SuitChecker.from("HONOR", tiles);
+      const branches = suitChecker.parseHonors();
+
+      console.log("leaves", "" + branches);
+    });
   });
 });

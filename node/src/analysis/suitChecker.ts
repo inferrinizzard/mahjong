@@ -220,12 +220,13 @@ export class SuitChecker {
       } else if (branch.hand[i] === 3) {
         branch.addSet(tripleAt(i));
       } else if (branch.hand[i] === 2) {
-        branch.addSet(pairAt(i));
-      } else {
+        branch.addPair(pairAt(i));
+      } else if (branch.hand[i] === 1) {
         branch.addSingle(i);
       }
     }
 
+    branch.calculateScore();
     return branch;
   };
 }
