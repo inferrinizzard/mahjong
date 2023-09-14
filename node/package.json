@@ -2,5 +2,9 @@
   "name": "mahjong",
   "version": "1.0.0",
   "main": "index.ts",
-  "license": "MIT"
+  "license": "MIT",
+	"devDependencies": {
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4"
+  }
 }
