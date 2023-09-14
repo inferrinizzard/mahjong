@@ -1,21 +1,28 @@
+import { UnicodeTileLookup } from "../constants/tiles";
+import { type TileMap } from "../types/tile";
+
 const suitLookup = {
   m: "MAN",
   p: "TONG",
   s: "BAMBOO",
 };
 
-const honorList = [
+export const honorList = [
   "",
   "EAST_WIND",
   "SOUTH_WIND",
   "WEST_WIND",
   "NORTH_WIND",
-  "GREEN_DRAGON",
   "WHITE_DRAGON",
+  "GREEN_DRAGON",
   "RED_DRAGON",
 ];
 
-export const parseHandString = (hand: string) => {
+export const EmptyHand = Object.fromEntries(
+  Object.keys(UnicodeTileLookup).map((key) => [key, 0])
+) as TileMap;
+
+export const parseHandString = (hand: string): TileMap => {
   let tileMap = {};
 
   const man = hand.matchAll(/\d+m/g);
@@ -48,5 +55,5 @@ export const parseHandString = (hand: string) => {
     }
   }
 
-  return tileMap;
+  return { ...EmptyHand, ...tileMap };
 };
