@@ -39,6 +39,10 @@ export class ParseBranch {
     }
   }
 
+  get quads() {
+    return this.sets.filter((set) => set.length === 4);
+  }
+
   toString() {
     return `
 	score: ${this.score}

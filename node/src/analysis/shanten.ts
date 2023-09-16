@@ -1,23 +1,27 @@
 import { Suit } from "../constants/tiles";
 import { type TileMap } from "../types/tile";
 import { ParseBranch } from "./branch";
+import { ShantenSolver } from "./shanten/types";
 import { SuitChecker } from "./suitChecker";
 
 export class Shanten {
   tiles: TileMap;
-  num_tiles: number;
+  numTiles: number;
   comboes: ParseBranch[][] = [];
 
   wildcards: number = 0;
 
+  shantenSolver: ShantenSolver;
   shanten: number = 8;
 
-  constructor(tiles: TileMap) {
+  constructor(tiles: TileMap, shantenSolver: ShantenSolver) {
     this.tiles = tiles;
-    this.num_tiles = Object.values(tiles).reduce(
+    this.numTiles = Object.values(tiles).reduce(
       (sum, n) => sum + n,
       0 as number
     );
+
+    this.shantenSolver = shantenSolver;
   }
 
   find() {
@@ -39,7 +43,6 @@ export class Shanten {
   }
 
   calculateShanten = () => {
-    // maximumShanten = min(8 - 2 * groups - max(pairs + taatsu, floor(hand.length/3)-groups) - min(1, max(0, pairs + taatsu - (4 - groups))), 6)
     let shantens: number[] = []; // add ukeire as obj prop
     this.comboes.forEach((combo) => {
       const total = combo.reduce(
@@ -52,26 +55,11 @@ export class Shanten {
         { sets: 0, pairs: 0, tatsu: 0, singles: 0 }
       );
 
-      const jidahai = combo[3].quads.length - +(this.num_tiles % 3 === 2);
-
-      let curShanten = 8 - total.sets * 2 - total.tatsu - total.pairs;
-      let possibleSets = total.sets + total.tatsu;
-
-      if (total.pairs) {
-        possibleSets += total.pairs - 1;
-      }
-
-      if (possibleSets > 4) {
-        curShanten += possibleSets - 4;
-      }
-
-      if (curShanten != -1 && curShanten < jidahai) {
-        curShanten = jidahai;
-      }
-
+      const curShanten = this.shantenSolver(total, this.numTiles, combo);
       shantens.push(curShanten);
     });
 
+    console.log(shantens);
     const minShanten = shantens.reduce((min, num) => (num < min ? num : min));
     this.shanten = minShanten;
   };
