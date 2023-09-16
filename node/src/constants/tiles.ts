@@ -35,6 +35,7 @@ export const Flower = Object.freeze({
   BAMBOO: "NORTH",
 } as const);
 
+// missing akadora, include joker tile ?
 export const UnicodeTileLookup = Object.freeze({
   "1_BAMBOO": "\u{0001F010}",
   "2_BAMBOO": "\u{0001F011}",

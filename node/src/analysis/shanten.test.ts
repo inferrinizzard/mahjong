@@ -1,7 +1,6 @@
 import { parseHandString } from "../utils/hand";
 import { Shanten } from "./shanten";
-import { pythonMahjongShanten } from "./shanten/pythonMahjongShanten";
-import { riichiWikiShanten } from "./shanten/riichiWikiShanten";
+import { pythonMahjongShanten, riichiWikiShanten } from "./shanten/solver";
 
 describe("shanten", () => {
   // describe("456m356678p3s2477z", () => {

@@ -18,4 +18,4 @@ export type ShantenSolver = (
   total: ComboTotal,
   numTiles: number,
   combo?: ParseBranch[]
-) => number;
+) => ShantenResult;

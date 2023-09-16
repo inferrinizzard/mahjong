@@ -1,6 +1,7 @@
 import { Suit } from "../constants/tiles";
 import { type TileMap } from "../types/tile";
 import { ParseBranch } from "./branch";
+import { sevenPairsShanten, thirteenOrphansShanten } from "./shanten/solver";
 import { ShantenResult, ShantenSolver } from "./shanten/types";
 import { SuitChecker } from "./suitChecker";
 
@@ -25,6 +26,19 @@ export class Shanten {
   }
 
   find() {
+    const manBranches = SuitChecker.from(Suit.MAN, this.tiles).findBest();
+    const tongBranches = SuitChecker.from(Suit.TONG, this.tiles).findBest();
+    const bambooBranches = SuitChecker.from(Suit.BAMBOO, this.tiles).findBest();
+    const honorBranch = SuitChecker.from("HONOR", this.tiles).parseHonors();
+
+    manBranches.forEach((man) =>
+      tongBranches.forEach((tong) =>
+        bambooBranches.forEach((bamboo) =>
+          this.comboes.push([man, tong, bamboo, honorBranch])
+        )
+      )
+    );
+
     const standardShanten = this.findStandardShanten();
     const sevenPairsShanten = this.findSevenPairsShanten();
     const thirteenPairsShanten = this.findThirteenPairsShanten();
@@ -46,32 +60,43 @@ export class Shanten {
   }
 
   findSevenPairsShanten(): ShantenResult[] {
-    return [{ value: 14, score: 14, style: "7pairs" }];
+    let shantens: ShantenResult[] = [];
+    this.comboes.forEach((combo) => {
+      const total = combo.reduce(
+        (sum, branch) => ({
+          sets: sum.sets + branch.sets.length,
+          pairs: sum.pairs + branch.pairs.length,
+          tatsu: sum.tatsu + branch.tatsu.length,
+          singles: sum.singles + branch.singles.length,
+        }),
+        { sets: 0, pairs: 0, tatsu: 0, singles: 0 }
+      );
+
+      const curShanten = sevenPairsShanten(total, this.numTiles);
+      shantens.push(curShanten);
+    });
+
+    // console.log(shantens);
+    return shantens;
   }
 
   findThirteenPairsShanten(): ShantenResult[] {
-    return [{ value: 14, score: 14, style: "13orphans" }];
+    let shantens: ShantenResult[] = [];
+    this.comboes.forEach((combo) => {
+      const curShanten = thirteenOrphansShanten(
+        { sets: 0, pairs: 0, tatsu: 0, singles: 0 },
+        this.numTiles,
+        combo
+      );
+      shantens.push(curShanten);
+    });
+
+    // console.log(shantens);
+    return shantens;
   }
 
-  findStandardShanten() {
-    const manBranches = SuitChecker.from(Suit.MAN, this.tiles).findBest();
-    const tongBranches = SuitChecker.from(Suit.TONG, this.tiles).findBest();
-    const bambooBranches = SuitChecker.from(Suit.BAMBOO, this.tiles).findBest();
-    const honorBranch = SuitChecker.from("HONOR", this.tiles).parseHonors();
-
-    manBranches.forEach((man) =>
-      tongBranches.forEach((tong) =>
-        bambooBranches.forEach((bamboo) =>
-          this.comboes.push([man, tong, bamboo, honorBranch])
-        )
-      )
-    );
-
-    return this.calculateShanten();
-  }
-
-  calculateShanten = () => {
-    let shantens: ShantenResult[] = []; // add ukeire as obj prop
+  findStandardShanten = () => {
+    let shantens: ShantenResult[] = [];
     this.comboes.forEach((combo) => {
       const total = combo.reduce(
         (sum, branch) => ({
@@ -84,11 +109,7 @@ export class Shanten {
       );
 
       const curShanten = this.shantenSolver(total, this.numTiles, combo);
-      shantens.push({
-        value: curShanten,
-        score: curShanten,
-        style: "standard",
-      });
+      shantens.push(curShanten);
     });
 
     // console.log(shantens);
