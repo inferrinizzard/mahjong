@@ -20,12 +20,12 @@ describe("shanten", () => {
 
     it("finds the correct shanten with pythonMahjong", () => {
       const shanten = new Shanten(tiles, pythonMahjongShanten);
-      expect(shanten.find()).toBe(1);
+      expect(shanten.find().value).toBe(1);
     });
 
     it("finds the correct shanten with riichiWiki", () => {
       const shanten = new Shanten(tiles, riichiWikiShanten);
-      expect(shanten.find()).toBe(1);
+      expect(shanten.find().value).toBe(1);
     });
 
     it.todo("finds the correct ukeire", () => {});

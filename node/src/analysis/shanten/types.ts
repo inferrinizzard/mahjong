@@ -1,8 +1,9 @@
 import { ParseBranch } from "../branch";
 
-export interface Shanten {
-  num: number;
-  style: "standard" | "7pair" | "13orphans";
+export interface ShantenResult {
+  value: number;
+  score: number;
+  style: "standard" | "7pairs" | "13orphans";
   ukeire?: number[];
 }
 

@@ -1,7 +1,7 @@
 import { Suit } from "../constants/tiles";
 import { type TileMap } from "../types/tile";
 import { ParseBranch } from "./branch";
-import { ShantenSolver } from "./shanten/types";
+import { ShantenResult, ShantenSolver } from "./shanten/types";
 import { SuitChecker } from "./suitChecker";
 
 export class Shanten {
@@ -12,7 +12,7 @@ export class Shanten {
   wildcards: number = 0;
 
   shantenSolver: ShantenSolver;
-  shanten: number = 8;
+  shantens: ShantenResult[] = [];
 
   constructor(tiles: TileMap, shantenSolver: ShantenSolver) {
     this.tiles = tiles;
@@ -25,6 +25,35 @@ export class Shanten {
   }
 
   find() {
+    const standardShanten = this.findStandardShanten();
+    const sevenPairsShanten = this.findSevenPairsShanten();
+    const thirteenPairsShanten = this.findThirteenPairsShanten();
+
+    this.shantens = [
+      ...standardShanten,
+      ...sevenPairsShanten,
+      ...thirteenPairsShanten,
+    ].sort((a, b) => a.value - b.value || a.score - b.score);
+
+    return this.shantens[0];
+  }
+
+  findAll() {
+    if (!this.shantens.length) {
+      this.find();
+    }
+    return this.shantens;
+  }
+
+  findSevenPairsShanten(): ShantenResult[] {
+    return [{ value: 14, score: 14, style: "7pairs" }];
+  }
+
+  findThirteenPairsShanten(): ShantenResult[] {
+    return [{ value: 14, score: 14, style: "13orphans" }];
+  }
+
+  findStandardShanten() {
     const manBranches = SuitChecker.from(Suit.MAN, this.tiles).findBest();
     const tongBranches = SuitChecker.from(Suit.TONG, this.tiles).findBest();
     const bambooBranches = SuitChecker.from(Suit.BAMBOO, this.tiles).findBest();
@@ -38,12 +67,11 @@ export class Shanten {
       )
     );
 
-    this.calculateShanten();
-    return this.shanten;
+    return this.calculateShanten();
   }
 
   calculateShanten = () => {
-    let shantens: number[] = []; // add ukeire as obj prop
+    let shantens: ShantenResult[] = []; // add ukeire as obj prop
     this.comboes.forEach((combo) => {
       const total = combo.reduce(
         (sum, branch) => ({
@@ -56,11 +84,14 @@ export class Shanten {
       );
 
       const curShanten = this.shantenSolver(total, this.numTiles, combo);
-      shantens.push(curShanten);
+      shantens.push({
+        value: curShanten,
+        score: curShanten,
+        style: "standard",
+      });
     });
 
-    console.log(shantens);
-    const minShanten = shantens.reduce((min, num) => (num < min ? num : min));
-    this.shanten = minShanten;
+    // console.log(shantens);
+    return shantens;
   };
 }
