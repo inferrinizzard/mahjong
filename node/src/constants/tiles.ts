@@ -19,9 +19,9 @@ export const Wind = Object.freeze({
 
 export type Dragon = keyof typeof Dragon;
 export const Dragon = Object.freeze({
+  WHITE: 'WHITE',
   GREEN: 'GREEN',
   RED: 'RED',
-  WHITE: 'WHITE',
 } as const);
 
 export type Season = keyof typeof Season;
@@ -69,9 +69,9 @@ export const UnicodeTileLookup = Object.freeze({
   '7_TONG': '\u{0001F01F}',
   '8_TONG': '\u{0001F020}',
   '9_TONG': '\u{0001F021}',
+  WHITE_DRAGON: '\u{0001F006}',
   GREEN_DRAGON: '\u{0001F005}',
   RED_DRAGON: '\u{0001F004}',
-  WHITE_DRAGON: '\u{0001F006}',
   EAST_WIND: '\u{0001F000}',
   SOUTH_WIND: '\u{0001F001}',
   WEST_WIND: '\u{0001F002}',
@@ -86,7 +86,7 @@ export const UnicodeTileLookup = Object.freeze({
   WINTER_SEASON: '\u{0001F029}',
 } as const);
 
-export const NextTileMap = Object.freeze({
+export const nextTileMap = Object.freeze({
   '1_BAMBOO': '2_BAMBOO',
   '2_BAMBOO': '3_BAMBOO',
   '3_BAMBOO': '4_BAMBOO',
@@ -114,9 +114,9 @@ export const NextTileMap = Object.freeze({
   '7_TONG': '8_TONG',
   '8_TONG': '9_TONG',
   '9_TONG': '1_TONG',
+  WHITE_DRAGON: 'GREEN_DRAGON',
   GREEN_DRAGON: 'RED_DRAGON',
   RED_DRAGON: 'WHITE_DRAGON',
-  WHITE_DRAGON: 'GREEN_DRAGON',
   EAST_WIND: 'SOUTH_WIND',
   SOUTH_WIND: 'WEST_WIND',
   WEST_WIND: 'NORTH_WIND',
@@ -129,4 +129,32 @@ export const NextTileMap = Object.freeze({
   SUMMER_SEASON: 'AUTUMN_SEASON',
   AUTUMN_SEASON: 'WINTER_SEASON',
   WINTER_SEASON: 'SPRING_SEASON',
+} as const);
+
+export const suitCodeMap = Object.freeze({
+  BAMBOO: 's',
+  MAN: 'm',
+  TONG: 'p',
+  DRAGON: 'z',
+  WIND: 'z',
+  FLOWER: 'f',
+  SEASON: 'f',
+} as const);
+
+export const valueCodeMap = Object.freeze({
+  EAST_WIND: 1,
+  SOUTH_WIND: 2,
+  WEST_WIND: 3,
+  NORTH_WIND: 4,
+  WHITE_DRAGON: 5,
+  GREEN_DRAGON: 6,
+  RED_DRAGON: 7,
+  PLUM_FLOWER: 1,
+  LILY_FLOWER: 2,
+  CHRYSANTHEMUM_FLOWER: 3,
+  BAMBOO_FLOWER: 4,
+  SPRING_SEASON: 5,
+  SUMMER_SEASON: 6,
+  AUTUMN_SEASON: 7,
+  WINTER_SEASON: 8,
 } as const);
