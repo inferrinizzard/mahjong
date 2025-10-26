@@ -85,4 +85,13 @@ export class Tile {
 
     return Tile.from_string(nextTileName);
   }
+
+  public static less_than(aTile: Tile, bTile: Tile): number {
+    const tileList = Object.keys(nextTileMap);
+
+    const aSuitIndex = tileList.indexOf(aTile.suit);
+    const bSuitIndex = tileList.indexOf(bTile.suit);
+
+    return bSuitIndex - aSuitIndex;
+  }
 }
