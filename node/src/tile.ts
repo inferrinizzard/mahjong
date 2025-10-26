@@ -1,14 +1,12 @@
-import { UnicodeTileLookup, type Suit } from "./constants/tiles";
-import { type TileValue, type TileString } from "./types/tile";
-import { type ValueOf } from "./types/util";
+import { Suit, UnicodeTileLookup } from './constants/tiles';
+import { type TileValue, type TileString } from './types/tile';
+import { type ValueOf } from './types/util';
 
 export class Tile {
-  suit: keyof typeof Suit;
+  suit: Suit;
   value: TileValue;
   name: TileString;
   unicode: ValueOf<typeof UnicodeTileLookup>;
-
-  isNumber: boolean;
 
   constructor(suit: keyof typeof Suit, value: TileValue) {
     this.suit = suit;
@@ -16,6 +14,35 @@ export class Tile {
 
     this.name = `${value}_${suit}` as TileString;
     this.unicode = UnicodeTileLookup[this.name];
+  }
+
+  public get isNumber(): boolean {
+    return typeof this.value === 'number';
+  }
+  public get isTerminal(): boolean {
+    return (
+      typeof this.value === 'number' && (this.value === 1 || this.value === 9)
+    );
+  }
+  public get isSimple(): boolean {
+    return typeof this.value === 'number' && (this.value > 1 || this.value < 9);
+  }
+  public get isBonus(): boolean {
+    return this.suit === Suit.SEASON || this.suit === Suit.FLOWER;
+  }
+  public get isHonor(): boolean {
+    return this.suit === Suit.WIND || this.suit === Suit.DRAGON;
+  }
+  public get isGreen(): boolean {
+    return (
+      this.value === 'GREEN' ||
+      (this.suit === Suit.BAMBOO &&
+        (this.value === 2 ||
+          this.value === 3 ||
+          this.value === 4 ||
+          this.value === 6 ||
+          this.value === 8))
+    );
   }
 
   // static next(tile: Tile, step: number = 1) {
