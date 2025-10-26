@@ -1,13 +1,13 @@
-import { UnicodeTileLookup, type Wind } from "./constants/tiles";
-import { type BitMap, type TileMap } from "./types/tile";
+import { UnicodeTileLookup, type Wind } from '../constants/tiles';
+import { type BitMap, type TileMap } from '../types/tile';
 
-export class Hand {
+export class TileHand {
   wind: keyof typeof Wind;
   tileMap: TileMap;
   tileBitMap: BitMap;
   name: string;
 
-  constructor(wind: keyof typeof Wind, name: string = "player") {
+  constructor(wind: keyof typeof Wind, name: string = 'player') {
     this.name = name;
     this.wind = wind;
 

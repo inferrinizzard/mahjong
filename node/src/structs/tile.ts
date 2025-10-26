@@ -4,10 +4,10 @@ import {
   suitCodeMap,
   UnicodeTileLookup,
   valueCodeMap,
-} from './constants/tiles';
+} from '../constants/tiles';
 
-import { type TileValue, type TileString } from './types/tile';
-import { type ValueOf } from './types/util';
+import { type TileValue, type TileString } from '../types/tile';
+import { type ValueOf } from '../types/util';
 
 export class Tile {
   suit: Suit;
