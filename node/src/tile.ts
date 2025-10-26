@@ -1,4 +1,4 @@
-import { Suit, UnicodeTileLookup } from './constants/tiles';
+import { NextTileMap, Suit, UnicodeTileLookup } from './constants/tiles';
 import { type TileValue, type TileString } from './types/tile';
 import { type ValueOf } from './types/util';
 
@@ -45,11 +45,14 @@ export class Tile {
     );
   }
 
-  // static next(tile: Tile, step: number = 1) {
-  //   let next_value = tile.value;
+  public static from_string(name: string): Tile {
+    const [value, suit, ..._] = name.split('_');
+    return new Tile(suit as Suit, value as TileValue);
+  }
 
-  //   if (typeof next_value === "number") {
-  //     next_value = ((next_value + step) % 9) as TileValue;
-  //   }
-  // }
+  public static next(tile: Tile, step: number = 1): Tile {
+    const nextTileName = NextTileMap[tile.name];
+
+    return Tile.from_string(nextTileName);
+  }
 }
