@@ -1,3 +1,3 @@
-pub mod next_tile;
+pub mod tile;
 
-pub use next_tile::next_tile_map;
+pub use tile::NEXT_TILE_MAP;
