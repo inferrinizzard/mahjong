@@ -1,4 +1,8 @@
+#[macro_use]
+extern crate lazy_static;
+
 mod consts;
+mod maps;
 mod structs;
 
 use consts::Suit;

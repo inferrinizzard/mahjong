@@ -1,0 +1,51 @@
+use indexmap::{indexmap, IndexMap};
+
+lazy_static! {
+    pub static ref next_tile_map: IndexMap<&'static str, &'static str> = {
+        let tile_map = indexmap! {
+            "1_BAMBOO"=> "2_BAMBOO",
+            "2_BAMBOO"=> "3_BAMBOO",
+            "3_BAMBOO"=> "4_BAMBOO",
+            "4_BAMBOO"=> "5_BAMBOO",
+            "5_BAMBOO"=> "6_BAMBOO",
+            "6_BAMBOO"=> "7_BAMBOO",
+            "7_BAMBOO"=> "8_BAMBOO",
+            "8_BAMBOO"=> "9_BAMBOO",
+            "9_BAMBOO"=> "1_BAMBOO",
+            "1_MAN"=> "2_MAN",
+            "2_MAN"=> "3_MAN",
+            "3_MAN"=> "4_MAN",
+            "4_MAN"=> "5_MAN",
+            "5_MAN"=> "6_MAN",
+            "6_MAN"=> "7_MAN",
+            "7_MAN"=> "8_MAN",
+            "8_MAN"=> "9_MAN",
+            "9_MAN"=> "1_MAN",
+            "1_TONG"=> "2_TONG",
+            "2_TONG"=> "3_TONG",
+            "3_TONG"=> "4_TONG",
+            "4_TONG"=> "5_TONG",
+            "5_TONG"=> "6_TONG",
+            "6_TONG"=> "7_TONG",
+            "7_TONG"=> "8_TONG",
+            "8_TONG"=> "9_TONG",
+            "9_TONG"=> "1_TONG",
+            "EAST_WIND"=> "SOUTH_WIND",
+            "SOUTH_WIND"=> "WEST_WIND",
+            "WEST_WIND"=> "NORTH_WIND",
+            "NORTH_WIND"=> "EAST_WIND",
+            "WHITE_DRAGON"=> "GREEN_DRAGON",
+            "GREEN_DRAGON"=> "RED_DRAGON",
+            "RED_DRAGON"=> "WHITE_DRAGON",
+            "PLUM_FLOWER"=> "LILY_FLOWER",
+            "LILY_FLOWER"=> "CHRYSANTHEMUM_FLOWER",
+            "CHRYSANTHEMUM_FLOWER"=> "BAMBOO_FLOWER",
+            "BAMBOO_FLOWER"=> "PLUM_FLOWER",
+            "SPRING_SEASON"=> "SUMMER_SEASON",
+            "SUMMER_SEASON"=> "AUTUMN_SEASON",
+            "AUTUMN_SEASON"=> "WINTER_SEASON",
+            "WINTER_SEASON"=> "SPRING_SEASON",
+        };
+        tile_map
+    };
+}
