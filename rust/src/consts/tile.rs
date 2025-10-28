@@ -21,17 +21,9 @@ pub enum Wind {
 
 #[derive(Display, EnumString)]
 pub enum Dragon {
-    WHITE,
-    GREEN,
-    RED,
-}
-
-#[derive(Display, EnumString)]
-pub enum Season {
-    SPRING,
-    SUMMER,
-    AUTUMN,
-    WINTER,
+    WHITE = 0,
+    GREEN = 1,
+    RED = 2,
 }
 
 #[derive(Display, EnumString)]
@@ -40,4 +32,12 @@ pub enum Flower {
     LILY,
     CHRYSANTHEMUM,
     BAMBOO,
+}
+
+#[derive(Display, EnumString)]
+pub enum Season {
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER,
 }
