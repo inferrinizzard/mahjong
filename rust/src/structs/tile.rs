@@ -5,22 +5,37 @@ use std::{
     str::FromStr,
 };
 
+use derivative::Derivative;
 use strum::ParseError;
 
 use crate::consts::Suit;
 use crate::maps::next_tile_map;
 
+#[derive(Derivative)]
+#[derivative(Default)]
 pub struct Tile {
     pub suit: Suit,
     pub value: u8,
     pub name: String,
+
+    #[derivative(Default(value = "false"))]
+    pub is_wild: bool,
+    #[derivative(Default(value = "false"))]
+    pub is_dora: bool,
+    #[derivative(Default(value = "false"))]
+    pub is_akadora: bool,
 }
 
 impl Tile {
     pub fn new(suit: Suit, value: u8) -> Tile {
         let name = value.to_string() + "_" + &suit.to_string();
 
-        Tile { suit, value, name }
+        Tile {
+            suit,
+            value,
+            name,
+            ..Default::default()
+        }
     }
 
     pub fn is_number(&self) -> bool {
@@ -94,6 +109,7 @@ impl FromStr for Tile {
             suit,
             value,
             name: s.to_string(),
+            ..Default::default()
         })
     }
     type Err = TileParseError;

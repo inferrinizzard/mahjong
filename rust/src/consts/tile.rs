@@ -11,6 +11,12 @@ pub enum Suit {
     SEASON,
 }
 
+impl Default for Suit {
+    fn default() -> Self {
+        Suit::MAN
+    }
+}
+
 #[derive(Display, EnumString)]
 pub enum Wind {
     EAST,
