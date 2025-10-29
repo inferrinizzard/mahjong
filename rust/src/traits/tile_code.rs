@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 
-pub trait TileCode {
-    fn to_tile_code(&self) -> String;
+use crate::types::TileCode;
+
+pub trait ToTileCode {
+    fn to_tile_code(&self) -> TileCode;
 }
 
 lazy_static! {

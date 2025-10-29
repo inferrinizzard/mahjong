@@ -5,6 +5,7 @@ mod consts;
 mod maps;
 mod structs;
 mod traits;
+mod types;
 
 use consts::Suit;
 use structs::Tile;

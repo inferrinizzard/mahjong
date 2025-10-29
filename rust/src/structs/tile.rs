@@ -8,15 +8,17 @@ use std::{
 use derivative::Derivative;
 use strum::ParseError;
 
-use crate::{consts::Suit, traits::tile_code::TILE_CODE_MAP};
-use crate::{maps::NEXT_TILE_MAP, traits::TileCode};
+use crate::consts::Suit;
+use crate::maps::NEXT_TILE_MAP;
+use crate::traits::{ToTileCode, TILE_CODE_MAP};
+use crate::types::{TileCode, TileName};
 
 #[derive(Derivative)]
 #[derivative(Default)]
 pub struct Tile {
     pub suit: Suit,
     pub value: u8,
-    pub name: String,
+    pub name: TileName,
 
     #[derivative(Default(value = "false"))]
     pub is_wild: bool,
@@ -28,7 +30,7 @@ pub struct Tile {
 
 impl Tile {
     pub fn new(suit: Suit, value: u8) -> Tile {
-        let name = value.to_string() + "_" + &suit.to_string();
+        let name = TileName::from(value.to_string() + "_" + &suit.to_string());
 
         Tile {
             suit,
@@ -75,25 +77,25 @@ impl Tile {
     }
 }
 
-impl TileCode for Tile {
-    fn to_tile_code(&self) -> String {
+impl ToTileCode for Tile {
+    fn to_tile_code(&self) -> TileCode {
         if self.is_wild {
-            return String::from("0j");
+            return TileCode::from("0j");
         }
 
-        let tile_code = TILE_CODE_MAP[self.name.as_str()];
+        let tile_code_str = TILE_CODE_MAP[self.name.value.as_str()];
 
         if self.is_number() && self.is_akadora {
-            return String::from("0") + &tile_code.chars().nth(1).unwrap().to_string();
+            return TileCode::from(String::from("0") + &tile_code_str[1..]);
         }
 
-        String::from(tile_code)
+        TileCode::from(tile_code_str)
     }
 }
 
 impl Display for Tile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.name)
+        write!(f, "{}", self.name.value)
     }
 }
 
@@ -124,7 +126,7 @@ impl FromStr for Tile {
         Ok(Tile {
             suit,
             value,
-            name: s.to_string(),
+            name: TileName::from(s.to_string()),
             ..Default::default()
         })
     }
@@ -138,8 +140,8 @@ impl PartialEq for Tile {
 }
 impl PartialOrd for Tile {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let left_index = NEXT_TILE_MAP.get_index_of(self.name.as_str());
-        let right_index = NEXT_TILE_MAP.get_index_of(other.name.as_str());
+        let left_index = NEXT_TILE_MAP.get_index_of(self.name.value.as_str());
+        let right_index = NEXT_TILE_MAP.get_index_of(other.name.value.as_str());
 
         Some(if left_index > right_index {
             Ordering::Greater
