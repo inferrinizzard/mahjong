@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
-use crate::types::TileCode;
+use crate::types::{TileCode, TileName};
 
 pub trait ToTileCode {
     fn to_tile_code(&self) -> TileCode;
 }
 
 lazy_static! {
-    pub static ref TILE_CODE_MAP: HashMap<&'static str, &'static str> = vec![
+    static ref TILE_CODE_LIST: Vec<(&'static str, &'static str)> = vec![
         ("1_BAMBOO", "1s"),
         ("2_BAMBOO", "2s"),
         ("3_BAMBOO", "3s"),
@@ -50,7 +50,37 @@ lazy_static! {
         ("SUMMER_SEASON", "6f"),
         ("AUTUMN_SEASON", "7f"),
         ("WINTER_SEASON", "8f"),
-    ]
-    .into_iter()
-    .collect();
+    ];
+    pub static ref TILE_CODE_MAP: HashMap<&'static str, &'static str> =
+        TILE_CODE_LIST.clone().into_iter().collect();
+    pub static ref INVERSE_TILE_CODE_MAP: HashMap<&'static str, &'static str> = TILE_CODE_LIST
+        .clone()
+        .into_iter()
+        .map(|(k, v)| (v, k))
+        .collect();
+}
+
+pub fn parse_tile_code(tile_code: TileCode) -> Vec<TileName> {
+    let mut tile_name_str_list: Vec<TileName> = vec![];
+
+    let mut active_numbers: Vec<char> = vec![];
+
+    for c in tile_code.value.chars() {
+        if c.is_numeric() {
+            active_numbers.push(c);
+        } else if c == 'j' {
+            tile_name_str_list.push(TileName::from("WILDCARD"));
+            active_numbers = vec![];
+        } else {
+            for number in active_numbers {
+                let code_lookup_str: String = [number, c].iter().collect();
+                let tile_name = INVERSE_TILE_CODE_MAP[code_lookup_str.as_str()];
+                tile_name_str_list.push(TileName::from(tile_name));
+            }
+
+            active_numbers = vec![];
+        }
+    }
+
+    tile_name_str_list
 }

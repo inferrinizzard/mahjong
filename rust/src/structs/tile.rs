@@ -126,7 +126,7 @@ impl FromStr for Tile {
         Ok(Tile {
             suit,
             value,
-            name: TileName::from(s.to_string()),
+            name: TileName::from(s),
             ..Default::default()
         })
     }

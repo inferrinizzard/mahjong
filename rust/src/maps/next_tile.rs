@@ -2,7 +2,7 @@ use indexmap::{indexmap, IndexMap};
 
 lazy_static! {
     pub static ref NEXT_TILE_MAP: IndexMap<&'static str, &'static str> = {
-        let tile_map = indexmap! {
+        indexmap! {
             "1_BAMBOO"=> "2_BAMBOO",
             "2_BAMBOO"=> "3_BAMBOO",
             "3_BAMBOO"=> "4_BAMBOO",
@@ -45,7 +45,6 @@ lazy_static! {
             "SUMMER_SEASON"=> "AUTUMN_SEASON",
             "AUTUMN_SEASON"=> "WINTER_SEASON",
             "WINTER_SEASON"=> "SPRING_SEASON",
-        };
-        tile_map
+        }
     };
 }

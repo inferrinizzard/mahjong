@@ -1,3 +1,4 @@
-pub mod tile;
+pub mod next_tile;
+pub mod tile_frequency;
 
-pub use tile::NEXT_TILE_MAP;
+pub use next_tile::NEXT_TILE_MAP;
