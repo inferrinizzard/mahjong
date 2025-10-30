@@ -1,15 +1,12 @@
-use std::collections::HashMap;
+use std::{cmp::max, collections::HashMap};
 
-use crate::{
-    traits::parse_tile_code,
-    types::{TileCode, TileName},
-};
+use crate::structs::Tile;
 
-type TileFrequencyMap = HashMap<TileName, u8>;
+type TileFrequencyMap = HashMap<String, u8>;
 
 // consider implementing Deref, DerefMut to expose the map directly
 pub struct TileFrequency {
-    map: TileFrequencyMap,
+    pub map: TileFrequencyMap,
 }
 
 impl TileFrequency {
@@ -20,20 +17,14 @@ impl TileFrequency {
     }
 }
 
-impl From<Vec<TileName>> for TileFrequency {
-    fn from(value: Vec<TileName>) -> Self {
+impl From<&Vec<Tile>> for TileFrequency {
+    fn from(value: &Vec<Tile>) -> Self {
         let mut map = TileFrequencyMap::new();
 
-        for tile_name in value {
-            *map.entry(tile_name).or_insert(0) += 1;
+        for tile in value {
+            *map.entry(tile.name.clone()).or_insert(0) += 1;
         }
 
         TileFrequency { map }
-    }
-}
-
-impl From<TileCode> for TileFrequency {
-    fn from(value: TileCode) -> Self {
-        TileFrequency::from(parse_tile_code(value))
     }
 }

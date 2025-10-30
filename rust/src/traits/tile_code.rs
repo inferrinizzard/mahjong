@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::types::{TileCode, TileName};
 
 pub trait ToTileCode {
-    fn to_tile_code(&self) -> TileCode;
+    fn to_tile_code(&self) -> String;
 }
 
 lazy_static! {

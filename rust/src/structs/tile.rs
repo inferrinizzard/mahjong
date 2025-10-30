@@ -1,6 +1,7 @@
 use std::{
     cmp::Ordering,
     fmt::{self, Display},
+    hash::Hash,
     num::ParseIntError,
     str::FromStr,
 };
@@ -11,14 +12,13 @@ use strum::ParseError;
 use crate::consts::Suit;
 use crate::maps::NEXT_TILE_MAP;
 use crate::traits::{ToTileCode, TILE_CODE_MAP};
-use crate::types::{TileCode, TileName};
 
 #[derive(Derivative)]
 #[derivative(Default)]
 pub struct Tile {
     pub suit: Suit,
     pub value: u8,
-    pub name: TileName,
+    pub name: String,
 
     #[derivative(Default(value = "false"))]
     pub is_wild: bool,
@@ -30,7 +30,7 @@ pub struct Tile {
 
 impl Tile {
     pub fn new(suit: Suit, value: u8) -> Tile {
-        let name = TileName::from(value.to_string() + "_" + &suit.to_string());
+        let name = value.to_string() + "_" + &suit.to_string();
 
         Tile {
             suit,
@@ -78,24 +78,24 @@ impl Tile {
 }
 
 impl ToTileCode for Tile {
-    fn to_tile_code(&self) -> TileCode {
+    fn to_tile_code(&self) -> String {
         if self.is_wild {
-            return TileCode::from("0j");
+            return String::from("0j");
         }
 
-        let tile_code_str = TILE_CODE_MAP[self.name.value.as_str()];
+        let tile_code_str = TILE_CODE_MAP[self.name.as_str()];
 
         if self.is_number() && self.is_akadora {
-            return TileCode::from(String::from("0") + &tile_code_str[1..]);
+            return String::from("0") + &tile_code_str[1..];
         }
 
-        TileCode::from(tile_code_str)
+        String::from(tile_code_str)
     }
 }
 
 impl Display for Tile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.name.value)
+        write!(f, "{}", self.name)
     }
 }
 
@@ -126,7 +126,7 @@ impl FromStr for Tile {
         Ok(Tile {
             suit,
             value,
-            name: TileName::from(s),
+            name: String::from(s),
             ..Default::default()
         })
     }
@@ -138,10 +138,18 @@ impl PartialEq for Tile {
         self.name == other.name
     }
 }
+impl Eq for Tile {}
+
+impl Hash for Tile {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.name.hash(state);
+    }
+}
+
 impl PartialOrd for Tile {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let left_index = NEXT_TILE_MAP.get_index_of(self.name.value.as_str());
-        let right_index = NEXT_TILE_MAP.get_index_of(other.name.value.as_str());
+        let left_index = NEXT_TILE_MAP.get_index_of(self.name.as_str());
+        let right_index = NEXT_TILE_MAP.get_index_of(other.name.as_str());
 
         Some(if left_index > right_index {
             Ordering::Greater
