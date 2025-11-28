@@ -9,16 +9,18 @@ use std::{
 use derivative::Derivative;
 use strum::ParseError;
 
-use crate::consts::Suit;
-use crate::maps::NEXT_TILE_MAP;
+use crate::consts::{Suit, TileName};
 use crate::traits::{ToTileCode, TILE_CODE_MAP};
+use crate::{
+    consts::{tile, TileData},
+    maps::NEXT_TILE_MAP,
+};
 
 #[derive(Derivative)]
 #[derivative(Default)]
 pub struct Tile {
-    pub suit: Suit,
-    pub value: u8,
-    pub name: String,
+    pub tile_data: TileData,
+    pub name: TileName,
 
     #[derivative(Default(value = "false"))]
     pub is_wild: bool,
@@ -29,12 +31,11 @@ pub struct Tile {
 }
 
 impl Tile {
-    pub fn new(suit: Suit, value: u8) -> Tile {
-        let name = value.to_string() + "_" + &suit.to_string();
+    pub fn new(tile_data: TileData) -> Tile {
+        let name = TileName::from(&tile_data);
 
         Tile {
-            suit,
-            value,
+            tile_data,
             name,
             ..Default::default()
         }
@@ -83,7 +84,7 @@ impl ToTileCode for Tile {
             return String::from("0j");
         }
 
-        let tile_code_str = TILE_CODE_MAP[self.name.as_str()];
+        let tile_code_str = TILE_CODE_MAP[&self.name];
 
         if self.is_number() && self.is_akadora {
             return String::from("0") + &tile_code_str[1..];
@@ -117,21 +118,21 @@ impl From<ParseIntError> for TileParseError {
     }
 }
 
-impl FromStr for Tile {
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let slugs = s.split("_").take(2).collect::<Vec<_>>();
-        let value = u8::from_str(slugs[0])?;
-        let suit = Suit::from_str(slugs[1])?;
+// impl FromStr for Tile {
+//     fn from_str(s: &str) -> Result<Self, Self::Err> {
+//         let slugs = s.split("_").take(2).collect::<Vec<_>>();
+//         let value = u8::from_str(slugs[0])?;
+//         let suit = Suit::from_str(slugs[1])?;
 
-        Ok(Tile {
-            suit,
-            value,
-            name: String::from(s),
-            ..Default::default()
-        })
-    }
-    type Err = TileParseError;
-}
+//         Ok(Tile {
+//             suit,
+//             value,
+//             name: String::from(s),
+//             ..Default::default()
+//         })
+//     }
+//     type Err = TileParseError;
+// }
 
 impl PartialEq for Tile {
     fn eq(&self, other: &Self) -> bool {
@@ -148,8 +149,8 @@ impl Hash for Tile {
 
 impl PartialOrd for Tile {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        let left_index = NEXT_TILE_MAP.get_index_of(self.name.as_str());
-        let right_index = NEXT_TILE_MAP.get_index_of(other.name.as_str());
+        let left_index = NEXT_TILE_MAP.get_index_of(&self.name);
+        let right_index = NEXT_TILE_MAP.get_index_of(&other.name);
 
         Some(if left_index > right_index {
             Ordering::Greater

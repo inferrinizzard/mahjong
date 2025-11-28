@@ -1,3 +1,3 @@
 pub mod tile_str;
 
-pub use tile_str::{TileCode, TileName, TileString};
+pub use tile_str::TileCode;

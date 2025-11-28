@@ -7,10 +7,11 @@ mod structs;
 mod traits;
 mod types;
 
-use consts::Suit;
 use structs::Tile;
+
+use crate::consts::{tile::TileNumber, TileData};
 
 fn main() {
     println!("Hello, world!");
-    Tile::new(Suit::MAN, 1);
+    Tile::new(TileData::MAN(TileNumber::ONE));
 }

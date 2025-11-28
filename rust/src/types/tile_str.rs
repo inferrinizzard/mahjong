@@ -48,7 +48,5 @@ impl<T> Hash for TileString<T> {
 }
 
 pub struct TileCodeStruct;
-pub struct TileNameStruct;
 
 pub type TileCode = TileString<TileCodeStruct>;
-pub type TileName = TileString<TileNameStruct>;

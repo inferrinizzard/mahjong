@@ -1,59 +1,59 @@
 use std::collections::HashMap;
 
-use crate::types::{TileCode, TileName};
+use crate::{consts::TileName, types::TileCode};
 
 pub trait ToTileCode {
     fn to_tile_code(&self) -> String;
 }
 
 lazy_static! {
-    static ref TILE_CODE_LIST: Vec<(&'static str, &'static str)> = vec![
-        ("1_BAMBOO", "1s"),
-        ("2_BAMBOO", "2s"),
-        ("3_BAMBOO", "3s"),
-        ("4_BAMBOO", "4s"),
-        ("5_BAMBOO", "5s"),
-        ("6_BAMBOO", "6s"),
-        ("7_BAMBOO", "7s"),
-        ("8_BAMBOO", "8s"),
-        ("9_BAMBOO", "9s"),
-        ("1_MAN", "1m"),
-        ("2_MAN", "2m"),
-        ("3_MAN", "3m"),
-        ("4_MAN", "4m"),
-        ("5_MAN", "5m"),
-        ("6_MAN", "6m"),
-        ("7_MAN", "7m"),
-        ("8_MAN", "8m"),
-        ("9_MAN", "9m"),
-        ("1_TONG", "1p"),
-        ("2_TONG", "2p"),
-        ("3_TONG", "3p"),
-        ("4_TONG", "4p"),
-        ("5_TONG", "5p"),
-        ("6_TONG", "6p"),
-        ("7_TONG", "7p"),
-        ("8_TONG", "8p"),
-        ("9_TONG", "9p"),
-        ("EAST_WIND", "1z"),
-        ("SOUTH_WIND", "2z"),
-        ("WEST_WIND", "3z"),
-        ("NORTH_WIND", "4z"),
-        ("WHITE_DRAGON", "5z"),
-        ("GREEN_DRAGON", "6z"),
-        ("RED_DRAGON", "7z"),
-        ("PLUM_FLOWER", "1f"),
-        ("LILY_FLOWER", "2f"),
-        ("CHRYSANTHEMUM_FLOWER", "3f"),
-        ("BAMBOO_FLOWER", "4f"),
-        ("SPRING_SEASON", "5f"),
-        ("SUMMER_SEASON", "6f"),
-        ("AUTUMN_SEASON", "7f"),
-        ("WINTER_SEASON", "8f"),
+    static ref TILE_CODE_LIST: Vec<(TileName, &'static str)> = vec![
+        (TileName::BAMBOO_1, "1s"),
+        (TileName::BAMBOO_2, "2s"),
+        (TileName::BAMBOO_3, "3s"),
+        (TileName::BAMBOO_4, "4s"),
+        (TileName::BAMBOO_5, "5s"),
+        (TileName::BAMBOO_6, "6s"),
+        (TileName::BAMBOO_7, "7s"),
+        (TileName::BAMBOO_8, "8s"),
+        (TileName::BAMBOO_9, "9s"),
+        (TileName::MAN_1, "1m"),
+        (TileName::MAN_2, "2m"),
+        (TileName::MAN_3, "3m"),
+        (TileName::MAN_4, "4m"),
+        (TileName::MAN_5, "5m"),
+        (TileName::MAN_6, "6m"),
+        (TileName::MAN_7, "7m"),
+        (TileName::MAN_8, "8m"),
+        (TileName::MAN_9, "9m"),
+        (TileName::TONG_1, "1p"),
+        (TileName::TONG_2, "2p"),
+        (TileName::TONG_3, "3p"),
+        (TileName::TONG_4, "4p"),
+        (TileName::TONG_5, "5p"),
+        (TileName::TONG_6, "6p"),
+        (TileName::TONG_7, "7p"),
+        (TileName::TONG_8, "8p"),
+        (TileName::TONG_9, "9p"),
+        (TileName::WIND_EAST, "1z"),
+        (TileName::WIND_SOUTH, "2z"),
+        (TileName::WIND_WEST, "3z"),
+        (TileName::WIND_NORTH, "4z"),
+        (TileName::DRAGON_WHITE, "5z"),
+        (TileName::DRAGON_GREEN, "6z"),
+        (TileName::DRAGON_RED, "7z"),
+        (TileName::FLOWER_PLUM, "1f"),
+        (TileName::FLOWER_LILY, "2f"),
+        (TileName::FLOWER_CHRYSANTHEMUM, "3f"),
+        (TileName::FLOWER_BAMBOO, "4f"),
+        (TileName::SEASON_SPRING, "5f"),
+        (TileName::SEASON_SUMMER, "6f"),
+        (TileName::SEASON_AUTUMN, "7f"),
+        (TileName::SEASON_WINTER, "8f"),
     ];
-    pub static ref TILE_CODE_MAP: HashMap<&'static str, &'static str> =
+    pub static ref TILE_CODE_MAP: HashMap<TileName, &'static str> =
         TILE_CODE_LIST.clone().into_iter().collect();
-    pub static ref INVERSE_TILE_CODE_MAP: HashMap<&'static str, &'static str> = TILE_CODE_LIST
+    pub static ref INVERSE_TILE_CODE_MAP: HashMap<&'static str, TileName> = TILE_CODE_LIST
         .clone()
         .into_iter()
         .map(|(k, v)| (v, k))
@@ -68,14 +68,16 @@ pub fn parse_tile_code(tile_code: TileCode) -> Vec<TileName> {
     for c in tile_code.value.chars() {
         if c.is_numeric() {
             active_numbers.push(c);
-        } else if c == 'j' {
-            tile_name_str_list.push(TileName::from("WILDCARD"));
-            active_numbers = vec![];
-        } else {
+        }
+        // else if c == 'j' {
+        //     tile_name_str_list.push(TileName::from("WILDCARD"));
+        //     active_numbers = vec![];
+        // }
+        else {
             for number in active_numbers {
                 let code_lookup_str: String = [number, c].iter().collect();
-                let tile_name = INVERSE_TILE_CODE_MAP[code_lookup_str.as_str()];
-                tile_name_str_list.push(TileName::from(tile_name));
+                let tile_name = INVERSE_TILE_CODE_MAP[&code_lookup_str.as_str()].clone();
+                tile_name_str_list.push(tile_name);
             }
 
             active_numbers = vec![];

@@ -1,4 +1,14 @@
-use strum_macros::{Display, EnumString};
+use strum_macros::{Display, EnumIter, EnumString};
+
+pub enum TileData {
+    MAN(TileNumber),
+    TONG(TileNumber),
+    BAMBOO(TileNumber),
+    WIND(Wind),
+    DRAGON(Dragon),
+    FLOWER(Flower),
+    SEASON(Season),
+}
 
 #[derive(Display, EnumString)]
 pub enum Suit {
@@ -17,6 +27,19 @@ impl Default for Suit {
     }
 }
 
+#[derive(Display, EnumString, EnumIter)]
+pub enum TileNumber {
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+}
+
 #[derive(Display, EnumString)]
 pub enum Wind {
     EAST,
@@ -27,9 +50,9 @@ pub enum Wind {
 
 #[derive(Display, EnumString)]
 pub enum Dragon {
-    WHITE = 0,
-    GREEN = 1,
-    RED = 2,
+    WHITE,
+    GREEN,
+    RED,
 }
 
 #[derive(Display, EnumString)]
