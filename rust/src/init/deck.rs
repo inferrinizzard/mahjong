@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use crate::{
     consts::{tile::TileNumber, Dragon, Flower, Season, TileData, Wind},
     structs::Tile,
@@ -9,8 +11,8 @@ pub struct DeckFlags {
     pub has_akadora: bool,
 }
 
-pub fn create_deck(flags: DeckFlags) -> Vec<Tile> {
-    let mut base_deck = vec![
+pub fn create_deck(flags: DeckFlags) -> VecDeque<Tile> {
+    let mut base_deck = VecDeque::from(vec![
         Tile::new(TileData::MAN(TileNumber::ONE)),
         Tile::new(TileData::MAN(TileNumber::ONE)),
         Tile::new(TileData::MAN(TileNumber::ONE)),
@@ -147,7 +149,7 @@ pub fn create_deck(flags: DeckFlags) -> Vec<Tile> {
         Tile::new(TileData::DRAGON(Dragon::RED)),
         Tile::new(TileData::DRAGON(Dragon::RED)),
         Tile::new(TileData::DRAGON(Dragon::RED)),
-    ];
+    ]);
 
     // Add missing fives
     let mut special_fives = vec![
@@ -162,20 +164,20 @@ pub fn create_deck(flags: DeckFlags) -> Vec<Tile> {
             .for_each(|tile| tile.is_akadora = true);
     }
 
-    base_deck.append(&mut special_fives);
+    base_deck.extend(special_fives);
 
     // Add flowers, seasons
     if flags.has_flowers {
-        base_deck.push(Tile::new(TileData::FLOWER(Flower::PLUM)));
-        base_deck.push(Tile::new(TileData::FLOWER(Flower::LILY)));
-        base_deck.push(Tile::new(TileData::FLOWER(Flower::CHRYSANTHEMUM)));
-        base_deck.push(Tile::new(TileData::FLOWER(Flower::BAMBOO)));
+        base_deck.push_back(Tile::new(TileData::FLOWER(Flower::PLUM)));
+        base_deck.push_back(Tile::new(TileData::FLOWER(Flower::LILY)));
+        base_deck.push_back(Tile::new(TileData::FLOWER(Flower::CHRYSANTHEMUM)));
+        base_deck.push_back(Tile::new(TileData::FLOWER(Flower::BAMBOO)));
     }
     if flags.has_seasons {
-        base_deck.push(Tile::new(TileData::SEASON(Season::SPRING)));
-        base_deck.push(Tile::new(TileData::SEASON(Season::SUMMER)));
-        base_deck.push(Tile::new(TileData::SEASON(Season::AUTUMN)));
-        base_deck.push(Tile::new(TileData::SEASON(Season::WINTER)));
+        base_deck.push_back(Tile::new(TileData::SEASON(Season::SPRING)));
+        base_deck.push_back(Tile::new(TileData::SEASON(Season::SUMMER)));
+        base_deck.push_back(Tile::new(TileData::SEASON(Season::AUTUMN)));
+        base_deck.push_back(Tile::new(TileData::SEASON(Season::WINTER)));
     }
 
     // TODO: shuffle
