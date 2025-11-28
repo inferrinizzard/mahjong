@@ -1,5 +1,6 @@
 use strum_macros::{Display, EnumIter, EnumString};
 
+#[derive(Debug)]
 pub enum TileData {
     MAN(TileNumber),
     TONG(TileNumber),
@@ -33,7 +34,7 @@ impl Default for Suit {
     }
 }
 
-#[derive(Display, EnumString, EnumIter)]
+#[derive(Debug, EnumIter)]
 pub enum TileNumber {
     ONE,
     TWO,
@@ -46,7 +47,23 @@ pub enum TileNumber {
     NINE,
 }
 
-#[derive(Display, EnumString)]
+impl ToString for TileNumber {
+    fn to_string(&self) -> String {
+        match self {
+            TileNumber::ONE => String::from("1"),
+            TileNumber::TWO => String::from("2"),
+            TileNumber::THREE => String::from("3"),
+            TileNumber::FOUR => String::from("4"),
+            TileNumber::FIVE => String::from("5"),
+            TileNumber::SIX => String::from("6"),
+            TileNumber::SEVEN => String::from("7"),
+            TileNumber::EIGHT => String::from("8"),
+            TileNumber::NINE => String::from("9"),
+        }
+    }
+}
+
+#[derive(Debug, Display, EnumString)]
 pub enum Wind {
     EAST,
     SOUTH,
@@ -54,14 +71,14 @@ pub enum Wind {
     NORTH,
 }
 
-#[derive(Display, EnumString)]
+#[derive(Debug, Display, EnumString)]
 pub enum Dragon {
     WHITE,
     GREEN,
     RED,
 }
 
-#[derive(Display, EnumString)]
+#[derive(Debug, Display, EnumString)]
 pub enum Flower {
     PLUM,
     LILY,
@@ -69,7 +86,7 @@ pub enum Flower {
     BAMBOO,
 }
 
-#[derive(Display, EnumString)]
+#[derive(Debug, Display, EnumString)]
 pub enum Season {
     SPRING,
     SUMMER,

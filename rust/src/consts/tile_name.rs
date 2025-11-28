@@ -1,11 +1,11 @@
-use std::{fmt::Display, str::FromStr};
+use std::str::FromStr;
 
-use strum_macros::EnumString;
+use strum_macros::{Display, EnumString};
 
 use crate::consts::{Suit, TileData};
 
 #[allow(non_camel_case_types)]
-#[derive(Clone, PartialEq, Eq, Hash, EnumString)]
+#[derive(Debug, Display, Clone, PartialEq, Eq, Hash, EnumString)]
 pub enum TileName {
     MAN_1,
     MAN_2,
@@ -65,12 +65,6 @@ impl From<&TileData> for TileName {
         let tile_name_str = format!("{}_{}", suit, value);
 
         TileName::from_str(&tile_name_str.as_str()).unwrap()
-    }
-}
-
-impl Display for TileName {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_string())
     }
 }
 

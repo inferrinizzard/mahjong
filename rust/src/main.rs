@@ -13,5 +13,5 @@ use crate::consts::{tile::TileNumber, TileData};
 
 fn main() {
     println!("Hello, world!");
-    Tile::new(TileData::MAN(TileNumber::ONE));
+    println!("{}", Tile::new(TileData::MAN(TileNumber::ONE)).to_string());
 }
