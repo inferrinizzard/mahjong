@@ -3,18 +3,14 @@ use std::{
     fmt::{self, Display},
     hash::Hash,
     num::ParseIntError,
-    str::FromStr,
 };
 
 use derivative::Derivative;
 use strum::ParseError;
 
-use crate::consts::{Suit, TileName};
+use crate::consts::{tile::TileNumber, Dragon, TileName};
 use crate::traits::{ToTileCode, TILE_CODE_MAP};
-use crate::{
-    consts::{tile, TileData},
-    maps::NEXT_TILE_MAP,
-};
+use crate::{consts::TileData, maps::NEXT_TILE_MAP};
 
 #[derive(Derivative)]
 #[derivative(Default)]
@@ -42,11 +38,20 @@ impl Tile {
     }
 
     pub fn is_number(&self) -> bool {
-        matches!(self.suit, Suit::BAMBOO | Suit::MAN | Suit::TONG)
+        matches!(
+            self.tile_data,
+            TileData::BAMBOO(_) | TileData::MAN(_) | TileData::TONG(_)
+        )
     }
 
     pub fn is_terminal(&self) -> bool {
-        self.is_number() && matches!(self.value, 1 | 9)
+        self.is_number()
+            && match &self.tile_data {
+                TileData::BAMBOO(value) | TileData::MAN(value) | TileData::TONG(value) => {
+                    matches!(value, TileNumber::ONE | TileNumber::NINE)
+                }
+                _ => false,
+            }
     }
 
     pub fn is_simple(&self) -> bool {
@@ -54,27 +59,25 @@ impl Tile {
     }
 
     pub fn is_honor(&self) -> bool {
-        matches!(self.suit, Suit::WIND | Suit::DRAGON)
+        matches!(self.tile_data, TileData::WIND(_) | TileData::DRAGON(_))
     }
 
     pub fn is_bonus(&self) -> bool {
-        matches!(self.suit, Suit::SEASON | Suit::FLOWER)
+        matches!(self.tile_data, TileData::SEASON(_) | TileData::FLOWER(_))
     }
 
     pub fn is_green(&self) -> bool {
-        match self {
-            Tile {
-                suit: Suit::DRAGON,
-                value: 1,
-                ..
-            } => true,
-            Tile {
-                suit: Suit::BAMBOO,
-                value: 2 | 3 | 4 | 6 | 8,
-                ..
-            } => true,
-            _ => false,
-        }
+        matches!(
+            self.tile_data,
+            TileData::DRAGON(Dragon::GREEN)
+                | TileData::BAMBOO(
+                    TileNumber::TWO
+                        | TileNumber::THREE
+                        | TileNumber::FOUR
+                        | TileNumber::SIX
+                        | TileNumber::EIGHT
+                )
+        )
     }
 }
 

@@ -73,3 +73,9 @@ impl Display for TileName {
         write!(f, "{}", self.to_string())
     }
 }
+
+impl Default for TileName {
+    fn default() -> Self {
+        TileName::from(&TileData::default())
+    }
+}

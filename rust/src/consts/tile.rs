@@ -10,6 +10,12 @@ pub enum TileData {
     SEASON(Season),
 }
 
+impl Default for TileData {
+    fn default() -> Self {
+        TileData::DRAGON(Dragon::RED)
+    }
+}
+
 #[derive(Display, EnumString)]
 pub enum Suit {
     MAN,
