@@ -2,6 +2,7 @@
 extern crate lazy_static;
 
 mod consts;
+mod game;
 mod init;
 mod maps;
 mod structs;

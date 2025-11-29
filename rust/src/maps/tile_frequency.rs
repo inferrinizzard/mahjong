@@ -37,3 +37,9 @@ impl From<&Vec<Tile>> for TileFrequency {
         TileFrequency { map }
     }
 }
+
+impl Default for TileFrequency {
+    fn default() -> Self {
+        TileFrequency::new()
+    }
+}
