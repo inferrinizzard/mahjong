@@ -5,13 +5,15 @@ use crate::{
     structs::Tile,
 };
 
+pub type Deck = VecDeque<Tile>;
+
 pub struct DeckFlags {
     pub has_flowers: bool,
     pub has_seasons: bool,
     pub has_akadora: bool,
 }
 
-pub fn create_deck(flags: DeckFlags) -> VecDeque<Tile> {
+pub fn create_deck(flags: DeckFlags) -> Deck {
     let mut base_deck = VecDeque::from(vec![
         Tile::new(TileData::MAN(TileNumber::ONE)),
         Tile::new(TileData::MAN(TileNumber::ONE)),
