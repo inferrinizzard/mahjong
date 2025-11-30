@@ -1,4 +1,4 @@
-use crate::game::{create_deck, game::create_game, DeckFlags};
+use crate::game::game::create_game;
 
 #[macro_use]
 extern crate lazy_static;

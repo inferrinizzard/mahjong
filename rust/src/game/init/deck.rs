@@ -3,19 +3,21 @@ use std::collections::VecDeque;
 use rand::seq::SliceRandom;
 
 use crate::{
-    consts::{tile::TileNumber, Dragon, Flower, Season, TileData, Wind},
+    consts::{tile::TileNumber, Dragon, Flower, Season, TileData, TileName, Wind},
     structs::Tile,
 };
 
 pub type Deck = VecDeque<Tile>;
 
-pub struct DeckFlags {
+pub struct DeckOptions {
     pub has_flowers: bool,
     pub has_seasons: bool,
     pub has_akadora: bool,
+
+    pub wild: Option<TileName>,
 }
 
-pub fn create_deck(flags: DeckFlags) -> Deck {
+pub fn create_deck(options: DeckOptions) -> Deck {
     let mut base_deck = VecDeque::from(vec![
         Tile::new(TileData::MAN(TileNumber::ONE)),
         Tile::new(TileData::MAN(TileNumber::ONE)),
@@ -162,7 +164,7 @@ pub fn create_deck(flags: DeckFlags) -> Deck {
         Tile::new(TileData::BAMBOO(TileNumber::FIVE)),
     ];
 
-    if flags.has_akadora {
+    if options.has_akadora {
         special_fives
             .iter_mut()
             .for_each(|tile| tile.is_akadora = true);
@@ -171,18 +173,27 @@ pub fn create_deck(flags: DeckFlags) -> Deck {
     base_deck.extend(special_fives);
 
     // Add flowers, seasons
-    if flags.has_flowers {
+    if options.has_flowers {
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::PLUM)));
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::LILY)));
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::CHRYSANTHEMUM)));
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::BAMBOO)));
     }
-    if flags.has_seasons {
+    if options.has_seasons {
         base_deck.push_back(Tile::new(TileData::SEASON(Season::SPRING)));
         base_deck.push_back(Tile::new(TileData::SEASON(Season::SUMMER)));
         base_deck.push_back(Tile::new(TileData::SEASON(Season::AUTUMN)));
         base_deck.push_back(Tile::new(TileData::SEASON(Season::WINTER)));
     }
+
+    // Set wild if supported
+    match options.wild {
+        Some(tile_name) => base_deck
+            .iter_mut()
+            .filter(|tile| tile.name == tile_name)
+            .for_each(|tile| tile.is_wild = true),
+        _ => (),
+    };
 
     let mut rng = rand::rng();
     base_deck.make_contiguous().shuffle(&mut rng);
