@@ -5,7 +5,7 @@ use crate::{
     structs::{meld::Meld, Tile},
 };
 
-#[derive(Derivative)]
+#[derive(Debug, Derivative)]
 #[derivative(Default)]
 pub struct Hand {
     pub tiles: Vec<Tile>,

@@ -1,5 +1,7 @@
 use std::collections::VecDeque;
 
+use rand::seq::SliceRandom;
+
 use crate::{
     consts::{tile::TileNumber, Dragon, Flower, Season, TileData, Wind},
     structs::Tile,
@@ -182,6 +184,8 @@ pub fn create_deck(flags: DeckFlags) -> Deck {
         base_deck.push_back(Tile::new(TileData::SEASON(Season::WINTER)));
     }
 
-    // TODO: shuffle
+    let mut rng = rand::rng();
+    base_deck.make_contiguous().shuffle(&mut rng);
+
     base_deck
 }

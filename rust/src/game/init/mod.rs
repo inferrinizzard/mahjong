@@ -1,3 +1,5 @@
 pub mod deck;
+pub mod game;
+pub mod player;
 
-pub use deck::{create_deck, Deck, DeckFlags};
+pub use deck::*;

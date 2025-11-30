@@ -2,7 +2,7 @@ use derivative::Derivative;
 
 use crate::{consts::Wind, structs::Hand};
 
-#[derive(Derivative)]
+#[derive(Debug, Derivative)]
 #[derivative(Default)]
 pub struct Player {
     pub name: String,
@@ -20,7 +20,7 @@ pub struct Player {
 }
 
 impl Player {
-    fn new(name: String) -> Player {
+    pub fn new(name: String, hand: Hand) -> Player {
         Player {
             name,
             ..Default::default()

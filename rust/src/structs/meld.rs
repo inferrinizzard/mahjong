@@ -1,11 +1,13 @@
 use crate::{consts::Wind, structs::Tile};
 
+#[derive(Debug)]
 pub enum MeldType {
     PONG,
     GANG,
     CHI,
 }
 
+#[derive(Debug)]
 pub struct Meld {
     pub meld_type: MeldType,
     pub tiles: Vec<Tile>,

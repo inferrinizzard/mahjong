@@ -5,6 +5,7 @@ use crate::{consts::TileName, structs::Tile};
 type TileFrequencyMap = HashMap<TileName, u8>;
 
 // consider implementing Deref, DerefMut to expose the map directly
+#[derive(Debug)]
 pub struct TileFrequency {
     pub map: TileFrequencyMap,
 }

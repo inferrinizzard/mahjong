@@ -12,7 +12,7 @@ use crate::consts::{tile::TileNumber, Dragon, TileName};
 use crate::traits::{ToTileCode, TILE_CODE_MAP};
 use crate::{consts::TileData, maps::NEXT_TILE_MAP};
 
-#[derive(Derivative)]
+#[derive(Derivative, Debug)]
 #[derivative(Default)]
 pub struct Tile {
     pub tile_data: TileData,
