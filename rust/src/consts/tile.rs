@@ -63,7 +63,7 @@ impl ToString for TileNumber {
     }
 }
 
-#[derive(Debug, Display, EnumString)]
+#[derive(Debug, Display, EnumString, EnumIter)]
 pub enum Wind {
     EAST,
     SOUTH,
