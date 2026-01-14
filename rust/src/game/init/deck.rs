@@ -17,7 +17,7 @@ pub struct DeckOptions {
     pub wild: Option<TileName>,
 }
 
-pub fn create_deck(options: DeckOptions) -> Deck {
+pub fn create_deck(options: &DeckOptions) -> Deck {
     let mut base_deck = VecDeque::from(vec![
         Tile::new(TileData::MAN(TileNumber::ONE)),
         Tile::new(TileData::MAN(TileNumber::ONE)),
@@ -187,10 +187,10 @@ pub fn create_deck(options: DeckOptions) -> Deck {
     }
 
     // Set wild if supported
-    match options.wild {
+    match &options.wild {
         Some(tile_name) => base_deck
             .iter_mut()
-            .filter(|tile| tile.name == tile_name)
+            .filter(|tile| &tile.name == tile_name)
             .for_each(|tile| tile.is_wild = true),
         _ => (),
     };

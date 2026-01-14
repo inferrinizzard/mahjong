@@ -2,17 +2,12 @@ use strum::IntoEnumIterator;
 
 use crate::{
     consts::Wind,
-    game::{create_deck, create_players, Deck, DeckOptions, Player},
+    game::{create_deck, create_players, Deck, GameOptions, Player},
 };
 
-pub fn create_game() -> (Deck, Vec<Player>) {
+pub fn create_game(game_options: &GameOptions) -> (Deck, Vec<Player>) {
     // Create Deck
-    let mut deck = create_deck(DeckOptions {
-        has_akadora: true,
-        has_flowers: true,
-        has_seasons: true,
-        wild: None,
-    });
+    let mut deck = create_deck(&game_options.deck);
 
     let names = vec!["A", "B", "C", "D"]
         .iter()

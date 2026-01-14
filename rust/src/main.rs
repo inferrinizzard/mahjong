@@ -1,4 +1,4 @@
-use crate::game::game::create_game;
+use crate::game::{game::create_game, DeckOptions, GameOptions};
 
 #[macro_use]
 extern crate lazy_static;
@@ -12,5 +12,14 @@ mod types;
 
 fn main() {
     println!("Hello, world!");
-    let game = create_game();
+    let mut game_options = GameOptions {
+        deck: DeckOptions {
+            has_akadora: true,
+            has_flowers: true,
+            has_seasons: true,
+            wild: None,
+        },
+    };
+
+    let game = create_game(&game_options);
 }
