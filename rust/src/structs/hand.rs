@@ -13,7 +13,7 @@ pub struct Hand {
     pub melds: Vec<Meld>,
 
     #[derivative(Default(value = "0"))]
-    pub num_wilds: i8,
+    pub num_wilds: u8,
 
     #[derivative(Default(value = "false"))]
     pub is_riichi: bool,

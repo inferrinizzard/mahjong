@@ -28,8 +28,15 @@ fn solve_seven_pairs_shanten(hand: &Hand) -> Shanten {
     let max_seven_pairs_shanten = 6;
     let mut shanten = max_seven_pairs_shanten;
 
-    //  6 - pairs
+    let num_pairs: u8 = hand
+        .tile_frequency
+        .map
+        .iter()
+        // .filter(|entry| *entry.1 >= 2)
+        .map(|entry| *entry.1 / 2)
+        .sum();
 
+    shanten = cmp::min(shanten, max_seven_pairs_shanten - num_pairs);
     shanten
 }
 

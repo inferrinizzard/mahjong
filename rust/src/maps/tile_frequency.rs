@@ -44,3 +44,11 @@ impl Default for TileFrequency {
         TileFrequency::new()
     }
 }
+
+// impl Iterator for TileFrequency {
+//     type Item = (&'TileName, u8);
+
+//     fn next(&mut self) -> Option<Self::Item> {
+//         self.map.iter().next()
+//     }
+// }
