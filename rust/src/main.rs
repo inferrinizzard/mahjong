@@ -6,6 +6,7 @@ extern crate lazy_static;
 mod consts;
 mod game;
 mod maps;
+mod notation;
 mod structs;
 mod traits;
 mod types;
