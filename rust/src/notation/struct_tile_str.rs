@@ -1,4 +1,4 @@
-use std::{hash::Hash, marker::PhantomData};
+use std::{hash, marker::PhantomData};
 
 // consider implementing Deref, DerefMut to expose the string directly
 pub struct TileString<T> {
@@ -41,8 +41,8 @@ impl<T> PartialEq for TileString<T> {
 
 impl<T> Eq for TileString<T> {}
 
-impl<T> Hash for TileString<T> {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+impl<T> hash::Hash for TileString<T> {
+    fn hash<H: hash::Hasher>(&self, state: &mut H) {
         self.value.hash(state)
     }
 }

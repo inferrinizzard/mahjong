@@ -8,9 +8,11 @@ use std::{
 use derivative::Derivative;
 use strum::ParseError;
 
-use crate::consts::{tile::TileNumber, Dragon, TileName};
-use crate::traits::{ToTileCode, TILE_CODE_MAP};
-use crate::{consts::TileData, maps::NEXT_TILE_MAP};
+use crate::{consts::TileData, maps::NEXT_TILE_MAP, notation::trait_tile_code::TILE_CODE_MAP};
+use crate::{
+    consts::{tile::TileNumber, Dragon, TileName},
+    notation::ToTileCode,
+};
 
 #[derive(Derivative, Debug)]
 #[derivative(Default)]

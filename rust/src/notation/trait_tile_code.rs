@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-use crate::{consts::TileName, types::TileCode};
+use super::TileCode;
+use crate::consts::TileName;
 
 pub trait ToTileCode {
     fn to_tile_code(&self) -> String;
