@@ -3,7 +3,7 @@ use strum_macros::{Display, EnumIter, EnumString};
 
 use crate::notation::tile_parse_error::TileParseError;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TileData {
     MAN(TileNumber),
     TONG(TileNumber),
@@ -75,7 +75,7 @@ impl Default for Suit {
     }
 }
 
-#[derive(Debug, EnumIter)]
+#[derive(Debug, Clone, EnumIter)]
 pub enum TileNumber {
     ONE,
     TWO,
@@ -121,7 +121,7 @@ impl From<char> for TileNumber {
     }
 }
 
-#[derive(Debug, Display, EnumString, EnumIter)]
+#[derive(Debug, Display, Clone, EnumString, EnumIter)]
 pub enum Wind {
     EAST,
     SOUTH,
@@ -129,14 +129,14 @@ pub enum Wind {
     NORTH,
 }
 
-#[derive(Debug, Display, EnumString, EnumIter)]
+#[derive(Debug, Display, Clone, EnumString, EnumIter)]
 pub enum Dragon {
     WHITE,
     GREEN,
     RED,
 }
 
-#[derive(Debug, Display, EnumString, EnumIter)]
+#[derive(Debug, Display, Clone, EnumString, EnumIter)]
 pub enum Flower {
     PLUM,
     LILY,
@@ -144,7 +144,7 @@ pub enum Flower {
     BAMBOO,
 }
 
-#[derive(Debug, Display, EnumString, EnumIter)]
+#[derive(Debug, Display, Clone, EnumString, EnumIter)]
 pub enum Season {
     SPRING,
     SUMMER,

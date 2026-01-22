@@ -21,7 +21,7 @@ impl Parser {
             .map(|s| parse_tiles_for_suit(s).unwrap())
             .collect::<Vec<Vec<TileData>>>();
 
-        Ok(tiles.iter().flatten().collect::<Vec<TileData>>())
+        Ok(tiles.concat())
     }
 }
 
