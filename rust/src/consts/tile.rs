@@ -32,18 +32,18 @@ impl TryFrom<String> for TileData {
             (c, 'p') => TileData::TONG(TileNumber::from(c)),
             (c, 's') => TileData::BAMBOO(TileNumber::from(c)),
             (c, 'z') => {
-                let code = c.to_digit(10).unwrap() as usize;
+                let code = c.to_digit(10).unwrap() as usize - 1;
 
-                if code > 4 {
+                if code >= 4 {
                     return Ok(TileData::DRAGON(Dragon::iter().nth(code - 4).unwrap()));
                 }
 
                 TileData::WIND(Wind::iter().nth(code).unwrap())
             }
             (c, 'f') => {
-                let code = c.to_digit(10).unwrap() as usize;
+                let code = c.to_digit(10).unwrap() as usize - 1;
 
-                if code > 4 {
+                if code >= 4 {
                     return Ok(TileData::SEASON(Season::iter().nth(code - 4).unwrap()));
                 }
 

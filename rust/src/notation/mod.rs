@@ -6,7 +6,3 @@ pub mod trait_tile_code;
 
 pub use struct_tile_str::TileCode;
 pub use trait_tile_code::ToTileCode;
-
-lazy_static! {
-    static ref PARSER: parser::Parser = parser::Parser {};
-}
