@@ -2,11 +2,9 @@ use std::{
     cmp::Ordering,
     fmt::{self, Display},
     hash::Hash,
-    num::ParseIntError,
 };
 
 use derivative::Derivative;
-use strum::ParseError;
 
 use crate::{consts::TileData, maps::NEXT_TILE_MAP, notation::trait_tile_code::TILE_CODE_MAP};
 use crate::{
@@ -102,24 +100,6 @@ impl ToTileCode for Tile {
 impl Display for Tile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.name)
-    }
-}
-
-pub struct TileParseError {
-    message: String,
-}
-impl From<ParseError> for TileParseError {
-    fn from(value: ParseError) -> Self {
-        TileParseError {
-            message: value.to_string(),
-        }
-    }
-}
-impl From<ParseIntError> for TileParseError {
-    fn from(value: ParseIntError) -> Self {
-        TileParseError {
-            message: value.to_string(),
-        }
     }
 }
 
