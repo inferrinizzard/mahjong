@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use super::TileCode;
 use crate::consts::TileName;
 
 pub trait ToTileCode {
@@ -59,31 +58,4 @@ lazy_static! {
         .into_iter()
         .map(|(k, v)| (v, k))
         .collect();
-}
-
-pub fn parse_tile_code(tile_code: TileCode) -> Vec<TileName> {
-    let mut tile_name_str_list: Vec<TileName> = vec![];
-
-    let mut active_numbers: Vec<char> = vec![];
-
-    for c in tile_code.value.chars() {
-        if c.is_numeric() {
-            active_numbers.push(c);
-        }
-        // else if c == 'j' {
-        //     tile_name_str_list.push(TileName::from("WILDCARD"));
-        //     active_numbers = vec![];
-        // }
-        else {
-            for number in active_numbers {
-                let code_lookup_str: String = [number, c].iter().collect();
-                let tile_name = INVERSE_TILE_CODE_MAP[&code_lookup_str.as_str()].clone();
-                tile_name_str_list.push(tile_name);
-            }
-
-            active_numbers = vec![];
-        }
-    }
-
-    tile_name_str_list
 }

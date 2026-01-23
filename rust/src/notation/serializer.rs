@@ -35,22 +35,20 @@ fn merge_tile_code_list_str(tile_codes: Vec<&str>) -> String {
     let mut tile_string = String::new();
 
     Suit::iter().for_each(|suit| {
+        // DRAGON and SEASON share same code as WIND and FLOWER, skip double process
+        if suit == Suit::DRAGON || suit == Suit::SEASON {
+            return;
+        }
+
         let suit_code = suit.to_tile_code();
         let tiles_of_suit = tile_codes.iter().filter(|tile| tile.ends_with(&suit_code));
         let mut sorted_tile_values = tiles_of_suit
-            .map(|tile| {
-                let tile_value = tile.chars().nth(0).unwrap();
-                // if suit == Suit::DRAGON || suit == Suit::SEASON {
-                //     return char::from_u32(tile_value.to_digit(10).unwrap() + 4).unwrap();
-                // }
-
-                tile_value
-            })
+            .map(|tile| tile.chars().nth(0).unwrap())
             .collect::<Vec<char>>();
         sorted_tile_values.sort();
         sorted_tile_values.iter().for_each(|c| tile_string.push(*c));
 
-        if (sorted_tile_values.len() > 0) {
+        if sorted_tile_values.len() > 0 {
             tile_string.push_str(suit_code.as_str());
         }
     });

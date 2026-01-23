@@ -136,6 +136,7 @@ impl Default for Suit {
 
 #[derive(Debug, Clone, EnumIter)]
 pub enum TileNumber {
+    ZERO,
     ONE,
     TWO,
     THREE,
@@ -150,6 +151,7 @@ pub enum TileNumber {
 impl ToString for TileNumber {
     fn to_string(&self) -> String {
         match self {
+            TileNumber::ZERO => String::from("0"),
             TileNumber::ONE => String::from("1"),
             TileNumber::TWO => String::from("2"),
             TileNumber::THREE => String::from("3"),
@@ -166,6 +168,7 @@ impl ToString for TileNumber {
 impl From<char> for TileNumber {
     fn from(value: char) -> Self {
         match value {
+            '0' => TileNumber::ZERO,
             '1' => TileNumber::ONE,
             '2' => TileNumber::TWO,
             '3' => TileNumber::THREE,
