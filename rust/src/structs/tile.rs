@@ -2,15 +2,20 @@ use std::{
     cmp::Ordering,
     fmt::{self, Display},
     hash::Hash,
-    num::ParseIntError,
+    str::FromStr,
 };
 
 use derivative::Derivative;
-use strum::ParseError;
 
-use crate::consts::{tile::TileNumber, Dragon, TileName};
-use crate::traits::{ToTileCode, TILE_CODE_MAP};
-use crate::{consts::TileData, maps::NEXT_TILE_MAP};
+use crate::{
+    consts::TileData,
+    maps::NEXT_TILE_MAP,
+    notation::{tile_parse_error::TileParseError, trait_tile_code::TILE_CODE_MAP},
+};
+use crate::{
+    consts::{tile::TileNumber, Dragon, TileName},
+    notation::ToTileCode,
+};
 
 #[derive(Derivative, Debug)]
 #[derivative(Default)]
@@ -103,39 +108,17 @@ impl Display for Tile {
     }
 }
 
-pub struct TileParseError {
-    message: String,
-}
-impl From<ParseError> for TileParseError {
-    fn from(value: ParseError) -> Self {
-        TileParseError {
-            message: value.to_string(),
+impl FromStr for Tile {
+    type Err = TileParseError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let tile_data = TileData::try_from(s.to_owned());
+        if tile_data.is_err() {
+            return Err(tile_data.err().unwrap());
         }
+
+        Ok(Tile::new(tile_data.unwrap()))
     }
 }
-impl From<ParseIntError> for TileParseError {
-    fn from(value: ParseIntError) -> Self {
-        TileParseError {
-            message: value.to_string(),
-        }
-    }
-}
-
-// impl FromStr for Tile {
-//     fn from_str(s: &str) -> Result<Self, Self::Err> {
-//         let slugs = s.split("_").take(2).collect::<Vec<_>>();
-//         let value = u8::from_str(slugs[0])?;
-//         let suit = Suit::from_str(slugs[1])?;
-
-//         Ok(Tile {
-//             suit,
-//             value,
-//             name: String::from(s),
-//             ..Default::default()
-//         })
-//     }
-//     type Err = TileParseError;
-// }
 
 impl PartialEq for Tile {
     fn eq(&self, other: &Self) -> bool {
