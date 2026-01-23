@@ -2,11 +2,16 @@ use std::{
     cmp::Ordering,
     fmt::{self, Display},
     hash::Hash,
+    str::FromStr,
 };
 
 use derivative::Derivative;
 
-use crate::{consts::TileData, maps::NEXT_TILE_MAP, notation::trait_tile_code::TILE_CODE_MAP};
+use crate::{
+    consts::TileData,
+    maps::NEXT_TILE_MAP,
+    notation::{tile_parse_error::TileParseError, trait_tile_code::TILE_CODE_MAP},
+};
 use crate::{
     consts::{tile::TileNumber, Dragon, TileName},
     notation::ToTileCode,
@@ -103,21 +108,17 @@ impl Display for Tile {
     }
 }
 
-// impl FromStr for Tile {
-//     fn from_str(s: &str) -> Result<Self, Self::Err> {
-//         let slugs = s.split("_").take(2).collect::<Vec<_>>();
-//         let value = u8::from_str(slugs[0])?;
-//         let suit = Suit::from_str(slugs[1])?;
+impl FromStr for Tile {
+    type Err = TileParseError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let tile_data = TileData::try_from(s.to_owned());
+        if tile_data.is_err() {
+            return Err(tile_data.err().unwrap());
+        }
 
-//         Ok(Tile {
-//             suit,
-//             value,
-//             name: String::from(s),
-//             ..Default::default()
-//         })
-//     }
-//     type Err = TileParseError;
-// }
+        Ok(Tile::new(tile_data.unwrap()))
+    }
+}
 
 impl PartialEq for Tile {
     fn eq(&self, other: &Self) -> bool {
