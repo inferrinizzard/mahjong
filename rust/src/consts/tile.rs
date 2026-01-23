@@ -103,7 +103,7 @@ impl ToString for TileData {
     }
 }
 
-#[derive(Display, EnumString)]
+#[derive(Display, PartialEq, EnumString, EnumIter)]
 pub enum Suit {
     MAN,
     TONG,
@@ -112,6 +112,20 @@ pub enum Suit {
     DRAGON,
     FLOWER,
     SEASON,
+}
+
+impl ToTileCode for Suit {
+    fn to_tile_code(&self) -> String {
+        match self {
+            Suit::MAN => String::from("m"),
+            Suit::TONG => String::from("p"),
+            Suit::BAMBOO => String::from("s"),
+            Suit::WIND => String::from("z"),
+            Suit::DRAGON => String::from("z"),
+            Suit::FLOWER => String::from("f"),
+            Suit::SEASON => String::from("f"),
+        }
+    }
 }
 
 impl Default for Suit {
