@@ -6,10 +6,9 @@ extern crate lazy_static;
 mod consts;
 mod game;
 mod maps;
+mod notation;
 mod solver;
 mod structs;
-mod traits;
-mod types;
 
 fn main() {
     println!("Hello, world!");
