@@ -1,6 +1,24 @@
 use std::cmp;
 
-use crate::maps::TileFrequency;
+use crate::{consts::TileName, maps::TileFrequency};
+
+lazy_static! {
+    static ref THIRTEEN_ORPHANS: Vec<TileName> = vec![
+        TileName::MAN_1,
+        TileName::MAN_9,
+        TileName::BAMBOO_1,
+        TileName::BAMBOO_9,
+        TileName::TONG_1,
+        TileName::TONG_9,
+        TileName::WIND_EAST,
+        TileName::WIND_SOUTH,
+        TileName::WIND_WEST,
+        TileName::WIND_NORTH,
+        TileName::DRAGON_GREEN,
+        TileName::DRAGON_RED,
+        TileName::DRAGON_WHITE,
+    ];
+}
 
 pub type Shanten = i8;
 
@@ -13,7 +31,7 @@ pub fn solve_shanten(tile_frequency: &TileFrequency, num_wilds: u8) -> Shanten {
         cmp::min(
             cmp::min(standard_shanten, seven_pairs_shanten),
             thirteen_orphans_shanten,
-        ) - num_wilds as i8,
+        ) - num_wilds as i8, // don't subtract wild if thirteen orphan
         -1,
     )
 }
@@ -46,7 +64,21 @@ fn solve_thirteen_orphans_shanten(tile_frequency: &TileFrequency) -> Shanten {
     let max_thirteen_orphans_shanten = 13;
     let mut shanten = max_thirteen_orphans_shanten;
 
-    // 13 - diffTerminals - min(terminalPairs, 1)
+    let mut num_different_terminals = 0;
+    let mut num_terminal_pairs = 0;
+    THIRTEEN_ORPHANS.iter().for_each(|orphan| {
+        let count = tile_frequency.map[orphan];
+        if count > 0 {
+            num_different_terminals += 1;
+        }
+        if count >= 2 {
+            num_terminal_pairs += 1;
+        }
+    });
 
+    shanten = cmp::min(
+        shanten,
+        13 - num_different_terminals - cmp::min(num_terminal_pairs, 1),
+    );
     shanten
 }
