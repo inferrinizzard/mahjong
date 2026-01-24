@@ -11,7 +11,7 @@ pub struct SolveResult {
 }
 
 pub fn solve(hand: &Hand, unavailable_tiles: Option<&TileFrequency>) -> SolveResult {
-    let shanten = solve_shanten(hand);
+    let shanten = solve_shanten(&hand.tile_frequency, hand.num_wilds);
 
     SolveResult {
         shanten,
