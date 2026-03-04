@@ -1,6 +1,6 @@
-import { Count, NumericSuit, TileMap } from "../types/tile";
-import { honorList } from "../utils/hand";
-import { ParseBranch, BranchItemMap, BranchItem } from "./branch";
+import { Count, NumericSuit, TileMap } from '../types/tile';
+import { honorList } from '../utils/hand';
+import { ParseBranch, BranchItemMap, BranchItem } from './branch';
 import {
   matchesKernel,
   tripleAt,
@@ -9,7 +9,7 @@ import {
   quadAt,
   pairAt,
   skipTatsu,
-} from "./utils";
+} from './utils';
 
 const straightKernel = [1, 1, 1] as const;
 const adjTatsuKernel = [1, 1, 0] as const; //[0,1,1]
@@ -28,9 +28,9 @@ export class SuitChecker {
     this.leaves = [];
   }
 
-  static from = (suit: NumericSuit | "HONOR", tileMap: TileMap) => {
+  static from = (suit: NumericSuit | 'HONOR', tileMap: TileMap) => {
     let tiles;
-    if (suit === "HONOR") {
+    if (suit === 'HONOR') {
       tiles = new Array(7)
         .fill(0)
         .map((_, i) => tileMap[honorList[i + 1] as keyof TileMap]);

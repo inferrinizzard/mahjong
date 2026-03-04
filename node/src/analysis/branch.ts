@@ -1,6 +1,6 @@
-import { type Count } from "../types/tile";
+import { type Count } from '../types/tile';
 
-export type BranchItem = ("sets" | "pairs" | "tatsu" | "singles") &
+export type BranchItem = ('sets' | 'pairs' | 'tatsu' | 'singles') &
   keyof ParseBranch;
 
 export type BranchItemMap<ItemType extends BranchItem = BranchItem> =
@@ -46,11 +46,11 @@ export class ParseBranch {
   toString() {
     return `
 	score: ${this.score}
-	hand: [ ${this.hand.join(", ")} ]
-	sets: [ ${this.sets.map((item) => `(${item.join(",")})`).join(" ")} ] 
-	pairs: [ ${this.pairs.map((item) => `(${item.join(",")})`).join(" ")} ] 
-	tatsu: [ ${this.tatsu.map((item) => `(${item.join(",")})`).join(" ")} ] 
-	singles: [ ${this.singles.join(", ")} ]
+	hand: [ ${this.hand.join(', ')} ]
+	sets: [ ${this.sets.map((item) => `(${item.join(',')})`).join(' ')} ] 
+	pairs: [ ${this.pairs.map((item) => `(${item.join(',')})`).join(' ')} ] 
+	tatsu: [ ${this.tatsu.map((item) => `(${item.join(',')})`).join(' ')} ] 
+	singles: [ ${this.singles.join(', ')} ]
 		`;
   }
 
@@ -64,8 +64,8 @@ export class ParseBranch {
 
   calculateScore = () => {
     let sum = 0;
-    sum += this.sets.length * 3;
-    sum += this.pairs.length * 2;
+    sum += this.sets.length * 5;
+    sum += this.pairs.length * 3;
     sum += this.tatsu.length * 1;
     sum -= this.singles.length * 1;
 
@@ -77,7 +77,7 @@ export class ParseBranch {
     itemType: ItemType,
     item: this[ItemType][number]
   ) => {
-    if (itemType === "singles") {
+    if (itemType === 'singles') {
       this.addSingle(item as number);
       return;
     }
@@ -98,14 +98,14 @@ export class ParseBranch {
   };
 
   addPair = <N extends number>(pair: [N, N]) => {
-    this.addItem("pairs", pair);
+    this.addItem('pairs', pair);
   };
 
   addSet = (set: number[]) => {
-    this.addItem("sets", set);
+    this.addItem('sets', set);
   };
 
   addTatsu = (tatsu: [number, number]) => {
-    this.addItem("tatsu", tatsu);
+    this.addItem('tatsu', tatsu);
   };
 }
