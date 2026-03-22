@@ -3,18 +3,18 @@ use strum::IntoEnumIterator;
 use crate::{
     consts::{Suit, TileData},
     maps::TileFrequency,
-    notation::{trait_tile_code::TILE_CODE_MAP, ToTileCode},
+    notation::{trait_tile_code::TILE_CODE_MAP, types::TileHandString, ToTileCode},
 };
 
 pub struct Serializer {}
 
 impl Serializer {
-    pub fn serialize_tiles(tiles: Vec<TileData>) -> String {
+    pub fn serialize_tiles(tiles: Vec<TileData>) -> TileHandString {
         let tile_codes = tiles.iter().map(|tile| tile.to_tile_code()).collect();
         merge_tile_code_list(tile_codes)
     }
 
-    pub fn serialize_tile_frequency(tile_frequency: TileFrequency) -> String {
+    pub fn serialize_tile_frequency(tile_frequency: TileFrequency) -> TileHandString {
         let mut tile_codes = vec![];
 
         tile_frequency.map.iter().for_each(|(tile_name, count)| {
@@ -28,10 +28,10 @@ impl Serializer {
     }
 }
 
-fn merge_tile_code_list(tile_codes: Vec<String>) -> String {
+fn merge_tile_code_list(tile_codes: Vec<String>) -> TileHandString {
     merge_tile_code_list_str(tile_codes.iter().map(|tile| tile.as_str()).collect())
 }
-fn merge_tile_code_list_str(tile_codes: Vec<&str>) -> String {
+fn merge_tile_code_list_str(tile_codes: Vec<&str>) -> TileHandString {
     let mut tile_string = String::new();
 
     Suit::iter().for_each(|suit| {
