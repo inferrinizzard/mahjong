@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use crate::notation::types::TileHandSuitSubString;
+
 use super::branch::Branch;
 
 pub struct BranchSolver {
@@ -12,10 +14,10 @@ pub struct BranchSolver {
 }
 
 impl BranchSolver {
-    pub fn new() -> BranchSolver {
+    pub fn new(tiles: TileHandSuitSubString) -> BranchSolver {
         BranchSolver {
             branch_map: HashMap::new(),
-            branches: vec![],
+            branches: vec![Branch::from(tiles)],
             leaves: vec![],
             cur_branch: None,
         }
