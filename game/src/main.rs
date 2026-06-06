@@ -1,4 +1,9 @@
+pub mod app;
+pub mod screens;
+
 use iced::widget::{Column, button, column, text};
+
+use crate::app::root::AppRoot;
 
 #[derive(Default)]
 struct Counter {
@@ -39,5 +44,8 @@ impl Counter {
 }
 
 pub fn main() -> iced::Result {
-    iced::run(Counter::update, Counter::view)
+    iced::application(AppRoot::default, AppRoot::update, AppRoot::view)
+        .title("TEST")
+        .run()
+    // iced::run(Counter::update, Counter::view)
 }
