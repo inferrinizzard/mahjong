@@ -7,6 +7,7 @@ pub enum Suit {
     DRAGON,
     FLOWER,
     SEASON,
+    JOKER,
 }
 
 #[derive(Debug)]
