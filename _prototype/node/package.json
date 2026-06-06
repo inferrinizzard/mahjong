@@ -1,0 +1,14 @@
+{
+  "name": "mahjong",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "jsdom": "^22.1.0",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4"
+  }
+}
