@@ -1,4 +1,7 @@
-use iced::widget::{Column, button, column, text};
+use iced::{
+    Element,
+    widget::{button, column, text},
+};
 
 use crate::app::root::{Message, Screen};
 
@@ -14,7 +17,7 @@ pub enum CounterMessage {
 }
 
 impl Counter {
-    pub fn view(&self) -> Column<'static, Message> {
+    pub fn view(&self) -> Element<'static, Message> {
         // We use a column: a simple vertical layout
         column![
             button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)),
@@ -27,6 +30,7 @@ impl Counter {
             // `Decrement` message when pressed
             button("-").on_press(Message::Counter(CounterMessage::Decrement)),
         ]
+        .into()
     }
 
     pub fn update(&mut self, message: CounterMessage) {
