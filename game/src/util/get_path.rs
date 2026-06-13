@@ -9,6 +9,6 @@ pub fn get_root_path_buf() -> PathBuf {
 }
 pub fn get_path(path: &str) -> String {
     let root_path_buf = get_root_path_buf();
-    let path_buf = root_path_buf.join(path);
+    let path_buf = root_path_buf.join(path.trim());
     String::from(path_buf.to_str().unwrap())
 }
