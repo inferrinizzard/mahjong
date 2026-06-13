@@ -1,5 +1,6 @@
 pub mod app;
 pub mod screens;
+pub mod util;
 
 use crate::app::root::AppRoot;
 
