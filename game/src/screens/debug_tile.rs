@@ -4,7 +4,7 @@ use iced::{
 };
 
 use crate::{
-    ui::root::{Message, Screen},
+    app::{render::Screen, root::Message},
     util::get_path::get_path,
 };
 

@@ -3,7 +3,7 @@ use iced::{
     widget::{button, column, text},
 };
 
-use crate::ui::root::{Message, Screen};
+use crate::app::{render::Screen, root::Message};
 
 #[derive(Default)]
 pub struct Counter {

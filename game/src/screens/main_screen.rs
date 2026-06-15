@@ -3,7 +3,7 @@ use iced::{
     widget::{button, column, text},
 };
 
-use crate::ui::root::{Message, Screen};
+use crate::app::{render::Screen, root::Message};
 
 pub fn render_main_screen() -> Element<'static, Message> {
     column![
