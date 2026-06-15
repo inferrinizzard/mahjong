@@ -1,4 +1,4 @@
-use iced::Element;
+use iced::{Element, Task};
 
 use crate::{
     app::{
@@ -30,7 +30,7 @@ impl AppRoot {
         }
     }
 
-    pub fn update(&mut self, message: Message) {
+    pub fn update(&mut self, message: Message) -> Task<Message> {
         println!("{:?}", message);
 
         match message {
@@ -39,9 +39,11 @@ impl AppRoot {
                 Counter::update(&mut self.render.counter, counter_message)
             }
             Message::Settings(settings_message) => {
-                Settings::update(&mut self.settings, settings_message)
+                return Settings::update(&mut self.settings, settings_message);
             }
         }
+
+        Task::none()
     }
 
     pub fn view(&self) -> Element<'_, Message> {

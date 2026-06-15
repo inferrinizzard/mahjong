@@ -1,4 +1,11 @@
-use iced::{Element, widget::button};
+use iced::{
+    Element, Task,
+    widget::{button, column},
+    window::{
+        self,
+        Mode::{Fullscreen, Windowed},
+    },
+};
 
 use crate::{app::root::Message, screens::Screen};
 
@@ -10,7 +17,10 @@ pub struct Settings {
 }
 
 #[derive(Default)]
-pub struct VideoSettings {}
+pub struct VideoSettings {
+    pub is_fullscreen: bool,
+    // pub window_size:
+}
 
 #[derive(Default)]
 pub struct AudioSettings {}
@@ -23,18 +33,36 @@ pub struct GameSettings {
 }
 
 #[derive(Debug, Clone)]
-pub struct SettingsMessage {}
+pub enum SettingsMessage {
+    ToggleFullscreen,
+}
 
 impl Settings {
-    pub fn update(&self, message: SettingsMessage) {
+    pub fn update(&mut self, message: SettingsMessage) -> Task<Message> {
         match message {
-            _ => todo!(),
+            SettingsMessage::ToggleFullscreen => {
+                self.video.is_fullscreen = !self.video.is_fullscreen;
+                let should_be_fullscreen = self.video.is_fullscreen;
+                window::latest().and_then(move |window_id| {
+                    window::set_mode(
+                        window_id,
+                        if should_be_fullscreen {
+                            Fullscreen
+                        } else {
+                            Windowed
+                        },
+                    )
+                })
+            }
         }
     }
 
     pub fn view(&self) -> Element<'static, Message> {
-        button("Back to Main Menu")
-            .on_press(Message::ChangeScreen(Screen::Main))
-            .into()
+        column!(
+            button("Back to Main Menu").on_press(Message::ChangeScreen(Screen::Main)),
+            button("Toggle Fullscreen")
+                .on_press(Message::Settings(SettingsMessage::ToggleFullscreen)),
+        )
+        .into()
     }
 }
