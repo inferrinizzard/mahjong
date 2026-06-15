@@ -143,7 +143,7 @@ pub fn init_deck() -> Vec<TileData> {
 
     if has_flowers {
         deck.push(Tile::PLUM_FLOWER);
-        deck.push(Tile::LILY_FLOWER);
+        deck.push(Tile::ORCHID_FLOWER);
         deck.push(Tile::CHRYSANTHEMUM_FLOWER);
         deck.push(Tile::BAMBOO_FLOWER);
     }

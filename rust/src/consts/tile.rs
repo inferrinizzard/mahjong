@@ -201,7 +201,7 @@ pub enum Dragon {
 #[derive(Debug, Display, Clone, PartialEq, EnumString, EnumIter)]
 pub enum Flower {
     PLUM,
-    LILY,
+    ORCHID,
     CHRYSANTHEMUM,
     BAMBOO,
 }

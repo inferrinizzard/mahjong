@@ -28,7 +28,7 @@ pub enum Dragon {
 #[derive(Debug)]
 pub enum Flower {
     PLUM,
-    LILY,
+    ORCHID,
     CHRYSANTHEMUM,
     BAMBOO,
 }

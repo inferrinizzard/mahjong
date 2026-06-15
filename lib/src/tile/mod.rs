@@ -255,10 +255,10 @@ impl Tile {
         code: "1f",
         index: -1,
     };
-    pub const LILY_FLOWER: TileData = TileData {
+    pub const ORCHID_FLOWER: TileData = TileData {
         suit: Suit::FLOWER,
         value: 2,
-        name: "LILY_FLOWER",
+        name: "ORCHID_FLOWER",
         code: "2f",
         index: -1,
     };
@@ -350,7 +350,7 @@ impl Tile {
         Self::GREEN_GRADON,
         Self::RED_DRAGON,
         Self::PLUM_FLOWER,
-        Self::LILY_FLOWER,
+        Self::ORCHID_FLOWER,
         Self::CHRYSANTHEMUM_FLOWER,
         Self::BAMBOO_FLOWER,
         Self::SPRING_SEASON,
