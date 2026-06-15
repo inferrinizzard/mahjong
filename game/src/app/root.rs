@@ -3,11 +3,14 @@ use iced::Element;
 use crate::{
     app::{
         game::Game,
-        render::{Render, Screen},
+        render::Render,
         server::ServerRoot,
-        settings::Settings,
+        settings::{Settings, SettingsMessage},
     },
-    screens::debug_counter::{Counter, CounterMessage},
+    screens::{
+        Screen,
+        debug_counter::{Counter, CounterMessage},
+    },
 };
 
 pub struct AppRoot {
@@ -35,11 +38,14 @@ impl AppRoot {
             Message::Counter(counter_message) => {
                 Counter::update(&mut self.render.counter, counter_message)
             }
+            Message::Settings(settings_message) => {
+                Settings::update(&mut self.settings, settings_message)
+            }
         }
     }
 
     pub fn view(&self) -> Element<'_, Message> {
-        self.render.view()
+        Render::view(&self)
     }
 }
 
@@ -47,4 +53,5 @@ impl AppRoot {
 pub enum Message {
     ChangeScreen(Screen),
     Counter(CounterMessage),
+    Settings(SettingsMessage),
 }

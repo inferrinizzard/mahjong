@@ -3,10 +3,7 @@ use iced::{
     widget::{Stack, button, column, container, pin, stack, svg},
 };
 
-use crate::{
-    app::{render::Screen, root::Message},
-    util::get_path::get_path,
-};
+use crate::{app::root::Message, screens::Screen, util::get_path::get_path};
 
 pub struct DebugTile {}
 

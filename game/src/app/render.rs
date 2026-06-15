@@ -1,21 +1,19 @@
 use iced::Element;
 
 use crate::{
-    app::root::Message,
-    screens::{debug_counter::Counter, debug_tile::DebugTile, main_screen::render_main_screen},
+    app::{
+        root::{AppRoot, Message},
+        settings::Settings,
+    },
+    screens::{
+        Screen, debug_counter::Counter, debug_tile::DebugTile, main_screen::render_main_screen,
+    },
 };
 
 pub struct Render {
     pub screen: Screen,
     pub counter: Counter,
     pub debug_tile: DebugTile,
-}
-
-#[derive(Debug, Clone)]
-pub enum Screen {
-    Main,
-    DebugCounter,
-    DebugTile,
 }
 
 impl Default for Render {
@@ -29,11 +27,12 @@ impl Default for Render {
 }
 
 impl Render {
-    pub fn view(&self) -> Element<'_, Message> {
-        match self.screen {
+    pub fn view(state: &AppRoot) -> Element<'_, Message> {
+        match state.render.screen {
             Screen::Main => return render_main_screen(),
-            Screen::DebugCounter => return Counter::view(&self.counter),
-            Screen::DebugTile => return DebugTile::view(&self.debug_tile),
+            Screen::DebugCounter => return Counter::view(&state.render.counter),
+            Screen::DebugTile => return DebugTile::view(&state.render.debug_tile),
+            Screen::Settings => return Settings::view(&state.settings),
         }
     }
 }
