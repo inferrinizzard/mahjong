@@ -1,0 +1,12 @@
+[package]
+name = "mahjong_game"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+mahjong_lib = { path = "../lib" }
+
+iced = { version = "0.14.0", features = ["debug", "image", "svg"] }
+
+[dev-dependencies]
+iced_comet = "0.14.0"

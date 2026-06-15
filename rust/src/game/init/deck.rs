@@ -175,7 +175,7 @@ pub fn create_deck(options: &DeckOptions) -> Deck {
     // Add flowers, seasons
     if options.has_flowers {
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::PLUM)));
-        base_deck.push_back(Tile::new(TileData::FLOWER(Flower::LILY)));
+        base_deck.push_back(Tile::new(TileData::FLOWER(Flower::ORCHID)));
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::CHRYSANTHEMUM)));
         base_deck.push_back(Tile::new(TileData::FLOWER(Flower::BAMBOO)));
     }

@@ -43,7 +43,7 @@ lazy_static! {
         (TileName::DRAGON_GREEN, "6z"),
         (TileName::DRAGON_RED, "7z"),
         (TileName::FLOWER_PLUM, "1f"),
-        (TileName::FLOWER_LILY, "2f"),
+        (TileName::FLOWER_ORCHID, "2f"),
         (TileName::FLOWER_CHRYSANTHEMUM, "3f"),
         (TileName::FLOWER_BAMBOO, "4f"),
         (TileName::SEASON_SPRING, "5f"),
