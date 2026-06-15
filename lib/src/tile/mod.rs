@@ -233,10 +233,10 @@ impl Tile {
         code: "5z",
         index: 31,
     };
-    pub const GREEN_GRADON: TileData = TileData {
+    pub const GREEN_DRAGON: TileData = TileData {
         suit: Suit::DRAGON,
         value: 2,
-        name: "GREEN_GRADON",
+        name: "GREEN_DRAGON",
         code: "6z",
         index: 31,
     };
@@ -347,7 +347,7 @@ impl Tile {
         Self::WEST_WIND,
         Self::NORTH_WIND,
         Self::WHITE_DRAGON,
-        Self::GREEN_GRADON,
+        Self::GREEN_DRAGON,
         Self::RED_DRAGON,
         Self::PLUM_FLOWER,
         Self::ORCHID_FLOWER,

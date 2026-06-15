@@ -130,10 +130,10 @@ pub fn init_deck() -> Vec<TileData> {
         Tile::WHITE_DRAGON,
         Tile::WHITE_DRAGON,
         Tile::WHITE_DRAGON,
-        Tile::GREEN_GRADON,
-        Tile::GREEN_GRADON,
-        Tile::GREEN_GRADON,
-        Tile::GREEN_GRADON,
+        Tile::GREEN_DRAGON,
+        Tile::GREEN_DRAGON,
+        Tile::GREEN_DRAGON,
+        Tile::GREEN_DRAGON,
     ];
 
     // TODO: tile inclusion flags
