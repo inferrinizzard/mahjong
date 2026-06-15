@@ -1,8 +1,10 @@
+pub mod init_deck;
+
 use std::collections::HashMap;
 
 use mahjong_lib::{consts::Wind, tile::TileData};
 
-use crate::app::init_deck::init_deck;
+use crate::app::game::init_deck::init_deck;
 
 type Hand = Vec<TileData>;
 
