@@ -16,7 +16,7 @@ use crate::{
 pub struct AppRoot {
     pub render: Render,
     pub settings: Settings,
-    pub game: Option<Game>,
+    pub game: Game,
     pub server: ServerRoot,
 }
 
@@ -24,7 +24,7 @@ impl AppRoot {
     pub fn new() -> AppRoot {
         Self {
             render: Render::default(),
-            game: None,
+            game: Game::default(),
             settings: Settings::default(),
             server: ServerRoot::default(),
         }

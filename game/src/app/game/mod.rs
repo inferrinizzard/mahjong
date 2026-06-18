@@ -2,9 +2,20 @@ pub mod init_deck;
 
 use std::collections::HashMap;
 
-use mahjong_lib::{consts::Wind, tile::TileData};
+use iced::{
+    Element,
+    widget::{button, column},
+};
+use mahjong_lib::{
+    consts::Wind,
+    tile::{Tile, TileData},
+};
 
-use crate::app::game::init_deck::init_deck;
+use crate::{
+    app::{Message, game::init_deck::init_deck},
+    screens::Screen,
+    util::render_tile::render_tile,
+};
 
 type Hand = Vec<TileData>;
 
@@ -42,5 +53,13 @@ impl Game {
         }
 
         self.turn = 1;
+    }
+
+    pub fn view(&self) -> Element<'static, Message> {
+        column![
+            button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)),
+            render_tile(&Tile::WEST_WIND, 64)
+        ]
+        .into()
     }
 }
