@@ -14,7 +14,7 @@ use mahjong_lib::{
 use crate::{
     app::{Message, game::init_deck::init_deck},
     screens::Screen,
-    util::render_tile::render_tile,
+    util::render_tile::{render_back_row, render_tile},
 };
 
 type Hand = Vec<TileData>;
@@ -25,6 +25,8 @@ pub struct Game {
     pub discard: HashMap<u8, Vec<TileData>>,
     pub turn: u8,
     pub wind: Wind,
+
+    bank_size: u8,
 }
 
 impl Default for Game {
@@ -35,6 +37,8 @@ impl Default for Game {
             discard: [].into_iter().collect(),
             turn: 0,
             wind: Wind::EAST,
+
+            bank_size: 0,
         }
     }
 }
@@ -42,6 +46,7 @@ impl Default for Game {
 impl Game {
     pub fn init(&mut self) {
         self.deck = init_deck();
+        self.bank_size = self.deck.len() as u8 / 4;
 
         // TODO: hand_size settings
         let hand_size = 13;
@@ -58,7 +63,8 @@ impl Game {
     pub fn view(&self) -> Element<'static, Message> {
         column![
             button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)),
-            render_tile(&Tile::WEST_WIND, 64)
+            render_tile(&Tile::WEST_WIND, 64),
+            // render_back_row(13, 64)
         ]
         .into()
     }

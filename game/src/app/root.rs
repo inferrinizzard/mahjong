@@ -34,7 +34,10 @@ impl AppRoot {
         println!("{:?}", message);
 
         match message {
-            Message::ChangeScreen(screen) => self.render.screen = screen,
+            Message::ChangeScreen(screen) => {
+                self.render.screen = screen;
+                return self.on_render_screen();
+            }
             Message::Counter(counter_message) => {
                 Counter::update(&mut self.render.counter, counter_message)
             }
@@ -48,6 +51,16 @@ impl AppRoot {
 
     pub fn view(&self) -> Element<'_, Message> {
         Render::view(&self)
+    }
+
+    fn on_render_screen(&mut self) -> Task<Message> {
+        match self.render.screen {
+            Screen::Game => {
+                self.game.init();
+            }
+            _ => {}
+        }
+        Task::none()
     }
 }
 
