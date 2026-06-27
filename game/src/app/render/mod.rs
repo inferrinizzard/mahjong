@@ -1,3 +1,5 @@
+pub mod consts;
+
 use iced::Element;
 
 use crate::{
