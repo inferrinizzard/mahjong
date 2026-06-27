@@ -71,7 +71,7 @@ pub enum Message {
     Settings(SettingsMessage),
 }
 
-pub fn subscription_window_resize() -> Subscription<Message> {
+pub fn subscription_window_resize(_: &AppRoot) -> Subscription<Message> {
     window::resize_events().map(|(_id, size)| {
         Message::Settings(SettingsMessage::VideoSettings(
             VideoSettingsMessage::WindowResize(size),

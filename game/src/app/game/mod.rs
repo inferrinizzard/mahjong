@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use iced::{
     Element,
-    widget::{button, column, stack},
+    widget::{button, pin, stack},
 };
 use mahjong_lib::{
     consts::Wind,
@@ -12,7 +12,7 @@ use mahjong_lib::{
 };
 
 use crate::{
-    app::{Message, game::init_deck::init_deck},
+    app::{Message, game::init_deck::init_deck, settings::Settings},
     screens::Screen,
     util::render_tile::{render_bank, render_tile},
 };
@@ -60,12 +60,20 @@ impl Game {
         self.turn = 1;
     }
 
-    pub fn view(&self) -> Element<'static, Message> {
-        stack![column![
-            button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)),
-            render_tile(&Tile::WEST_WIND, 64),
-            render_bank(self.bank_size, 64)
-        ]]
+    pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
+        println!(
+            "{} {}",
+            settings.video.window_size.width, settings.video.window_size.height
+        );
+        stack![
+            pin(button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)))
+                .x(0)
+                .y(0),
+            pin(render_tile(&Tile::WEST_WIND, 64)).x(0).y(48),
+            pin(render_bank(self.bank_size, 64)).x(0).y(128)
+        ]
+        .width(settings.video.window_size.width)
+        .height(settings.video.window_size.height)
         .into()
     }
 }

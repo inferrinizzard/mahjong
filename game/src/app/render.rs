@@ -31,7 +31,7 @@ impl Render {
     pub fn view(state: &AppRoot) -> Element<'_, Message> {
         match state.render.screen {
             Screen::Main => render_main_screen(),
-            Screen::Game => Game::view(&state.game),
+            Screen::Game => Game::view(&state.game, &state.settings),
             Screen::DebugCounter => Counter::view(&state.render.counter),
             Screen::DebugTile => DebugTile::view(&state.render.debug_tile),
             Screen::Settings => Settings::view(&state.settings),
