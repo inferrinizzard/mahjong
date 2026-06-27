@@ -61,16 +61,16 @@ impl Game {
     }
 
     pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
-        println!(
-            "{} {}",
-            settings.video.window_size.width, settings.video.window_size.height
-        );
         stack![
             pin(button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)))
                 .x(0)
                 .y(0),
-            pin(render_tile(&Tile::WEST_WIND, 64)).x(0).y(48),
-            pin(render_bank(self.bank_size, 64)).x(0).y(128)
+            pin(render_tile(&Tile::WEST_WIND, settings.video.tile_size))
+                .x(0)
+                .y(48),
+            pin(render_bank(self.bank_size, settings.video.tile_size))
+                .x(0)
+                .y(128)
         ]
         .width(settings.video.window_size.width)
         .height(settings.video.window_size.height)

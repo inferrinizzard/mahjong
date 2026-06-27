@@ -12,6 +12,7 @@ use crate::app::root::Message;
 pub struct VideoSettings {
     pub is_fullscreen: bool,
     pub window_size: Size,
+    pub tile_size: u32,
 }
 
 #[derive(Debug, Clone)]
@@ -37,7 +38,10 @@ impl VideoSettings {
                     )
                 });
             }
-            VideoSettingsMessage::WindowResize(size) => self.window_size = size,
+            VideoSettingsMessage::WindowResize(size) => {
+                self.window_size = size;
+                self.tile_size = size.height as u32 / 20 / 4 * 4;
+            }
         }
 
         Task::none()
