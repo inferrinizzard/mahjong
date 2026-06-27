@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use iced::{
     Element,
-    widget::{button, column},
+    widget::{button, column, stack},
 };
 use mahjong_lib::{
     consts::Wind,
@@ -14,7 +14,7 @@ use mahjong_lib::{
 use crate::{
     app::{Message, game::init_deck::init_deck},
     screens::Screen,
-    util::render_tile::{render_back_row, render_tile},
+    util::render_tile::{render_bank, render_tile},
 };
 
 type Hand = Vec<TileData>;
@@ -26,7 +26,7 @@ pub struct Game {
     pub turn: u8,
     pub wind: Wind,
 
-    bank_size: u8,
+    bank_size: usize,
 }
 
 impl Default for Game {
@@ -46,7 +46,7 @@ impl Default for Game {
 impl Game {
     pub fn init(&mut self) {
         self.deck = init_deck();
-        self.bank_size = self.deck.len() as u8 / 4;
+        self.bank_size = self.deck.len() / 4;
 
         // TODO: hand_size settings
         let hand_size = 13;
@@ -61,11 +61,11 @@ impl Game {
     }
 
     pub fn view(&self) -> Element<'static, Message> {
-        column![
+        stack![column![
             button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)),
             render_tile(&Tile::WEST_WIND, 64),
-            // render_back_row(13, 64)
-        ]
+            render_bank(self.bank_size, 64)
+        ]]
         .into()
     }
 }

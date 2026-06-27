@@ -1,10 +1,14 @@
 use iced::{
     Element,
-    widget::{container, svg},
+    widget::{Stack, container, pin, svg},
 };
 use mahjong_lib::{consts::Suit, tile::TileData};
 
 use crate::{app::Message, util::get_path::get_path};
+
+pub fn render_tile_for_path(tile_path: &str, size: u32) -> Element<'static, Message> {
+    container(svg(tile_path).width(size)).into()
+}
 
 pub fn render_tile(tile: &TileData, size: u32) -> Element<'static, Message> {
     let tile_dir = match tile.suit {
@@ -30,5 +34,37 @@ pub fn render_tile(tile: &TileData, size: u32) -> Element<'static, Message> {
 
     let tile_path =
         get_path(format!("assets/tiles/oblique/{}/{}.svg", tile_dir, file_name).as_str());
-    container(svg(tile_path).width(size)).into()
+    render_tile_for_path(&tile_path, size)
+}
+
+pub fn render_bank(num_tiles: usize, size: u32) -> Element<'static, Message> {
+    let tile_face_width_coeffecient = size as f32 * 50. / 64.;
+
+    let mut row_stack_vec: Vec<Element<Message>> = vec![];
+    for i in 0..num_tiles {
+        let is_top_tile = i % 2 == 0;
+        let mut x = (i / 2) as f32 * tile_face_width_coeffecient;
+        let mut y = 0.;
+
+        if is_top_tile {
+            x += size as f32 - tile_face_width_coeffecient
+        } else {
+            y += size as f32 - tile_face_width_coeffecient
+        }
+
+        row_stack_vec.push(
+            pin(render_tile_for_path(
+                &get_path("assets/tiles/oblique/misc/back.svg"),
+                size,
+            ))
+            .x(x)
+            .y(y)
+            .into(),
+        );
+    }
+
+    Stack::from_vec(row_stack_vec)
+        .width(tile_face_width_coeffecient * num_tiles as f32 + size as f32)
+        .height(size * 2)
+        .into()
 }
