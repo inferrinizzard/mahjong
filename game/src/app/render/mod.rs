@@ -1,4 +1,5 @@
 pub mod consts;
+pub mod render_tile;
 
 use iced::Element;
 

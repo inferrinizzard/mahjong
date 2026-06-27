@@ -12,9 +12,13 @@ use mahjong_lib::{
 };
 
 use crate::{
-    app::{Message, game::init_deck::init_deck, settings::Settings},
+    app::{
+        Message,
+        game::init_deck::init_deck,
+        render::render_tile::{render_bank, render_tile},
+        settings::Settings,
+    },
     screens::Screen,
-    util::render_tile::{render_bank, render_tile},
 };
 
 type Hand = Vec<TileData>;

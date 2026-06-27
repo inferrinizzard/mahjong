@@ -4,13 +4,9 @@ use iced::{
 };
 use mahjong_lib::{consts::Suit, tile::TileData};
 
-use crate::{
-    app::{
-        Message,
-        render::consts::{TILE_BACK_PATH, TILE_FACE_RATIO},
-    },
-    util::get_path::get_path,
-};
+use crate::{app::Message, util::get_path::get_path};
+
+use super::consts::{TILE_BACK_PATH, TILE_FACE_RATIO};
 
 pub fn render_tile_for_path(tile_path: &str, size: u32) -> Element<'static, Message> {
     container(svg(tile_path).width(size)).into()
