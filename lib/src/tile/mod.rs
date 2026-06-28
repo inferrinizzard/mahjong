@@ -1,5 +1,5 @@
-use crate::{consts::consts::Suit, tile::tile_data::TileData};
-
+use crate::consts::consts::Suit;
+pub use tile_data::TileData;
 pub mod tile_data;
 
 pub struct Tile;
@@ -17,7 +17,7 @@ impl Tile {
         value: 2,
         name: "MAN_2",
         code: "2m",
-        index: 2,
+        index: 1,
     };
     pub const MAN_3: TileData = TileData {
         suit: Suit::MAN,
@@ -253,28 +253,28 @@ impl Tile {
         value: 1,
         name: "PLUM_FLOWER",
         code: "1f",
-        index: 33,
+        index: -1,
     };
-    pub const LILY_FLOWER: TileData = TileData {
+    pub const ORCHID_FLOWER: TileData = TileData {
         suit: Suit::FLOWER,
         value: 2,
-        name: "LILY_FLOWER",
+        name: "ORCHID_FLOWER",
         code: "2f",
-        index: 34,
+        index: -1,
     };
     pub const CHRYSANTHEMUM_FLOWER: TileData = TileData {
         suit: Suit::FLOWER,
         value: 3,
         name: "CHRYSANTHEMUM_FLOWER",
         code: "3f",
-        index: 35,
+        index: -1,
     };
     pub const BAMBOO_FLOWER: TileData = TileData {
         suit: Suit::FLOWER,
         value: 4,
         name: "BAMBOO_FLOWER",
         code: "4f",
-        index: 36,
+        index: -1,
     };
 
     pub const SPRING_SEASON: TileData = TileData {
@@ -282,28 +282,28 @@ impl Tile {
         value: 1,
         name: "SPRING_SEASON",
         code: "5f",
-        index: 37,
+        index: -1,
     };
     pub const SUMMER_SEASON: TileData = TileData {
         suit: Suit::SEASON,
         value: 2,
         name: "SUMMER_SEASON",
         code: "6f",
-        index: 38,
+        index: -1,
     };
     pub const AUTUMN_SEASON: TileData = TileData {
         suit: Suit::SEASON,
         value: 3,
         name: "AUTUMN_SEASON",
         code: "7f",
-        index: 39,
+        index: -1,
     };
     pub const WINTER_SEASON: TileData = TileData {
         suit: Suit::SEASON,
         value: 4,
         name: "WINTER_SEASON",
         code: "8f",
-        index: 40,
+        index: -1,
     };
 
     pub const JOKER: TileData = TileData {
@@ -311,6 +311,52 @@ impl Tile {
         value: 1,
         name: "JOKER",
         code: "1j",
-        index: 41,
+        index: -1,
     };
+
+    pub const TILE_LIST: &'static [TileData] = &[
+        Self::MAN_1,
+        Self::MAN_2,
+        Self::MAN_3,
+        Self::MAN_4,
+        Self::MAN_5,
+        Self::MAN_6,
+        Self::MAN_7,
+        Self::MAN_8,
+        Self::MAN_9,
+        Self::TONG_1,
+        Self::TONG_2,
+        Self::TONG_3,
+        Self::TONG_4,
+        Self::TONG_5,
+        Self::TONG_6,
+        Self::TONG_7,
+        Self::TONG_8,
+        Self::TONG_9,
+        Self::BAMBOO_1,
+        Self::BAMBOO_2,
+        Self::BAMBOO_3,
+        Self::BAMBOO_4,
+        Self::BAMBOO_5,
+        Self::BAMBOO_6,
+        Self::BAMBOO_7,
+        Self::BAMBOO_8,
+        Self::BAMBOO_9,
+        Self::EAST_WIND,
+        Self::SOUTH_WIND,
+        Self::WEST_WIND,
+        Self::NORTH_WIND,
+        Self::WHITE_DRAGON,
+        Self::GREEN_GRADON,
+        Self::RED_DRAGON,
+        Self::PLUM_FLOWER,
+        Self::ORCHID_FLOWER,
+        Self::CHRYSANTHEMUM_FLOWER,
+        Self::BAMBOO_FLOWER,
+        Self::SPRING_SEASON,
+        Self::SUMMER_SEASON,
+        Self::AUTUMN_SEASON,
+        Self::WINTER_SEASON,
+        Self::JOKER,
+    ];
 }

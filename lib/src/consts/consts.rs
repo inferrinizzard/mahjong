@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Suit {
     MAN,
     TONG,
@@ -28,7 +28,7 @@ pub enum Dragon {
 #[derive(Debug)]
 pub enum Flower {
     PLUM,
-    LILY,
+    ORCHID,
     CHRYSANTHEMUM,
     BAMBOO,
 }
