@@ -6,16 +6,13 @@ use iced::{
     Element,
     widget::{button, pin, stack},
 };
-use mahjong_lib::{
-    consts::Wind,
-    tile::{Tile, TileData},
-};
+use mahjong_lib::{consts::Wind, tile::TileData};
 
 use crate::{
     app::{
         Message,
         game::init_deck::init_deck,
-        render::render_tile::{render_bank, render_tile},
+        render::render_tile::{render_bank, render_hand},
         settings::Settings,
     },
     screens::Screen,
@@ -69,7 +66,7 @@ impl Game {
             pin(button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)))
                 .x(0)
                 .y(0),
-            pin(render_tile(&Tile::WEST_WIND, settings.video.tile_size))
+            pin(render_hand(&self.hands[&0], settings.video.tile_size))
                 .x(0)
                 .y(48),
             pin(render_bank(self.bank_size, settings.video.tile_size))
