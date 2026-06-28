@@ -7,6 +7,8 @@ edition = "2024"
 mahjong_lib = { path = "../lib" }
 
 iced = { version = "0.14.0", features = ["debug", "image", "svg"] }
+derivative = "2.2.0"
+rand = "0.9.2"
 
 [dev-dependencies]
 iced_comet = "0.14.0"
