@@ -1,3 +1,5 @@
+use rand::{rng, seq::SliceRandom};
+
 use mahjong_lib::tile::{Tile, TileData};
 
 use crate::app::settings::GameSettings;
@@ -158,6 +160,7 @@ pub fn init_deck(game_settings: &GameSettings) -> Vec<TileData> {
         deck.push(Tile::JOKER);
     }
 
-    // TODO: shuffle
+    let mut rng = rng();
+    deck.shuffle(&mut rng);
     deck
 }
