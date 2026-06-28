@@ -1,6 +1,8 @@
 use mahjong_lib::tile::{Tile, TileData};
 
-pub fn init_deck() -> Vec<TileData> {
+use crate::app::settings::GameSettings;
+
+pub fn init_deck(game_settings: &GameSettings) -> Vec<TileData> {
     let mut deck = vec![
         Tile::MAN_1,
         Tile::MAN_1,
@@ -140,24 +142,19 @@ pub fn init_deck() -> Vec<TileData> {
         Tile::RED_DRAGON,
     ];
 
-    // TODO: tile inclusion flags
-    let has_flowers = false;
-    let has_seasons = false;
-    let has_joker = false;
-
-    if has_flowers {
+    if game_settings.has_flowers {
         deck.push(Tile::PLUM_FLOWER);
         deck.push(Tile::ORCHID_FLOWER);
         deck.push(Tile::CHRYSANTHEMUM_FLOWER);
         deck.push(Tile::BAMBOO_FLOWER);
     }
-    if has_seasons {
+    if game_settings.has_seasons {
         deck.push(Tile::SPRING_SEASON);
         deck.push(Tile::SUMMER_SEASON);
         deck.push(Tile::AUTUMN_SEASON);
         deck.push(Tile::WINTER_SEASON);
     }
-    if has_joker {
+    if game_settings.has_joker {
         deck.push(Tile::JOKER);
     }
 

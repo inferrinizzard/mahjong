@@ -28,8 +28,9 @@ pub struct Game {
     pub hands: HashMap<u8, Hand>,
     // pub open_tiles: HashMap<u8, Hand>,
     pub discard: HashMap<u8, Vec<TileData>>,
-    pub turn: u8,
+    pub turn: usize,
     pub wind: Wind,
+    pub round: usize,
 
     bank_size: usize,
 }
@@ -42,6 +43,7 @@ impl Default for Game {
             discard: [].into_iter().collect(),
             turn: 0,
             wind: Wind::EAST,
+            round: 0,
 
             bank_size: 0,
         }
@@ -49,19 +51,21 @@ impl Default for Game {
 }
 
 impl Game {
-    pub fn init(&mut self) {
-        self.deck = init_deck();
+    pub fn init(&mut self, settings: &Settings) {
+        self.deck = init_deck(&settings.game);
         self.bank_size = self.deck.len() / 4;
 
-        // TODO: hand_size settings
-        let hand_size = 13;
         // TODO: 2x2 dealing hands
         for i in 0..4 {
-            self.hands
-                .insert(i, self.deck.split_off(self.deck.len() - hand_size));
+            self.hands.insert(
+                i,
+                self.deck
+                    .split_off(self.deck.len() - settings.game.hand_size),
+            );
             self.discard.insert(i, vec![]);
         }
 
+        self.round = 1;
         self.turn = 1;
     }
 

@@ -56,7 +56,7 @@ impl AppRoot {
     fn on_render_screen(&mut self) -> Task<Message> {
         match self.render.screen {
             Screen::Game => {
-                self.game.init();
+                self.game.init(&self.settings);
             }
             _ => {}
         }
