@@ -1,17 +1,18 @@
 pub mod init_deck;
+pub mod render;
 
 use std::collections::HashMap;
 
 use iced::{
     Element,
-    widget::{button, pin, stack},
+    widget::{Stack, button, pin, stack},
 };
 use mahjong_lib::{consts::Wind, tile::TileData};
 
 use crate::{
     app::{
         Message,
-        game::init_deck::init_deck,
+        game::{init_deck::init_deck, render::render_game_hands},
         render::render_tile::{render_bank, render_hand},
         settings::Settings,
     },
@@ -23,6 +24,7 @@ type Hand = Vec<TileData>;
 pub struct Game {
     pub deck: Vec<TileData>,
     pub hands: HashMap<u8, Hand>,
+    // pub open_tiles: HashMap<u8, Hand>,
     pub discard: HashMap<u8, Vec<TileData>>,
     pub turn: u8,
     pub wind: Wind,
@@ -62,19 +64,28 @@ impl Game {
     }
 
     pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
-        stack![
+        // render hands 1,2,3,4
+        // render banks 1,2,3,4
+        // render discards 1,2,3,4
+        // render open_tiles 1,2,3,4
+        // render ui
+
+        let mut elements = vec![
             pin(button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)))
                 .x(0)
-                .y(0),
-            pin(render_hand(&self.hands[&0], settings.video.tile_size))
-                .x(0)
-                .y(48),
+                .y(0)
+                .into(),
             pin(render_bank(self.bank_size, settings.video.tile_size))
                 .x(0)
                 .y(128)
-        ]
-        .width(settings.video.window_size.width)
-        .height(settings.video.window_size.height)
-        .into()
+                .into(),
+        ];
+
+        elements.extend(render_game_hands(&self, settings));
+
+        Stack::from_vec(elements)
+            .width(settings.video.window_size.width)
+            .height(settings.video.window_size.height)
+            .into()
     }
 }

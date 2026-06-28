@@ -1,5 +1,6 @@
 pub static TILE_BACK_PATH: &'static str = "assets/tiles/oblique/misc/back.svg";
 
+pub static TILE_ASPECT_RATIO: f32 = 78. / 64.;
 pub static TILE_FACE_RATIO: f32 = 50. / 64.;
 pub static TILE_EDGE_RATIO: f32 = 1. - TILE_FACE_RATIO;
 
