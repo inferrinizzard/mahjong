@@ -1,3 +1,4 @@
+pub mod hand;
 pub mod init_deck;
 pub mod render;
 
@@ -7,12 +8,15 @@ use iced::{
     Element,
     widget::{Stack, button, pin},
 };
+use strum::IntoEnumIterator;
+
 use mahjong_lib::{consts::Wind, tile::TileData};
 
 use crate::{
     app::{
         Message,
         game::{
+            hand::GameHand,
             init_deck::init_deck,
             render::{render_game_banks, render_game_hands},
         },
@@ -21,13 +25,10 @@ use crate::{
     screens::Screen,
 };
 
-type Hand = Vec<TileData>;
-
 pub struct Game {
     pub deck: Vec<TileData>,
-    pub hands: HashMap<u8, Hand>,
-    // pub open_tiles: HashMap<u8, Hand>,
-    pub discard: HashMap<u8, Vec<TileData>>,
+    pub hands: HashMap<Wind, GameHand>,
+    pub discard: HashMap<Wind, Vec<TileData>>,
     pub turn: usize,
     pub wind: Wind,
     pub round: usize,
@@ -39,8 +40,8 @@ impl Default for Game {
     fn default() -> Self {
         Self {
             deck: vec![],
-            hands: [].into_iter().collect(),
-            discard: [].into_iter().collect(),
+            hands: HashMap::default(),
+            discard: HashMap::default(),
             turn: 0,
             wind: Wind::EAST,
             round: 0,
@@ -56,13 +57,15 @@ impl Game {
         self.bank_size = self.deck.len() / 4;
 
         // TODO: 2x2 dealing hands
-        for i in 0..4 {
+        for wind in Wind::iter() {
             self.hands.insert(
-                i,
-                self.deck
-                    .split_off(self.deck.len() - settings.game.hand_size),
+                wind.clone(),
+                GameHand::from(
+                    self.deck
+                        .split_off(self.deck.len() - settings.game.hand_size),
+                ),
             );
-            self.discard.insert(i, vec![]);
+            self.discard.insert(wind, vec![]);
         }
 
         self.round = 1;

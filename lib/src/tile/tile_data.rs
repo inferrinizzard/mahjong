@@ -13,3 +13,9 @@ pub struct TileData {
     /// index within standard 34-array
     pub index: i8,
 }
+
+impl PartialEq for TileData {
+    fn eq(&self, other: &Self) -> bool {
+        self.suit == other.suit && self.value == other.value
+    }
+}

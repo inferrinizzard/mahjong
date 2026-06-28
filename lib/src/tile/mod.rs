@@ -1,5 +1,7 @@
 use crate::consts::consts::Suit;
+pub use meld::Meld;
 pub use tile_data::TileData;
+pub mod meld;
 pub mod tile_data;
 
 pub struct Tile;
