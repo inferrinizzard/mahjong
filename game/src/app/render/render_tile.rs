@@ -23,6 +23,10 @@ pub fn render_tile_for_path(
     size: u32,
     direction: &Direction,
 ) -> Element<'static, Message> {
+    if !Path::new(tile_path).exists() {
+        println!("can't find tile: {}", tile_path);
+    }
+
     let mut svg = svg(tile_path);
     if matches!(direction, Direction::DOWN | Direction::UP) {
         svg = svg.width(size)
@@ -55,7 +59,7 @@ pub fn get_path_for_tile(tile: &TileData, direction: &Direction) -> String {
         Suit::FLOWER | Suit::SEASON => {
             let slugs = &mut lower_tile_name.split("_").collect::<Vec<&str>>();
             slugs.reverse();
-            slugs.join("_").leak()
+            slugs.join("-").leak()
         }
     };
 
