@@ -5,7 +5,7 @@ pub static TILE_FACE_RATIO: f32 = 50. / 64.;
 pub static TILE_EDGE_RATIO: f32 = 1. - TILE_FACE_RATIO;
 
 pub fn get_total_tile_length(num_tiles: usize, size: u32) -> f32 {
-    (TILE_FACE_RATIO * num_tiles as f32 + 1.) * size as f32
+    (TILE_FACE_RATIO * num_tiles as f32 + TILE_EDGE_RATIO) * size as f32
 }
 
 pub enum Direction {

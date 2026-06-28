@@ -9,15 +9,25 @@ use mahjong_lib::{consts::Suit, tile::TileData};
 use crate::{
     app::{
         Message,
-        render::consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO},
+        render::consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
     },
-    util::get_path::get_path,
+    util::{debug_outline::debug_outline, get_path::get_path},
 };
 
 use super::consts::{TILE_BACK_PATH, TILE_FACE_RATIO};
 
-pub fn render_tile_for_path(tile_path: &str, size: u32) -> Element<'static, Message> {
-    container(svg(tile_path).width(size)).into()
+pub fn render_tile_for_path(
+    tile_path: &str,
+    size: u32,
+    direction: &Direction,
+) -> Element<'static, Message> {
+    let mut svg = svg(tile_path);
+    if matches!(direction, Direction::DOWN | Direction::UP) {
+        svg = svg.width(size)
+    } else {
+        svg = svg.height(size)
+    }
+    container(svg).into()
 }
 
 pub fn get_path_for_tile(tile: &TileData, direction: &Direction) -> String {
@@ -75,7 +85,11 @@ pub fn get_path_for_tile(tile: &TileData, direction: &Direction) -> String {
 }
 
 pub fn render_tile(tile: &TileData, size: u32) -> Element<'static, Message> {
-    render_tile_for_path(get_path_for_tile(tile, &Direction::DOWN).as_str(), size)
+    render_tile_for_path(
+        get_path_for_tile(tile, &Direction::DOWN).as_str(),
+        size,
+        &Direction::DOWN,
+    )
 }
 
 pub fn render_hand(
@@ -90,7 +104,7 @@ pub fn render_hand(
             .collect(),
         size,
         &direction,
-        false,
+        1,
     )
 }
 
@@ -99,7 +113,7 @@ pub fn render_bank(num_tiles: usize, size: u32, direction: Direction) -> Element
         vec![TILE_BACK_PATH.to_string(); num_tiles],
         size,
         &direction,
-        true,
+        2,
     )
 }
 
@@ -107,50 +121,54 @@ pub fn render_tileset(
     paths: Vec<String>,
     size: u32,
     direction: &Direction,
-    should_stack: bool,
+    num_rows: usize,
 ) -> Element<'static, Message> {
     let tile_face_length = size as f32 * TILE_FACE_RATIO;
     let is_vertical = matches!(direction, Direction::LEFT | Direction::RIGHT);
+    let total_length = get_total_tile_length(paths.len() / num_rows, size);
 
     let mut stack_vec: Vec<Element<Message>> = vec![];
     for (i, path) in paths.iter().enumerate() {
-        let is_top_tile = if should_stack { i % 2 == 0 } else { true };
-        let mut x = (if should_stack { i / 2 } else { i }) as f32 * tile_face_length;
+        // position based on index
+        let mut x = (i / num_rows) as f32 * tile_face_length;
         let mut y = 0.;
 
-        if is_top_tile {
-            x += size as f32 - tile_face_length
-        } else {
-            y += size as f32 - tile_face_length
-        }
+        // offset rows for stacking
+        x += size as f32 * TILE_EDGE_RATIO * (num_rows - (i % num_rows) - 1) as f32;
+        y += size as f32 * TILE_EDGE_RATIO * (i % num_rows) as f32;
 
         if is_vertical {
             let z = x;
             x = y;
-            y = z;
+            y = total_length - z - size as f32;
         }
 
         stack_vec.push(
-            pin(render_tile_for_path(&get_path(path), size))
+            pin(render_tile_for_path(&get_path(path), size, direction))
                 .x(x)
                 .y(y)
                 .into(),
         );
     }
 
+    let long_length = total_length + (num_rows - 1) as f32 * TILE_EDGE_RATIO * size as f32;
+    let short_length = size as f32 * (TILE_ASPECT_RATIO + (num_rows - 1) as f32 * TILE_EDGE_RATIO);
+
     let container_width = if is_vertical {
-        size as f32 * (TILE_ASPECT_RATIO + TILE_EDGE_RATIO)
+        short_length
     } else {
-        tile_face_length * paths.len() as f32 + size as f32
+        long_length
     };
     let container_height = if is_vertical {
-        tile_face_length * paths.len() as f32 + size as f32
+        long_length
     } else {
-        size as f32 * (TILE_ASPECT_RATIO + TILE_EDGE_RATIO)
+        short_length
     };
 
-    Stack::from_vec(stack_vec)
-        .width(container_width)
-        .height(container_height)
-        .into()
+    debug_outline(
+        Stack::from_vec(stack_vec)
+            .width(container_width)
+            .height(container_height)
+            .into(),
+    )
 }
