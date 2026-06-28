@@ -1,19 +1,37 @@
 pub mod init_deck;
+pub mod render;
 
 use std::collections::HashMap;
 
+use iced::{
+    Element,
+    widget::{Stack, button, pin},
+};
 use mahjong_lib::{consts::Wind, tile::TileData};
 
-use crate::app::game::init_deck::init_deck;
+use crate::{
+    app::{
+        Message,
+        game::{
+            init_deck::init_deck,
+            render::{render_game_banks, render_game_hands},
+        },
+        settings::Settings,
+    },
+    screens::Screen,
+};
 
 type Hand = Vec<TileData>;
 
 pub struct Game {
     pub deck: Vec<TileData>,
     pub hands: HashMap<u8, Hand>,
+    // pub open_tiles: HashMap<u8, Hand>,
     pub discard: HashMap<u8, Vec<TileData>>,
     pub turn: u8,
     pub wind: Wind,
+
+    bank_size: usize,
 }
 
 impl Default for Game {
@@ -24,6 +42,8 @@ impl Default for Game {
             discard: [].into_iter().collect(),
             turn: 0,
             wind: Wind::EAST,
+
+            bank_size: 0,
         }
     }
 }
@@ -31,6 +51,7 @@ impl Default for Game {
 impl Game {
     pub fn init(&mut self) {
         self.deck = init_deck();
+        self.bank_size = self.deck.len() / 4;
 
         // TODO: hand_size settings
         let hand_size = 13;
@@ -42,5 +63,28 @@ impl Game {
         }
 
         self.turn = 1;
+    }
+
+    pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
+        // render hands 1,2,3,4
+        // render banks 1,2,3,4
+        // render discards 1,2,3,4
+        // render open_tiles 1,2,3,4
+        // render ui
+
+        let mut elements = vec![
+            pin(button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)))
+                .x(0)
+                .y(0)
+                .into(),
+        ];
+
+        elements.extend(render_game_banks(&self, settings));
+        elements.extend(render_game_hands(&self, settings));
+
+        Stack::from_vec(elements)
+            .width(settings.video.window_size.width)
+            .height(settings.video.window_size.height)
+            .into()
     }
 }

@@ -1,11 +1,11 @@
-use iced::{Element, Task};
+use iced::{Element, Subscription, Task, window};
 
 use crate::{
     app::{
         game::Game,
         render::Render,
         server::ServerRoot,
-        settings::{Settings, SettingsMessage},
+        settings::{Settings, SettingsMessage, video::VideoSettingsMessage},
     },
     screens::{
         Screen,
@@ -16,7 +16,7 @@ use crate::{
 pub struct AppRoot {
     pub render: Render,
     pub settings: Settings,
-    pub game: Option<Game>,
+    pub game: Game,
     pub server: ServerRoot,
 }
 
@@ -24,7 +24,7 @@ impl AppRoot {
     pub fn new() -> AppRoot {
         Self {
             render: Render::default(),
-            game: None,
+            game: Game::default(),
             settings: Settings::default(),
             server: ServerRoot::default(),
         }
@@ -34,7 +34,10 @@ impl AppRoot {
         println!("{:?}", message);
 
         match message {
-            Message::ChangeScreen(screen) => self.render.screen = screen,
+            Message::ChangeScreen(screen) => {
+                self.render.screen = screen;
+                return self.on_render_screen();
+            }
             Message::Counter(counter_message) => {
                 Counter::update(&mut self.render.counter, counter_message)
             }
@@ -49,6 +52,16 @@ impl AppRoot {
     pub fn view(&self) -> Element<'_, Message> {
         Render::view(&self)
     }
+
+    fn on_render_screen(&mut self) -> Task<Message> {
+        match self.render.screen {
+            Screen::Game => {
+                self.game.init();
+            }
+            _ => {}
+        }
+        Task::none()
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -56,4 +69,12 @@ pub enum Message {
     ChangeScreen(Screen),
     Counter(CounterMessage),
     Settings(SettingsMessage),
+}
+
+pub fn subscription_window_resize(_: &AppRoot) -> Subscription<Message> {
+    window::resize_events().map(|(_id, size)| {
+        Message::Settings(SettingsMessage::VideoSettings(
+            VideoSettingsMessage::WindowResize(size),
+        ))
+    })
 }
