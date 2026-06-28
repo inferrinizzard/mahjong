@@ -9,7 +9,9 @@ use mahjong_lib::{consts::Suit, tile::TileData};
 use crate::{
     app::{
         Message,
-        render::consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
+        render::consts::{
+            Direction, TILE_ASPECT_RATIO, TILE_BACK_X_PATH, TILE_EDGE_RATIO, get_total_tile_length,
+        },
     },
     util::get_path::get_path,
 };
@@ -109,12 +111,12 @@ pub fn render_hand(
 }
 
 pub fn render_bank(num_tiles: usize, size: u32, direction: Direction) -> Element<'static, Message> {
-    render_tileset(
-        vec![TILE_BACK_PATH.to_string(); num_tiles],
-        size,
-        &direction,
-        2,
-    )
+    let path = if matches!(direction, Direction::DOWN | Direction::UP) {
+        TILE_BACK_PATH
+    } else {
+        TILE_BACK_X_PATH
+    };
+    render_tileset(vec![path.to_string(); num_tiles], size, &direction, 2)
 }
 
 pub fn render_tileset(
@@ -125,7 +127,7 @@ pub fn render_tileset(
 ) -> Element<'static, Message> {
     let tile_face_length = size as f32 * TILE_FACE_RATIO;
     let is_vertical = matches!(direction, Direction::LEFT | Direction::RIGHT);
-    let total_length = get_total_tile_length(paths.len() / num_rows, size);
+    let total_length = get_total_tile_length((paths.len() + num_rows - 1) / num_rows, size);
 
     let mut stack_vec: Vec<Element<Message>> = vec![];
     for (i, path) in paths.iter().enumerate() {
@@ -135,7 +137,13 @@ pub fn render_tileset(
 
         // offset rows for stacking
         x += size as f32 * TILE_EDGE_RATIO * (num_rows - (i % num_rows) - 1) as f32;
-        y += size as f32 * TILE_EDGE_RATIO * (i % num_rows) as f32;
+        y += size as f32
+            * TILE_EDGE_RATIO
+            * if is_vertical {
+                num_rows - (i % num_rows) - 1
+            } else {
+                i % num_rows
+            } as f32;
 
         if is_vertical {
             let z = x;

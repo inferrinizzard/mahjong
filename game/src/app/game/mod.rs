@@ -12,8 +12,10 @@ use mahjong_lib::{consts::Wind, tile::TileData};
 use crate::{
     app::{
         Message,
-        game::{init_deck::init_deck, render::render_game_hands},
-        render::{consts::Direction, render_tile::render_bank},
+        game::{
+            init_deck::init_deck,
+            render::{render_game_banks, render_game_hands},
+        },
         settings::Settings,
     },
     screens::Screen,
@@ -75,16 +77,9 @@ impl Game {
                 .x(0)
                 .y(0)
                 .into(),
-            pin(render_bank(
-                self.bank_size,
-                settings.video.tile_size,
-                Direction::DOWN,
-            ))
-            .x(0)
-            .y(128)
-            .into(),
         ];
 
+        elements.extend(render_game_banks(&self, settings));
         elements.extend(render_game_hands(&self, settings));
 
         Stack::from_vec(elements)
