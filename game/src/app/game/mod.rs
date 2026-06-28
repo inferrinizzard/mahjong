@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 use iced::{
     Element,
-    widget::{Stack, button, pin, stack},
+    widget::{Stack, button, pin},
 };
 use mahjong_lib::{consts::Wind, tile::TileData};
 
@@ -13,10 +13,7 @@ use crate::{
     app::{
         Message,
         game::{init_deck::init_deck, render::render_game_hands},
-        render::{
-            consts::Direction,
-            render_tile::{render_bank, render_hand},
-        },
+        render::{consts::Direction, render_tile::render_bank},
         settings::Settings,
     },
     screens::Screen,

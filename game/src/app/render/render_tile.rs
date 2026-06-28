@@ -11,7 +11,7 @@ use crate::{
         Message,
         render::consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
     },
-    util::{debug_outline::debug_outline, get_path::get_path},
+    util::get_path::get_path,
 };
 
 use super::consts::{TILE_BACK_PATH, TILE_FACE_RATIO};
@@ -165,10 +165,8 @@ pub fn render_tileset(
         short_length
     };
 
-    debug_outline(
-        Stack::from_vec(stack_vec)
-            .width(container_width)
-            .height(container_height)
-            .into(),
-    )
+    Stack::from_vec(stack_vec)
+        .width(container_width)
+        .height(container_height)
+        .into()
 }
