@@ -1,7 +1,11 @@
+pub mod consts;
+pub mod render_tile;
+
 use iced::Element;
 
 use crate::{
     app::{
+        game::Game,
         root::{AppRoot, Message},
         settings::Settings,
     },
@@ -27,12 +31,13 @@ impl Default for Render {
 }
 
 impl Render {
-    pub fn view(state: &AppRoot) -> Element<'_, Message> {
+    pub fn view(state: &AppRoot) -> Element<'static, Message> {
         match state.render.screen {
-            Screen::Main => return render_main_screen(),
-            Screen::DebugCounter => return Counter::view(&state.render.counter),
-            Screen::DebugTile => return DebugTile::view(&state.render.debug_tile),
-            Screen::Settings => return Settings::view(&state.settings),
+            Screen::Main => render_main_screen(),
+            Screen::Game => Game::view(&state.game, &state.settings),
+            Screen::DebugCounter => Counter::view(&state.render.counter),
+            Screen::DebugTile => DebugTile::view(&state.render.debug_tile),
+            Screen::Settings => Settings::view(&state.settings),
         }
     }
 }

@@ -1,5 +1,6 @@
 pub mod video;
 
+use derivative::Derivative;
 use iced::{
     Element, Task,
     widget::{button, column},
@@ -23,10 +24,17 @@ pub struct Settings {
 #[derive(Default)]
 pub struct AudioSettings {}
 
-#[derive(Default)]
+#[derive(Derivative)]
+#[derivative(Default)]
 pub struct GameSettings {
+    #[derivative(Default(value = "13"))]
+    pub hand_size: usize,
+
+    #[derivative(Default(value = "true"))]
     pub has_flowers: bool,
+    #[derivative(Default(value = "true"))]
     pub has_seasons: bool,
+    #[derivative(Default(value = "false"))]
     pub has_joker: bool,
 }
 
