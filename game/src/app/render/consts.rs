@@ -9,8 +9,9 @@ pub fn get_total_tile_length(num_tiles: usize, size: u32) -> f32 {
     (TILE_FACE_RATIO * num_tiles as f32 + TILE_EDGE_RATIO) * size as f32
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub enum Direction {
+    #[default]
     DOWN,
     RIGHT,
     UP,

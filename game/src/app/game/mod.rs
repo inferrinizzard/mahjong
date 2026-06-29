@@ -1,5 +1,5 @@
-pub mod hand;
 pub mod init_deck;
+pub mod player;
 pub mod render;
 
 use std::collections::HashMap;
@@ -16,60 +16,59 @@ use crate::{
     app::{
         Message,
         game::{
-            hand::GameHand,
             init_deck::init_deck,
+            player::Player,
             render::{render_game_banks, render_game_hands},
         },
+        render::consts::Direction,
         settings::Settings,
     },
     screens::Screen,
 };
 
-pub struct Game {
+pub struct Game<'game> {
     pub deck: Vec<TileData>,
-    pub hands: HashMap<Wind, GameHand>,
-    pub discard: HashMap<Wind, Vec<TileData>>,
-    pub turn: usize,
+    pub players: HashMap<Wind, Player>,
     pub wind: Wind,
     pub round: usize,
+    pub active_seat: Wind,
 
     bank_size: usize,
+    banks: Vec<&'game [TileData]>,
 }
 
-impl Default for Game {
+impl<'game> Default for Game<'game> {
     fn default() -> Self {
         Self {
             deck: vec![],
-            hands: HashMap::default(),
-            discard: HashMap::default(),
-            turn: 0,
+            players: HashMap::default(),
+            active_seat: Wind::EAST,
             wind: Wind::EAST,
             round: 0,
 
             bank_size: 0,
+            banks: vec![],
         }
     }
 }
 
-impl Game {
+impl<'game> Game<'game> {
     pub fn init(&mut self, settings: &Settings) {
         self.deck = init_deck(&settings.game);
         self.bank_size = self.deck.len() / 4;
 
         // TODO: 2x2 dealing hands
         for wind in Wind::iter() {
-            self.hands.insert(
-                wind.clone(),
-                GameHand::from(
-                    self.deck
-                        .split_off(self.deck.len() - settings.game.hand_size),
-                ),
+            let mut player = Player::new(wind.clone(), Direction::DOWN);
+            player.add_tiles(
+                self.deck
+                    .split_off(self.deck.len() - settings.game.hand_size),
             );
-            self.discard.insert(wind, vec![]);
+
+            self.players.insert(wind, player);
         }
 
         self.round = 1;
-        self.turn = 1;
     }
 
     pub fn view(&self, settings: &Settings) -> Element<'static, Message> {

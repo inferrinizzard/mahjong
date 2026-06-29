@@ -23,40 +23,40 @@ pub fn render_game_hands(game: &Game, settings: &Settings) -> Vec<Element<'stati
 
     vec![
         pin(render_hand(
-            &game.hands[&Wind::EAST].closed,
+            &game.players[&Wind::EAST].hand,
             tile_size,
             Direction::DOWN,
         ))
         .x(window_size.width / 2.
-            - get_total_tile_length(game.hands[&Wind::EAST].closed.len(), tile_size) / 2.)
+            - get_total_tile_length(game.players[&Wind::EAST].hand.len(), tile_size) / 2.)
         .y(window_size.height - tile_size as f32 * TILE_ASPECT_RATIO)
         .into(),
         pin(render_hand(
-            &game.hands[&Wind::NORTH].closed,
+            &game.players[&Wind::NORTH].hand,
             tile_size,
             Direction::RIGHT,
         ))
         .x(window_size.width - tile_size as f32 * TILE_ASPECT_RATIO)
         .y(window_size.height / 2.
-            - get_total_tile_length(game.hands[&Wind::NORTH].closed.len(), tile_size) / 2.)
+            - get_total_tile_length(game.players[&Wind::NORTH].hand.len(), tile_size) / 2.)
         .into(),
         pin(render_hand(
-            &game.hands[&Wind::WEST].closed,
+            &game.players[&Wind::WEST].hand,
             tile_size,
             Direction::UP,
         ))
         .x(window_size.width / 2.
-            - get_total_tile_length(game.hands[&Wind::WEST].closed.len(), tile_size) / 2.)
+            - get_total_tile_length(game.players[&Wind::WEST].hand.len(), tile_size) / 2.)
         .y(0.)
         .into(),
         pin(render_hand(
-            &game.hands[&Wind::SOUTH].closed,
+            &game.players[&Wind::SOUTH].hand,
             tile_size,
             Direction::LEFT,
         ))
         .x(0.)
         .y(window_size.height / 2.
-            - get_total_tile_length(game.hands[&Wind::SOUTH].closed.len(), tile_size) / 2.)
+            - get_total_tile_length(game.players[&Wind::SOUTH].hand.len(), tile_size) / 2.)
         .into(),
     ]
 }

@@ -12,8 +12,9 @@ pub enum Suit {
     JOKER,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, EnumString, EnumIter)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Hash, EnumString, EnumIter)]
 pub enum Wind {
+    #[default]
     EAST,
     SOUTH,
     WEST,

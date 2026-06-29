@@ -31,7 +31,7 @@ impl Default for Render {
 }
 
 impl Render {
-    pub fn view(state: &AppRoot) -> Element<'_, Message> {
+    pub fn view(state: &AppRoot) -> Element<'static, Message> {
         match state.render.screen {
             Screen::Main => render_main_screen(),
             Screen::Game => Game::view(&state.game, &state.settings),
