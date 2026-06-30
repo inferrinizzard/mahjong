@@ -68,13 +68,13 @@ pub fn render_game_banks(game: &Game, settings: &Settings) -> Vec<Element<'stati
     let center = (window_size.width / 2., window_size.height / 2.);
     let center_side = tile_size as f32 * 5.;
 
-    let bank_length =
-        get_total_tile_length(game.bank_size / 2, tile_size) + tile_size as f32 * TILE_EDGE_RATIO;
+    let bank_length = get_total_tile_length(game.deck.bank_size / 2, tile_size)
+        + tile_size as f32 * TILE_EDGE_RATIO;
     let bank_depth = tile_size as f32 * (TILE_ASPECT_RATIO + TILE_EDGE_RATIO);
 
     vec![
         pin(debug_outline(
-            container(text(""))
+            container(text(game.deck.count))
                 .width(center_side * 2.)
                 .height(center_side * 2.)
                 .into(),
@@ -82,21 +82,25 @@ pub fn render_game_banks(game: &Game, settings: &Settings) -> Vec<Element<'stati
         .x(center.0 - center_side)
         .y(center.1 - center_side)
         .into(),
-        pin(render_bank(game.bank_size, tile_size, Direction::DOWN))
+        pin(render_bank(game.deck.bank_size, tile_size, Direction::DOWN))
             .x(center.0 - center_side)
             .y(center.1 + center_side)
             .into(),
-        pin(render_bank(game.bank_size, tile_size, Direction::RIGHT))
-            .x(center.0 + center_side)
-            .y(center.1 + center_side - bank_length)
-            .into(),
-        pin(render_bank(game.bank_size, tile_size, Direction::UP))
-            .x(center.0 + center_side - bank_length)
-            .y(center.1 - center_side - bank_depth)
-            .into(),
-        pin(render_bank(game.bank_size, tile_size, Direction::LEFT))
+        pin(render_bank(
+            game.deck.bank_size,
+            tile_size,
+            Direction::RIGHT,
+        ))
+        .x(center.0 + center_side)
+        .y(center.1 + center_side - bank_length + (tile_size as f32) * TILE_EDGE_RATIO)
+        .into(),
+        pin(render_bank(game.deck.bank_size, tile_size, Direction::LEFT))
             .x(center.0 - center_side - bank_depth)
             .y(center.1 - center_side)
+            .into(),
+        pin(render_bank(game.deck.bank_size, tile_size, Direction::UP))
+            .x(center.0 + center_side - bank_length + (tile_size as f32) * TILE_EDGE_RATIO)
+            .y(center.1 - center_side - bank_depth)
             .into(),
     ]
 }

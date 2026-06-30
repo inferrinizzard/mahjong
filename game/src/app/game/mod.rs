@@ -1,3 +1,4 @@
+pub mod deck;
 pub mod init_deck;
 pub mod player;
 pub mod render;
@@ -8,15 +9,16 @@ use iced::{
     Element,
     widget::{Stack, button, pin},
 };
+use rand::Rng;
 use strum::IntoEnumIterator;
 
-use mahjong_lib::{consts::Wind, tile::TileData};
+use mahjong_lib::consts::Wind;
 
 use crate::{
     app::{
         Message,
         game::{
-            init_deck::init_deck,
+            deck::Deck,
             player::Player,
             render::{render_game_banks, render_game_hands},
         },
@@ -26,44 +28,38 @@ use crate::{
     screens::Screen,
 };
 
-pub struct Game<'game> {
-    pub deck: Vec<TileData>,
+pub struct Game {
+    pub deck: Deck,
     pub players: HashMap<Wind, Player>,
     pub wind: Wind,
     pub round: usize,
     pub active_seat: Wind,
-
-    bank_size: usize,
-    banks: Vec<&'game [TileData]>,
 }
 
-impl<'game> Default for Game<'game> {
+impl Default for Game {
     fn default() -> Self {
         Self {
-            deck: vec![],
+            deck: Deck::default(),
             players: HashMap::default(),
             active_seat: Wind::EAST,
             wind: Wind::EAST,
             round: 0,
-
-            bank_size: 0,
-            banks: vec![],
         }
     }
 }
 
-impl<'game> Game<'game> {
+impl Game {
     pub fn init(&mut self, settings: &Settings) {
-        self.deck = init_deck(&settings.game);
-        self.bank_size = self.deck.len() / 4;
+        self.deck = Deck::new(&settings.game);
+
+        let mut rng = rand::rng();
+        let dice_roll: usize = rng.random_range(1..=6) + rng.random_range(1..=6);
+        self.deck.init_index(dice_roll);
 
         // TODO: 2x2 dealing hands
         for wind in Wind::iter() {
             let mut player = Player::new(wind.clone(), Direction::DOWN);
-            player.add_tiles(
-                self.deck
-                    .split_off(self.deck.len() - settings.game.hand_size),
-            );
+            player.add_tiles(self.deck.draw_tiles(settings.game.hand_size));
 
             self.players.insert(wind, player);
         }

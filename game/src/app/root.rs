@@ -13,15 +13,15 @@ use crate::{
     },
 };
 
-pub struct AppRoot<'app> {
+pub struct AppRoot {
     pub render: Render,
     pub settings: Settings,
-    pub game: Game<'app>,
+    pub game: Game,
     pub server: ServerRoot,
 }
 
-impl<'app> AppRoot<'app> {
-    pub fn new() -> AppRoot<'app> {
+impl AppRoot {
+    pub fn new() -> AppRoot {
         Self {
             render: Render::default(),
             game: Game::default(),
