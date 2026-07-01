@@ -52,7 +52,7 @@ impl Deck {
 
     pub fn init_index(&mut self, dice_roll: usize) {
         let starting_bank = (dice_roll + 1) % self.banks.len();
-        self.head_index = starting_bank * self.bank_size + dice_roll * 2 - 1;
+        self.head_index = starting_bank * self.bank_size + dice_roll * 2;
         // TODO: offset by 14/15 if using dead wall
         self.tail_index = (self.head_index + self.len - 1) % self.len;
     }

@@ -20,7 +20,7 @@ use crate::{
         game::{
             deck::Deck,
             player::Player,
-            render::{render_game_banks, render_game_hands},
+            render::{render_deck, render_players},
         },
         render::consts::Direction,
         settings::Settings,
@@ -50,6 +50,10 @@ impl Default for Game {
 
 impl Game {
     pub fn init(&mut self, settings: &Settings) {
+        self.reset_round(settings);
+    }
+
+    pub fn reset_round(&mut self, settings: &Settings) {
         self.deck = Deck::new(&settings.game);
 
         let mut rng = rand::rng();
@@ -64,7 +68,7 @@ impl Game {
             self.players.insert(wind, player);
         }
 
-        self.round = 1;
+        self.round += 1;
     }
 
     pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
@@ -81,8 +85,8 @@ impl Game {
                 .into(),
         ];
 
-        elements.extend(render_game_banks(&self, settings));
-        elements.extend(render_game_hands(&self, settings));
+        elements.extend(render_deck(&self.deck, settings));
+        elements.extend(render_players(&self.players, settings));
 
         Stack::from_vec(elements)
             .width(settings.video.window_size.width)

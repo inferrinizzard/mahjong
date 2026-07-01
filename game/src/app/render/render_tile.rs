@@ -114,27 +114,51 @@ pub fn render_hand(
     )
 }
 
-pub fn render_bank(num_tiles: usize, size: u32, direction: Direction) -> Element<'static, Message> {
-    let path = if matches!(direction, Direction::DOWN | Direction::UP) {
-        TILE_BACK_PATH
-    } else {
-        TILE_BACK_X_PATH
-    };
-    render_tileset(vec![path.to_string(); num_tiles], size, &direction, 2)
+pub fn render_bank(
+    bank_tile_displays: &Vec<Option<TileData>>,
+    size: u32,
+    direction: Direction,
+) -> Element<'static, Message> {
+    let paths = bank_tile_displays
+        .iter()
+        .map(|tile| {
+            if matches!(tile, None) {
+                return "";
+            }
+
+            if matches!(direction, Direction::DOWN | Direction::UP) {
+                TILE_BACK_PATH
+            } else {
+                TILE_BACK_X_PATH
+            }
+        })
+        .map(str::to_string)
+        .collect();
+
+    render_tileset(paths, size, &direction, 2)
 }
 
 pub fn render_tileset(
-    paths: Vec<String>,
+    _paths: Vec<String>,
     size: u32,
     direction: &Direction,
     num_rows: usize,
 ) -> Element<'static, Message> {
+    let mut paths = _paths;
+    if matches!(direction, Direction::LEFT | Direction::UP) {
+        paths.reverse();
+    }
+
     let tile_face_length = size as f32 * TILE_FACE_RATIO;
     let is_vertical = matches!(direction, Direction::LEFT | Direction::RIGHT);
     let total_length = get_total_tile_length((paths.len() + num_rows - 1) / num_rows, size);
 
     let mut stack_vec: Vec<Element<Message>> = vec![];
     for (i, path) in paths.iter().enumerate() {
+        if path.is_empty() {
+            continue;
+        }
+
         // position based on index
         let mut x = (i / num_rows) as f32 * tile_face_length;
         let mut y = 0.;
