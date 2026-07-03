@@ -1,11 +1,12 @@
-use mahjong_lib::tile::TileData;
-
-use crate::app::{game::init_deck::init_deck, settings::GameSettings};
+use crate::app::{
+    game::{GameTile, init_deck::init_deck},
+    settings::GameSettings,
+};
 
 #[derive(Default)]
 pub struct Deck {
     len: usize,
-    pub banks: [Vec<Option<TileData>>; 4],
+    pub banks: [Vec<Option<GameTile>>; 4],
     pub bank_size: usize,
 
     pub count: usize,
@@ -57,7 +58,7 @@ impl Deck {
         self.tail_index = (self.head_index + self.len - 1) % self.len;
     }
 
-    fn get_tile(&mut self, index: usize) -> TileData {
+    fn get_tile(&mut self, index: usize) -> GameTile {
         let active_bank = (index / self.bank_size) % self.banks.len();
         let bank_index = (index - (self.bank_size * active_bank)) % self.len;
 
@@ -68,7 +69,7 @@ impl Deck {
         tile.unwrap()
     }
 
-    pub fn draw_tiles(&mut self, num_tiles: usize) -> Vec<TileData> {
+    pub fn draw_tiles(&mut self, num_tiles: usize) -> Vec<GameTile> {
         let mut tiles = vec![];
         for _ in 0..num_tiles {
             tiles.push(self.get_tile(self.head_index));
@@ -78,7 +79,7 @@ impl Deck {
         tiles
     }
 
-    pub fn draw_from_rear(&mut self) -> TileData {
+    pub fn draw_from_rear(&mut self) -> GameTile {
         let tile = self.get_tile(self.tail_index);
         self.tail_index = (self.tail_index + self.len - 1) % self.len;
 

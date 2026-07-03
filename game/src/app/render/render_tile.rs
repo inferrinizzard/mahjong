@@ -9,6 +9,7 @@ use mahjong_lib::{consts::Suit, tile::TileData};
 use crate::{
     app::{
         Message,
+        game::GameTile,
         render::consts::{
             Direction, TILE_ASPECT_RATIO, TILE_BACK_X_PATH, TILE_EDGE_RATIO, get_total_tile_length,
         },
@@ -99,14 +100,14 @@ pub fn render_tile(tile: &TileData, size: u32) -> Element<'static, Message> {
 }
 
 pub fn render_hand(
-    tiles: &Vec<TileData>,
+    tiles: &Vec<GameTile>,
     size: u32,
     direction: Direction,
 ) -> Element<'static, Message> {
     render_tileset(
         tiles
             .iter()
-            .map(|tile| get_path_for_tile(tile, &direction))
+            .map(|tile| get_path_for_tile(&tile.data, &direction))
             .collect(),
         size,
         &direction,
@@ -115,7 +116,7 @@ pub fn render_hand(
 }
 
 pub fn render_bank(
-    bank_tile_displays: &Vec<Option<TileData>>,
+    bank_tile_displays: &Vec<Option<GameTile>>,
     size: u32,
     direction: Direction,
 ) -> Element<'static, Message> {

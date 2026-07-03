@@ -1,16 +1,13 @@
-use mahjong_lib::{
-    consts::Wind,
-    tile::{Meld, TileData},
-};
+use mahjong_lib::{consts::Wind, tile::Meld};
 
-use crate::app::render::consts::Direction;
+use crate::app::{game::GameTile, render::consts::Direction};
 
 #[derive(Default)]
 pub struct Player {
-    pub hand: Vec<TileData>,
+    pub hand: Vec<GameTile>,
     pub open_melds: Vec<Meld>,
-    pub discard: Vec<TileData>,
-    pub active_tile: Option<TileData>,
+    pub discard: Vec<GameTile>,
+    pub active_tile: Option<GameTile>,
 
     pub wind: Wind,
     pub position: Direction,
@@ -29,7 +26,7 @@ impl Player {
         }
     }
 
-    pub fn add_tiles(&mut self, tiles: Vec<TileData>) {
+    pub fn add_tiles(&mut self, tiles: Vec<GameTile>) {
         self.hand.extend(tiles);
     }
 }

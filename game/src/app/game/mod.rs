@@ -2,6 +2,8 @@ pub mod deck;
 pub mod init_deck;
 pub mod player;
 pub mod render;
+pub mod tile;
+pub use tile::GameTile;
 
 use std::collections::HashMap;
 
