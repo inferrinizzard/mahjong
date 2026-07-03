@@ -20,7 +20,7 @@ use crate::{
         game::{
             deck::Deck,
             player::Player,
-            render::{render_deck, render_players},
+            render::{render_buttons, render_deck, render_players},
         },
         render::consts::Direction,
         settings::Settings,
@@ -34,6 +34,11 @@ pub struct Game {
     pub wind: Wind,
     pub round: usize,
     pub active_seat: Wind,
+}
+
+#[derive(Debug, Clone)]
+pub enum GameMessage {
+    SortHand,
 }
 
 impl Default for Game {
@@ -71,6 +76,14 @@ impl Game {
         self.round += 1;
     }
 
+    pub fn update(&mut self, _settings: &Settings, message: GameMessage) {
+        match message {
+            GameMessage::SortHand => {
+                self.players.get_mut(&Wind::EAST).unwrap().hand.sort();
+            }
+        }
+    }
+
     pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
         // render hands 1,2,3,4
         // render banks 1,2,3,4
@@ -87,6 +100,7 @@ impl Game {
 
         elements.extend(render_deck(&self.deck, settings));
         elements.extend(render_players(&self.players, settings));
+        elements.extend(render_buttons(settings));
 
         Stack::from_vec(elements)
             .width(settings.video.window_size.width)

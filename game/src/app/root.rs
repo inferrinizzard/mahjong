@@ -2,7 +2,7 @@ use iced::{Element, Subscription, Task, window};
 
 use crate::{
     app::{
-        game::Game,
+        game::{Game, GameMessage},
         render::Render,
         server::ServerRoot,
         settings::{Settings, SettingsMessage, video::VideoSettingsMessage},
@@ -44,6 +44,7 @@ impl AppRoot {
             Message::Settings(settings_message) => {
                 return Settings::update(&mut self.settings, settings_message);
             }
+            Message::Game(game_message) => self.game.update(&self.settings, game_message),
         }
 
         Task::none()
@@ -69,6 +70,7 @@ pub enum Message {
     ChangeScreen(Screen),
     Counter(CounterMessage),
     Settings(SettingsMessage),
+    Game(GameMessage),
 }
 
 pub fn subscription_window_resize(_: &AppRoot) -> Subscription<Message> {

@@ -2,14 +2,14 @@ use std::collections::HashMap;
 
 use iced::{
     Element,
-    widget::{container, pin, text},
+    widget::{button, container, pin, text},
 };
 use mahjong_lib::consts::Wind;
 
 use crate::{
     app::{
         Message,
-        game::{deck::Deck, player::Player},
+        game::{GameMessage, deck::Deck, player::Player},
         render::{
             consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
             render_tile::{render_bank, render_hand},
@@ -102,6 +102,21 @@ pub fn render_deck(deck: &Deck, settings: &Settings) -> Vec<Element<'static, Mes
         pin(render_bank(&deck.banks[2], tile_size, Direction::UP))
             .x(center.0 + center_side - bank_length + (tile_size as f32) * TILE_EDGE_RATIO)
             .y(center.1 - center_side - bank_depth)
+            .into(),
+    ]
+}
+
+pub fn render_buttons(settings: &Settings) -> Vec<Element<'static, Message>> {
+    let tile_size = settings.video.tile_size;
+    let window_size = settings.video.window_size;
+    let center = (window_size.width / 2., window_size.height / 2.);
+
+    let sort_button = button("Sort").on_press(Message::Game(GameMessage::SortHand));
+
+    vec![
+        pin(sort_button)
+            .x(center.0 - (tile_size as f32) * 3.)
+            .y(window_size.height - (tile_size as f32) * TILE_ASPECT_RATIO * 2.)
             .into(),
     ]
 }

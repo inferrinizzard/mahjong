@@ -1,6 +1,6 @@
 use strum_macros::{EnumIter, EnumString};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Suit {
     MAN,
     TONG,
