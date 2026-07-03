@@ -1,11 +1,11 @@
-use iced::{
-    Element,
-    widget::{button, column, text},
+use iced::widget::{button, column, text};
+
+use crate::{
+    app::{Component, Message},
+    screens::Screen,
 };
 
-use crate::{app::Message, screens::Screen};
-
-pub fn render_main_screen() -> Element<'static, Message> {
+pub fn render_main_screen() -> Component {
     column![
         text!("main menu"),
         button("Game Screen").on_press(Message::ChangeScreen(Screen::Game)),

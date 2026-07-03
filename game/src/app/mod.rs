@@ -4,4 +4,4 @@ pub mod root;
 pub mod server;
 pub mod settings;
 
-pub use root::Message;
+pub use root::{Component, Message};

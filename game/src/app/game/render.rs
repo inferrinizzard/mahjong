@@ -1,14 +1,12 @@
 use std::collections::HashMap;
 
-use iced::{
-    Element,
-    widget::{button, container, pin, text},
-};
+use iced::widget::{button, container, pin, text};
+
 use mahjong_lib::consts::Wind;
 
 use crate::{
     app::{
-        Message,
+        Component, Message,
         game::{GameMessage, deck::Deck, player::Player},
         render::{
             consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
@@ -19,10 +17,13 @@ use crate::{
     util::debug_outline::debug_outline,
 };
 
-pub fn render_players(
-    players: &HashMap<Wind, Player>,
-    settings: &Settings,
-) -> Vec<Element<'static, Message>> {
+pub fn render_players(players: &HashMap<Wind, Player>, settings: &Settings) -> Vec<Component> {
+    // for each player:
+    // - hand
+    // - active tile ?
+    // - discards
+    // - open melds
+
     let tile_size = settings.video.tile_size;
     let window_size = settings.video.window_size;
 
@@ -66,7 +67,7 @@ pub fn render_players(
     ]
 }
 
-pub fn render_deck(deck: &Deck, settings: &Settings) -> Vec<Element<'static, Message>> {
+pub fn render_deck(deck: &Deck, settings: &Settings) -> Vec<Component> {
     let tile_size = settings.video.tile_size;
     let window_size = settings.video.window_size;
 
@@ -106,7 +107,7 @@ pub fn render_deck(deck: &Deck, settings: &Settings) -> Vec<Element<'static, Mes
     ]
 }
 
-pub fn render_buttons(settings: &Settings) -> Vec<Element<'static, Message>> {
+pub fn render_buttons(settings: &Settings) -> Vec<Component> {
     let tile_size = settings.video.tile_size;
     let window_size = settings.video.window_size;
     let center = (window_size.width / 2., window_size.height / 2.);

@@ -1,18 +1,11 @@
 pub mod consts;
 pub mod render_tile;
 pub mod tile_renderer;
-
-use iced::Element;
+pub use tile_renderer::TileRenderer;
 
 use crate::{
-    app::{
-        game::Game,
-        root::{AppRoot, Message},
-        settings::Settings,
-    },
-    screens::{
-        Screen, debug_counter::Counter, debug_tile::DebugTile, main_screen::render_main_screen,
-    },
+    app::{Component, game::Game, root::AppRoot, settings::Settings},
+    screens::{Counter, DebugTile, Screen, main_screen::render_main_screen},
 };
 
 pub struct Render {
@@ -32,7 +25,7 @@ impl Default for Render {
 }
 
 impl Render {
-    pub fn view(state: &AppRoot) -> Element<'static, Message> {
+    pub fn view(state: &AppRoot) -> Component {
         match state.render.screen {
             Screen::Main => render_main_screen(),
             Screen::Game => Game::view(&state.game, &state.settings),

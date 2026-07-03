@@ -1,16 +1,14 @@
 pub mod video;
+pub use video::{VideoSettings, VideoSettingsMessage};
 
 use derivative::Derivative;
 use iced::{
-    Element, Task,
+    Task,
     widget::{button, column},
 };
 
 use crate::{
-    app::{
-        root::Message,
-        settings::video::{VideoSettings, VideoSettingsMessage},
-    },
+    app::{Component, Message},
     screens::Screen,
 };
 
@@ -52,7 +50,7 @@ impl Settings {
         }
     }
 
-    pub fn view(&self) -> Element<'static, Message> {
+    pub fn view(&self) -> Component {
         column!(
             button("Back to Main Menu").on_press(Message::ChangeScreen(Screen::Main)),
             button("Toggle Fullscreen").on_press(Message::Settings(

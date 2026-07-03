@@ -1,4 +1,4 @@
-use mahjong_lib::{consts::Wind, tile::Meld};
+use mahjong_lib::{Meld, consts::Wind};
 
 use crate::app::{game::GameTile, render::consts::Direction};
 

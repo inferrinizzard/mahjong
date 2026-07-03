@@ -1,4 +1,4 @@
-use mahjong_lib::tile::TileData;
+use mahjong_lib::TileData;
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Eq, Ord)]

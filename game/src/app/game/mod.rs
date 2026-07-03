@@ -3,14 +3,13 @@ pub mod init_deck;
 pub mod player;
 pub mod render;
 pub mod tile;
+pub use deck::Deck;
+pub use player::Player;
 pub use tile::GameTile;
 
 use std::collections::HashMap;
 
-use iced::{
-    Element,
-    widget::{Stack, button, pin},
-};
+use iced::widget::{Stack, button, pin};
 use rand::Rng;
 use strum::IntoEnumIterator;
 
@@ -18,12 +17,8 @@ use mahjong_lib::consts::Wind;
 
 use crate::{
     app::{
-        Message,
-        game::{
-            deck::Deck,
-            player::Player,
-            render::{render_buttons, render_deck, render_players},
-        },
+        Component, Message,
+        game::render::{render_buttons, render_deck, render_players},
         render::consts::Direction,
         settings::Settings,
     },
@@ -90,13 +85,7 @@ impl Game {
         }
     }
 
-    pub fn view(&self, settings: &Settings) -> Element<'static, Message> {
-        // render hands 1,2,3,4
-        // render banks 1,2,3,4
-        // render discards 1,2,3,4
-        // render open_tiles 1,2,3,4
-        // render ui
-
+    pub fn view(&self, settings: &Settings) -> Component {
         let mut elements = vec![
             pin(button("Back to Main").on_press(Message::ChangeScreen(Screen::Main)))
                 .x(0)

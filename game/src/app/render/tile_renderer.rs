@@ -8,10 +8,9 @@ use mahjong_lib::{consts::Suit, tile::TileData};
 
 use crate::{
     app::{
-        Message,
+        Component, Message,
         game::{GameMessage, GameTile},
         render::consts::{Direction, TILE_ASPECT_RATIO, TILE_BACK_PATH, TILE_BACK_X_PATH},
-        root::Component,
     },
     util::get_path::get_path,
 };

@@ -1,6 +1,6 @@
 use rand::{rng, seq::SliceRandom};
 
-use mahjong_lib::tile::Tile;
+use mahjong_lib::Tile;
 
 use crate::app::{game::GameTile, settings::GameSettings};
 

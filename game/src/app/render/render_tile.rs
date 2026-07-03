@@ -1,7 +1,7 @@
-use iced::{Element, widget::Stack};
+use iced::widget::Stack;
 
 use crate::app::{
-    Message,
+    Component,
     game::GameTile,
     render::{
         consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
@@ -11,18 +11,14 @@ use crate::app::{
 
 use super::consts::TILE_FACE_RATIO;
 
-pub fn render_tile(tile: &GameTile, size: u32) -> Element<'static, Message> {
+pub fn render_tile(tile: &GameTile, size: u32) -> Component {
     TileRenderer::new()
         .with_size(size as f32)
         .with_tile(tile)
         .render()
 }
 
-pub fn render_hand(
-    tiles: &Vec<GameTile>,
-    size: u32,
-    direction: Direction,
-) -> Element<'static, Message> {
+pub fn render_hand(tiles: &Vec<GameTile>, size: u32, direction: Direction) -> Component {
     render_tileset(
         tiles
             .iter()
@@ -44,7 +40,7 @@ pub fn render_bank(
     bank_tile_displays: &Vec<Option<GameTile>>,
     size: u32,
     direction: Direction,
-) -> Element<'static, Message> {
+) -> Component {
     let tiles = bank_tile_displays
         .iter()
         .map(|tile| {
@@ -73,7 +69,7 @@ pub fn render_tileset(
     size: u32,
     direction: &Direction,
     num_rows: usize,
-) -> Element<'static, Message> {
+) -> Component {
     if matches!(direction, Direction::LEFT | Direction::UP) {
         tiles.reverse();
     }
@@ -82,7 +78,7 @@ pub fn render_tileset(
     let is_vertical = matches!(direction, Direction::LEFT | Direction::RIGHT);
     let total_length = get_total_tile_length((tiles.len() + num_rows - 1) / num_rows, size);
 
-    let mut stack_vec: Vec<Element<Message>> = vec![];
+    let mut stack_vec: Vec<Component> = vec![];
     for (i, renderer) in tiles.iter_mut().enumerate() {
         if matches!(renderer, None) {
             continue;
