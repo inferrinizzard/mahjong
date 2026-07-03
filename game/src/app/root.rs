@@ -13,6 +13,8 @@ use crate::{
     },
 };
 
+pub type Component = Element<'static, Message>;
+
 pub struct AppRoot {
     pub render: Render,
     pub settings: Settings,
