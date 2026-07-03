@@ -2,14 +2,14 @@ use std::path::Path;
 
 use iced::{
     Element,
-    widget::{Stack, container, pin, svg},
+    widget::{Stack, container, mouse_area, pin, svg},
 };
 use mahjong_lib::{consts::Suit, tile::TileData};
 
 use crate::{
     app::{
         Message,
-        game::GameTile,
+        game::{GameMessage, GameTile},
         render::consts::{
             Direction, TILE_ASPECT_RATIO, TILE_BACK_X_PATH, TILE_EDGE_RATIO, get_total_tile_length,
         },
@@ -107,7 +107,10 @@ pub fn render_hand(
     render_tileset(
         tiles
             .iter()
-            .map(|tile| get_path_for_tile(&tile.data, &direction))
+            .map(|tile| PathItem {
+                path: get_path_for_tile(&tile.data, &direction),
+                id: tile.id.clone(),
+            })
             .collect(),
         size,
         &direction,
@@ -123,24 +126,32 @@ pub fn render_bank(
     let paths = bank_tile_displays
         .iter()
         .map(|tile| {
+            let path_str;
             if matches!(tile, None) {
-                return "";
+                path_str = "";
+            } else if matches!(direction, Direction::DOWN | Direction::UP) {
+                path_str = TILE_BACK_PATH
+            } else {
+                path_str = TILE_BACK_X_PATH
             }
 
-            if matches!(direction, Direction::DOWN | Direction::UP) {
-                TILE_BACK_PATH
-            } else {
-                TILE_BACK_X_PATH
+            PathItem {
+                path: path_str.to_string(),
+                id: String::new(),
             }
         })
-        .map(str::to_string)
         .collect();
 
     render_tileset(paths, size, &direction, 2)
 }
 
+pub struct PathItem {
+    pub path: String,
+    pub id: String,
+}
+
 pub fn render_tileset(
-    _paths: Vec<String>,
+    _paths: Vec<PathItem>,
     size: u32,
     direction: &Direction,
     num_rows: usize,
@@ -155,7 +166,7 @@ pub fn render_tileset(
     let total_length = get_total_tile_length((paths.len() + num_rows - 1) / num_rows, size);
 
     let mut stack_vec: Vec<Element<Message>> = vec![];
-    for (i, path) in paths.iter().enumerate() {
+    for (i, PathItem { path, id }) in paths.iter().enumerate() {
         if path.is_empty() {
             continue;
         }
@@ -180,12 +191,16 @@ pub fn render_tileset(
             y = total_length - z - size as f32;
         }
 
-        stack_vec.push(
-            pin(render_tile_for_path(&get_path(path), size, direction))
-                .x(x)
-                .y(y)
-                .into(),
-        );
+        let mut tile_element = render_tile_for_path(&get_path(path), size, direction).into();
+
+        // add click handler if id is present (render hand)
+        if !id.is_empty() {
+            let message = Message::Game(GameMessage::TileClick(id.to_owned(), direction.clone()));
+            tile_element = mouse_area(tile_element).on_press(message).into()
+        }
+        tile_element = pin(tile_element).x(x).y(y).into();
+
+        stack_vec.push(tile_element);
     }
 
     let long_length = total_length + (num_rows - 1) as f32 * TILE_EDGE_RATIO * size as f32;

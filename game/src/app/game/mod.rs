@@ -41,6 +41,7 @@ pub struct Game {
 #[derive(Debug, Clone)]
 pub enum GameMessage {
     SortHand,
+    TileClick(String, Direction),
 }
 
 impl Default for Game {
@@ -82,6 +83,9 @@ impl Game {
         match message {
             GameMessage::SortHand => {
                 self.players.get_mut(&Wind::EAST).unwrap().hand.sort();
+            }
+            GameMessage::TileClick(id, direction) => {
+                println!("{}, {:?}", id, direction);
             }
         }
     }
