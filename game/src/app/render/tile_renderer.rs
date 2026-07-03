@@ -26,7 +26,7 @@ pub struct TileRenderer {
 
 // Render methods
 impl TileRenderer {
-    pub fn render(&mut self) -> Component {
+    pub fn render(mut self) -> Component {
         if self.path.is_empty() {
             self.path = get_path(
                 if matches!(self.direction, Direction::DOWN | Direction::UP) {
@@ -40,10 +40,7 @@ impl TileRenderer {
         let mut tile_component = self.render_tile_svg();
 
         if !self.id.is_empty() {
-            let message = Message::Game(GameMessage::TileClick(
-                self.id.clone(),
-                self.direction.clone(),
-            ));
+            let message = Message::Game(GameMessage::TileClick(self.id, self.direction));
             tile_component = mouse_area(tile_component).on_press(message).into()
         }
 
@@ -87,24 +84,32 @@ impl TileRenderer {
         }
     }
 
-    pub fn set_size(&mut self, size: f32) {
+    pub fn with_size(mut self, size: f32) -> Self {
         self.size = Size {
             width: size,
             height: size * TILE_ASPECT_RATIO,
-        }
+        };
+
+        self
     }
 
-    pub fn set_direction(&mut self, direction: &Direction) {
-        self.direction = direction.clone()
+    pub fn with_direction(mut self, direction: &Direction) -> Self {
+        self.direction = direction.clone();
+
+        self
     }
 
-    pub fn set_tile(&mut self, tile: &GameTile) {
+    pub fn with_tile(mut self, tile: &GameTile) -> Self {
         self.path = TileRenderer::get_path_for_tile(&tile.data, &self.direction);
         self.id = tile.id.clone();
+
+        self
     }
 
-    pub fn set_position(&mut self, x: f32, y: f32) {
-        self.position = (x, y)
+    pub fn with_position(mut self, x: f32, y: f32) -> Self {
+        self.position = (x, y);
+
+        self
     }
 }
 
