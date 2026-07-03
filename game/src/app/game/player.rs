@@ -14,7 +14,7 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(wind: Wind, position: Direction) -> Self {
+    pub fn new(position: Direction, wind: Wind) -> Self {
         Self {
             hand: vec![],
             open_melds: vec![],

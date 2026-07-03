@@ -1,4 +1,4 @@
-use strum_macros::{EnumIter, EnumString};
+use strum_macros::{EnumIter, EnumString, FromRepr};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Suit {
@@ -12,7 +12,7 @@ pub enum Suit {
     JOKER,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq, Hash, EnumString, EnumIter)]
+#[derive(Debug, Clone, Default, FromRepr)]
 pub enum Wind {
     #[default]
     EAST,

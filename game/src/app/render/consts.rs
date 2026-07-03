@@ -1,3 +1,5 @@
+use strum_macros::EnumIter;
+
 pub static TILE_BACK_PATH: &'static str = "assets/tiles/oblique/misc/back.svg";
 pub static TILE_BACK_X_PATH: &'static str = "assets/tiles/oblique/misc/back_x.svg";
 
@@ -9,7 +11,7 @@ pub fn get_total_tile_length(num_tiles: usize, size: u32) -> f32 {
     (TILE_FACE_RATIO * num_tiles as f32 + TILE_EDGE_RATIO) * size as f32
 }
 
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, Hash, EnumIter, PartialEq, Eq)]
 pub enum Direction {
     #[default]
     DOWN,

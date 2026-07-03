@@ -27,7 +27,7 @@ use crate::{
 
 pub struct Game {
     pub deck: Deck,
-    pub players: HashMap<Wind, Player>,
+    pub players: HashMap<Direction, Player>,
     pub wind: Wind,
     pub round: usize,
     pub active_seat: Wind,
@@ -64,11 +64,12 @@ impl Game {
         self.deck.init_index(dice_roll);
 
         // TODO: 2x2 dealing hands
-        for wind in Wind::iter() {
-            let mut player = Player::new(wind.clone(), Direction::DOWN);
+        for direction in Direction::iter() {
+            let wind = Wind::from_repr(direction.clone() as usize).unwrap();
+            let mut player = Player::new(direction.clone(), wind);
             player.add_tiles(self.deck.draw_tiles(settings.game.hand_size));
 
-            self.players.insert(wind, player);
+            self.players.insert(direction, player);
         }
 
         self.round += 1;
@@ -77,7 +78,7 @@ impl Game {
     pub fn update(&mut self, _settings: &Settings, message: GameMessage) {
         match message {
             GameMessage::SortHand => {
-                self.players.get_mut(&Wind::EAST).unwrap().hand.sort();
+                self.players.get_mut(&Direction::DOWN).unwrap().hand.sort();
             }
             GameMessage::TileClick(id, direction) => {
                 println!("{}, {:?}", id, direction);
