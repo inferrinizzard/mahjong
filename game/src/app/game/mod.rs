@@ -18,7 +18,7 @@ use mahjong_lib::consts::Wind;
 use crate::{
     app::{
         Component, Message,
-        game::render::{render_buttons, render_deck, render_players},
+        game::render::{render_buttons, render_deck},
         render::consts::Direction,
         settings::Settings,
     },
@@ -95,7 +95,11 @@ impl Game {
         ];
 
         elements.extend(render_deck(&self.deck, settings));
-        elements.extend(render_players(&self.players, settings));
+        elements.extend(
+            self.players
+                .iter()
+                .flat_map(|(_, player)| player.render(settings)),
+        );
         elements.extend(render_buttons(settings));
 
         Stack::from_vec(elements)

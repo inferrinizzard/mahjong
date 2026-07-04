@@ -18,14 +18,14 @@ pub fn render_tile(tile: &GameTile, size: u32) -> Component {
         .render()
 }
 
-pub fn render_hand(tiles: &Vec<GameTile>, size: u32, direction: Direction) -> Component {
+pub fn render_hand(tiles: &Vec<GameTile>, size: u32, direction: &Direction) -> Component {
     render_tileset(
         tiles
             .iter()
             .map(|tile| {
                 TileRenderer::new()
                     .with_size(size as f32)
-                    .with_direction(&direction)
+                    .with_direction(direction)
                     .with_tile(tile)
             })
             .map(Some)

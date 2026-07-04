@@ -12,7 +12,7 @@ use crate::{
         game::{GameMessage, GameTile},
         render::consts::{Direction, TILE_ASPECT_RATIO, TILE_BACK_PATH, TILE_BACK_X_PATH},
     },
-    util::get_path::get_path,
+    util::{PositionTuple, get_path::get_path},
 };
 
 pub struct TileRenderer {
@@ -20,7 +20,7 @@ pub struct TileRenderer {
     path: String,
     size: Size,
     direction: Direction,
-    position: (f32, f32),
+    position: PositionTuple,
 }
 
 // Render methods

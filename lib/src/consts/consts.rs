@@ -1,4 +1,4 @@
-use strum_macros::{EnumIter, EnumString, FromRepr};
+use strum_macros::FromRepr;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Suit {

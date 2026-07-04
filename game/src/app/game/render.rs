@@ -1,69 +1,17 @@
-use std::collections::HashMap;
-
 use iced::widget::{button, container, pin, text};
 
 use crate::{
     app::{
         Component, Message,
-        game::{GameMessage, deck::Deck, player::Player},
+        game::{GameMessage, deck::Deck},
         render::{
             consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
-            render_tile::{render_bank, render_hand},
+            render_tile::render_bank,
         },
         settings::Settings,
     },
     util::debug_outline::debug_outline,
 };
-
-pub fn render_players(players: &HashMap<Direction, Player>, settings: &Settings) -> Vec<Component> {
-    // for each player:
-    // - hand
-    // - active tile ?
-    // - discards
-    // - open melds
-
-    let tile_size = settings.video.tile_size;
-    let window_size = settings.video.window_size;
-
-    vec![
-        pin(render_hand(
-            &players[&Direction::DOWN].hand,
-            tile_size,
-            Direction::DOWN,
-        ))
-        .x(window_size.width / 2.
-            - get_total_tile_length(players[&Direction::DOWN].hand.len(), tile_size) / 2.)
-        .y(window_size.height - tile_size as f32 * TILE_ASPECT_RATIO)
-        .into(),
-        pin(render_hand(
-            &players[&Direction::RIGHT].hand,
-            tile_size,
-            Direction::RIGHT,
-        ))
-        .x(window_size.width - tile_size as f32 * TILE_ASPECT_RATIO)
-        .y(window_size.height / 2.
-            - get_total_tile_length(players[&Direction::RIGHT].hand.len(), tile_size) / 2.)
-        .into(),
-        pin(render_hand(
-            &players[&Direction::UP].hand,
-            tile_size,
-            Direction::UP,
-        ))
-        .x(window_size.width / 2.
-            - get_total_tile_length(players[&Direction::UP].hand.len(), tile_size) / 2.)
-        .y(0.)
-        .into(),
-        pin(render_hand(
-            &players[&Direction::LEFT].hand,
-            tile_size,
-            Direction::LEFT,
-        ))
-        .x(0.)
-        .y(window_size.height / 2.
-            - get_total_tile_length(players[&Direction::LEFT].hand.len(), tile_size) / 2.)
-        .into(),
-    ]
-}
 
 pub fn render_deck(deck: &Deck, settings: &Settings) -> Vec<Component> {
     let tile_size = settings.video.tile_size;
