@@ -1,4 +1,7 @@
-use strum_macros::FromRepr;
+use strum::EnumCount;
+use strum_macros::{EnumCount, FromRepr};
+
+use crate::traits::Next;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Suit {
@@ -12,7 +15,7 @@ pub enum Suit {
     JOKER,
 }
 
-#[derive(Debug, Clone, Default, FromRepr)]
+#[derive(Debug, Clone, Default, EnumCount, FromRepr)]
 pub enum Wind {
     #[default]
     EAST,
@@ -21,11 +24,23 @@ pub enum Wind {
     NORTH,
 }
 
-#[derive(Debug)]
+impl Next for Wind {
+    fn next(&self) -> Self {
+        Wind::from_repr((self.clone() as usize + 1) % Wind::COUNT).unwrap()
+    }
+}
+
+#[derive(Debug, Clone, EnumCount, FromRepr)]
 pub enum Dragon {
     WHITE,
     GREEN,
     RED,
+}
+
+impl Next for Dragon {
+    fn next(&self) -> Self {
+        Dragon::from_repr((self.clone() as usize + 1) % Dragon::COUNT).unwrap()
+    }
 }
 
 #[derive(Debug)]
