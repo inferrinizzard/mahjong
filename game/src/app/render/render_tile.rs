@@ -1,20 +1,30 @@
 use iced::widget::Stack;
 
-use crate::app::{
-    Component,
-    game::GameTile,
-    render::{
-        consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
-        tile_renderer::TileRenderer,
+use crate::{
+    app::{
+        Component,
+        game::GameTile,
+        render::{
+            consts::{Direction, TILE_ASPECT_RATIO, TILE_EDGE_RATIO, get_total_tile_length},
+            tile_renderer::TileRenderer,
+        },
     },
+    util::PositionTuple,
 };
 
 use super::consts::TILE_FACE_RATIO;
 
-pub fn render_tile(tile: &GameTile, size: u32) -> Component {
+pub fn render_tile(
+    tile: &GameTile,
+    size: u32,
+    direction: &Direction,
+    position: PositionTuple,
+) -> Component {
     TileRenderer::new()
         .with_size(size as f32)
+        .with_direction(direction)
         .with_tile(tile)
+        .with_position(position.0, position.1)
         .render()
 }
 
@@ -44,7 +54,7 @@ pub fn render_bank(
     let tiles = bank_tile_displays
         .iter()
         .map(|tile| {
-            if matches!(tile, None) {
+            if tile.is_none() {
                 return None;
             }
 

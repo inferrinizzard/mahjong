@@ -7,7 +7,7 @@ use crate::{
         game::GameTile,
         render::{
             consts::{Direction, TILE_ASPECT_RATIO, get_total_tile_length},
-            render_tile::render_hand,
+            render_tile::{render_hand, render_tile},
         },
         settings::Settings,
     },
@@ -49,46 +49,82 @@ impl Player {
         // - discards
         // - open melds
 
-        let (hand_x, hand_y) =
-            get_position_for_player_hand(settings, &self.position, self.hand.len());
+        let PlayerRenderPositionStruct { hand, active } =
+            get_player_positions(settings, &self.position, self.hand.len());
 
-        vec![
+        let mut components = vec![
             pin(render_hand(
                 &self.hand,
                 settings.video.tile_size,
                 &self.position,
             ))
-            .x(hand_x)
-            .y(hand_y)
+            .x(hand.0)
+            .y(hand.1)
             .into(),
-        ]
+        ];
+
+        if self.active_tile.is_some() {
+            components.push(render_tile(
+                self.active_tile.as_ref().unwrap(),
+                settings.video.tile_size,
+                &self.position,
+                (active.0, active.1),
+            ));
+        }
+
+        components
     }
 }
 
-fn get_position_for_player_hand(
+struct PlayerRenderPositionStruct {
+    hand: PositionTuple,
+    active: PositionTuple,
+    // open: PositionTuple,
+    // discard: PositionTuple,
+}
+
+fn get_player_positions(
     settings: &Settings,
     direction: &Direction,
     num_tiles: usize,
-) -> PositionTuple {
+) -> PlayerRenderPositionStruct {
     let tile_size = settings.video.tile_size;
     let window_size = settings.video.window_size;
+    let total_tile_length = get_total_tile_length(num_tiles, tile_size);
+
+    let hand;
+    let active;
 
     match direction {
-        Direction::DOWN => (
-            window_size.width / 2. - get_total_tile_length(num_tiles, tile_size) / 2.,
-            window_size.height - tile_size as f32 * TILE_ASPECT_RATIO,
-        ),
-        Direction::RIGHT => (
-            window_size.width - tile_size as f32 * TILE_ASPECT_RATIO,
-            window_size.height / 2. - get_total_tile_length(num_tiles, tile_size) / 2.,
-        ),
-        Direction::UP => (
-            window_size.width / 2. - get_total_tile_length(num_tiles, tile_size) / 2.,
-            0.,
-        ),
-        Direction::LEFT => (
-            0.,
-            window_size.height / 2. - get_total_tile_length(num_tiles, tile_size) / 2.,
-        ),
+        Direction::DOWN => {
+            let x = window_size.width / 2. - total_tile_length / 2.;
+            let y = window_size.height - tile_size as f32 * TILE_ASPECT_RATIO;
+
+            hand = (x, y);
+            active = (x + total_tile_length + (tile_size as f32) / 2., y);
+        }
+        Direction::RIGHT => {
+            let x = window_size.width - tile_size as f32 * TILE_ASPECT_RATIO;
+            let y = window_size.height / 2. - total_tile_length / 2.;
+
+            hand = (x, y);
+            active = (x, y - (tile_size as f32) * 1.5);
+        }
+        Direction::UP => {
+            let x = window_size.width / 2. - total_tile_length / 2.;
+            let y = 0.;
+
+            hand = (x, y);
+            active = (x - (tile_size as f32) * 1.5, y);
+        }
+        Direction::LEFT => {
+            let x = 0.;
+            let y = window_size.height / 2. - total_tile_length / 2.;
+
+            hand = (x, y);
+            active = (x, y + total_tile_length + (tile_size as f32) / 2.);
+        }
     }
+
+    PlayerRenderPositionStruct { hand, active }
 }

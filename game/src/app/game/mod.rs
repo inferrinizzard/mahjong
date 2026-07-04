@@ -30,7 +30,7 @@ pub struct Game {
     pub players: HashMap<Direction, Player>,
     pub wind: Wind,
     pub round: usize,
-    pub active_seat: Wind,
+    pub active_seat: Direction,
 }
 
 #[derive(Debug, Clone)]
@@ -44,7 +44,7 @@ impl Default for Game {
         Self {
             deck: Deck::default(),
             players: HashMap::default(),
-            active_seat: Wind::EAST,
+            active_seat: Direction::DOWN,
             wind: Wind::EAST,
             round: 0,
         }
@@ -54,6 +54,18 @@ impl Default for Game {
 impl Game {
     pub fn init(&mut self, settings: &Settings) {
         self.reset_round(settings);
+
+        self.draw_tile();
+    }
+
+    pub fn draw_tile(&mut self) {
+        let tile = self.deck.draw_tiles(1).pop().unwrap();
+
+        self.players
+            .get_mut(&self.active_seat)
+            .as_mut()
+            .unwrap()
+            .active_tile = Some(tile);
     }
 
     pub fn reset_round(&mut self, settings: &Settings) {
