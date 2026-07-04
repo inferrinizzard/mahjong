@@ -13,7 +13,7 @@ use iced::widget::{Stack, button, pin};
 use rand::Rng;
 use strum::IntoEnumIterator;
 
-use mahjong_lib::consts::Wind;
+use mahjong_lib::{consts::Wind, traits::Next};
 
 use crate::{
     app::{
@@ -61,11 +61,7 @@ impl Game {
     pub fn draw_tile(&mut self) {
         let tile = self.deck.draw_tiles(1).pop().unwrap();
 
-        self.players
-            .get_mut(&self.active_seat)
-            .as_mut()
-            .unwrap()
-            .active_tile = Some(tile);
+        self.players.get_mut(&self.active_seat).unwrap().active_tile = Some(tile);
     }
 
     pub fn reset_round(&mut self, settings: &Settings) {
@@ -90,10 +86,17 @@ impl Game {
     pub fn update(&mut self, _settings: &Settings, message: GameMessage) {
         match message {
             GameMessage::SortHand => {
-                self.players.get_mut(&Direction::DOWN).unwrap().hand.sort();
+                self.players.get_mut(&self.active_seat).unwrap().hand.sort();
             }
             GameMessage::TileClick(id, direction) => {
                 println!("{}, {:?}", id, direction);
+                if direction != self.active_seat {
+                    return;
+                }
+
+                self.players.get_mut(&direction).unwrap().play_tile(id);
+                self.active_seat = self.active_seat.next();
+                self.draw_tile();
             }
         }
     }

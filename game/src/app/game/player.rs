@@ -42,6 +42,24 @@ impl Player {
         self.hand.extend(tiles);
     }
 
+    pub fn play_tile(&mut self, id: String) {
+        // Play active tile
+        if let Some(active_tile) = &self.active_tile
+            && active_tile.id == id
+        {
+            self.discard.push(self.active_tile.take().unwrap());
+            self.active_tile = None;
+        }
+        // Play tile from hand
+        else {
+            if let Some(index) = self.hand.iter().position(|tile| tile.id == id) {
+                let target_hand_tile = self.hand.remove(index);
+                self.discard.push(target_hand_tile);
+                self.hand.push(self.active_tile.take().unwrap());
+            }
+        }
+    }
+
     pub fn render(&self, settings: &Settings) -> Vec<Component> {
         // for each player:
         // - hand
