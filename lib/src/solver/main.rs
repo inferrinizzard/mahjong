@@ -1,7 +1,6 @@
 use crate::{
-    maps::TileFrequency,
-    solver::shanten::{solve_shanten, Shanten},
-    structs::Hand,
+    solver::shanten::{Shanten, solve_shanten},
+    tile::TileCounts,
 };
 
 pub struct SolveResult {
@@ -10,8 +9,12 @@ pub struct SolveResult {
     // ukeire: Tile
 }
 
-pub fn solve(hand: &Hand, unavailable_tiles: Option<&TileFrequency>) -> SolveResult {
-    let shanten = solve_shanten(&hand.tile_frequency, hand.num_wilds);
+pub fn solve(
+    tiles: &TileCounts,
+    _unavailable_tiles: Option<&TileCounts>,
+    num_wilds: usize,
+) -> SolveResult {
+    let shanten = solve_shanten(tiles, num_wilds);
 
     SolveResult {
         shanten,

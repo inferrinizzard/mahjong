@@ -7,6 +7,11 @@ impl Serializer {
         let tile_codes = tiles.iter().map(|tile| tile.code).collect();
         merge_tile_codes(tile_codes)
     }
+
+    pub fn serialize_tiles_full(tiles: Vec<TileData>) -> TileString {
+        let tile_codes: Vec<&str> = tiles.iter().map(|tile| tile.code).collect();
+        TileString::from(tile_codes.join(""))
+    }
 }
 
 fn merge_tile_codes(tile_codes: Vec<&str>) -> TileString {
