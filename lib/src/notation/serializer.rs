@@ -7,19 +7,6 @@ impl Serializer {
         let tile_codes = tiles.iter().map(|tile| tile.code).collect();
         merge_tile_codes(tile_codes)
     }
-
-    // pub fn serialize_tile_frequency(tile_frequency: TileFrequency) -> TileString {
-    //     let mut tile_codes = vec![];
-
-    //     tile_frequency.map.iter().for_each(|(tile_name, count)| {
-    //         let tile_code = TILE_CODE_MAP[tile_name];
-    //         for _ in 0..*count {
-    //             tile_codes.push(tile_code);
-    //         }
-    //     });
-
-    //     merge_tile_code_list_str(tile_codes)
-    // }
 }
 
 fn merge_tile_codes(tile_codes: Vec<&str>) -> TileString {

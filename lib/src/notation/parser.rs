@@ -1,43 +1,31 @@
-use regex::Regex;
+use crate::{TileData, notation::regex::TILE_CODE_REGEX, tile::TILE_MAP};
 
 use super::tile_parse_error::TileParseError;
-use crate::consts::TileData;
-
-lazy_static! {
-    static ref TILE_REGEX: Regex = Regex::new(r"\d+\w").unwrap();
-}
 
 pub struct Parser {}
 
 impl Parser {
-    pub fn parse_string(s: &str) -> Result<Vec<TileData>, TileParseError> {
-        let tile_matches = TILE_REGEX
+    pub fn parse_str(s: &str) -> Result<Vec<TileData>, TileParseError> {
+        let tile_matches = TILE_CODE_REGEX
             .find_iter(s)
             .map(|m| m.as_str())
             .collect::<Vec<&str>>();
 
-        let tiles = tile_matches
+        let tiles: Vec<TileData> = tile_matches
             .iter()
-            .map(|s| parse_tiles_for_suit(s).unwrap())
-            .collect::<Vec<Vec<TileData>>>();
+            .flat_map(|s| split_tile_codes(s))
+            .map(|s| TILE_MAP[s.as_str()].clone())
+            .collect();
 
-        Ok(tiles.concat())
+        Ok(tiles)
     }
 }
 
-fn parse_tiles_for_suit(s: &str) -> Result<Vec<TileData>, TileParseError> {
-    let mut input_tile_string = String::from(s);
-    let suit_char = input_tile_string.pop().unwrap();
-    // let suit =
-    //  {
-    //     Some(c) => c,
-    //     None => return Err(TileParseError::new("Missing a suit")),
-    // };
-    let tile_numbers = input_tile_string;
-    let tile_number_strings = tile_numbers.chars().map(|c| format!("{}{}", c, suit_char));
-    let tiles = tile_number_strings
-        .map(|tile_string| TileData::try_from(tile_string).unwrap())
-        .collect::<Vec<TileData>>();
+fn split_tile_codes(s: &str) -> Vec<String> {
+    let (tile_numbers, suit) = s.split_at(s.len() - 1);
 
-    Ok(tiles)
+    tile_numbers
+        .chars()
+        .map(|c| format!("{}{}", c, suit))
+        .collect()
 }

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::consts::consts::Suit;
 pub use meld::Meld;
 pub use tile_data::TileData;
@@ -361,4 +363,9 @@ impl Tile {
         Self::WINTER_SEASON,
         Self::JOKER,
     ];
+}
+
+lazy_static! {
+    pub static ref TILE_MAP: HashMap<&'static str, &'static TileData> =
+        HashMap::from_iter(Tile::TILE_LIST.iter().map(|tile| (tile.code, tile)));
 }
