@@ -6,7 +6,7 @@ use iced::{
     },
 };
 
-use crate::app::root::Message;
+use crate::app::Message;
 
 #[derive(Default)]
 pub struct VideoSettings {

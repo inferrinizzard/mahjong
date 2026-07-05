@@ -8,7 +8,7 @@ use crate::app::Message;
 
 pub fn debug_outline(element: Element<'static, Message>) -> Element<'static, Message> {
     widget::container(element)
-        .style(|s| Style {
+        .style(|_s| Style {
             border: Border {
                 color: Color {
                     r: 1.,
