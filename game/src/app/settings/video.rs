@@ -1,22 +1,24 @@
 use iced::{
-    Task,
+    Size, Task,
     window::{
         self,
         Mode::{Fullscreen, Windowed},
     },
 };
 
-use crate::app::root::Message;
+use crate::app::Message;
 
 #[derive(Default)]
 pub struct VideoSettings {
     pub is_fullscreen: bool,
-    // pub window_size:
+    pub window_size: Size,
+    pub tile_size: u32,
 }
 
 #[derive(Debug, Clone)]
 pub enum VideoSettingsMessage {
     ToggleFullscreen,
+    WindowResize(Size),
 }
 
 impl VideoSettings {
@@ -25,7 +27,7 @@ impl VideoSettings {
             VideoSettingsMessage::ToggleFullscreen => {
                 self.is_fullscreen = !self.is_fullscreen;
                 let should_be_fullscreen = self.is_fullscreen;
-                window::latest().and_then(move |window_id| {
+                return window::latest().and_then(move |window_id| {
                     window::set_mode(
                         window_id,
                         if should_be_fullscreen {
@@ -34,8 +36,14 @@ impl VideoSettings {
                             Windowed
                         },
                     )
-                })
+                });
+            }
+            VideoSettingsMessage::WindowResize(size) => {
+                self.window_size = size;
+                self.tile_size = size.height as u32 / 20 / 4 * 4;
             }
         }
+
+        Task::none()
     }
 }

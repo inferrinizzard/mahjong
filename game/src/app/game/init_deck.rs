@@ -1,7 +1,11 @@
-use mahjong_lib::tile::{Tile, TileData};
+use rand::{rng, seq::SliceRandom};
 
-pub fn init_deck() -> Vec<TileData> {
-    let mut deck = vec![
+use mahjong_lib::Tile;
+
+use crate::app::{game::GameTile, settings::GameSettings};
+
+pub fn init_deck(game_settings: &GameSettings) -> Vec<GameTile> {
+    let raw_deck = vec![
         Tile::MAN_1,
         Tile::MAN_1,
         Tile::MAN_1,
@@ -130,33 +134,34 @@ pub fn init_deck() -> Vec<TileData> {
         Tile::WHITE_DRAGON,
         Tile::WHITE_DRAGON,
         Tile::WHITE_DRAGON,
-        Tile::GREEN_GRADON,
-        Tile::GREEN_GRADON,
-        Tile::GREEN_GRADON,
-        Tile::GREEN_GRADON,
+        Tile::GREEN_DRAGON,
+        Tile::GREEN_DRAGON,
+        Tile::GREEN_DRAGON,
+        Tile::GREEN_DRAGON,
+        Tile::RED_DRAGON,
+        Tile::RED_DRAGON,
+        Tile::RED_DRAGON,
+        Tile::RED_DRAGON,
     ];
+    let mut deck: Vec<GameTile> = raw_deck.into_iter().map(GameTile::from).collect();
 
-    // TODO: tile inclusion flags
-    let has_flowers = false;
-    let has_seasons = false;
-    let has_joker = false;
-
-    if has_flowers {
-        deck.push(Tile::PLUM_FLOWER);
-        deck.push(Tile::ORCHID_FLOWER);
-        deck.push(Tile::CHRYSANTHEMUM_FLOWER);
-        deck.push(Tile::BAMBOO_FLOWER);
+    if game_settings.has_flowers {
+        deck.push(GameTile::from(Tile::PLUM_FLOWER));
+        deck.push(GameTile::from(Tile::ORCHID_FLOWER));
+        deck.push(GameTile::from(Tile::CHRYSANTHEMUM_FLOWER));
+        deck.push(GameTile::from(Tile::BAMBOO_FLOWER));
     }
-    if has_seasons {
-        deck.push(Tile::SPRING_SEASON);
-        deck.push(Tile::SUMMER_SEASON);
-        deck.push(Tile::AUTUMN_SEASON);
-        deck.push(Tile::WINTER_SEASON);
+    if game_settings.has_seasons {
+        deck.push(GameTile::from(Tile::SPRING_SEASON));
+        deck.push(GameTile::from(Tile::SUMMER_SEASON));
+        deck.push(GameTile::from(Tile::AUTUMN_SEASON));
+        deck.push(GameTile::from(Tile::WINTER_SEASON));
     }
-    if has_joker {
-        deck.push(Tile::JOKER);
+    if game_settings.has_joker {
+        deck.push(GameTile::from(Tile::JOKER));
     }
 
-    // TODO: shuffle
+    let mut rng = rng();
+    deck.shuffle(&mut rng);
     deck
 }

@@ -1,15 +1,14 @@
 pub mod video;
+pub use video::{VideoSettings, VideoSettingsMessage};
 
+use derivative::Derivative;
 use iced::{
-    Element, Task,
+    Task,
     widget::{button, column},
 };
 
 use crate::{
-    app::{
-        root::Message,
-        settings::video::{VideoSettings, VideoSettingsMessage},
-    },
+    app::{Component, Message},
     screens::Screen,
 };
 
@@ -23,10 +22,17 @@ pub struct Settings {
 #[derive(Default)]
 pub struct AudioSettings {}
 
-#[derive(Default)]
+#[derive(Derivative)]
+#[derivative(Default)]
 pub struct GameSettings {
+    #[derivative(Default(value = "13"))]
+    pub hand_size: usize,
+
+    #[derivative(Default(value = "true"))]
     pub has_flowers: bool,
+    #[derivative(Default(value = "true"))]
     pub has_seasons: bool,
+    #[derivative(Default(value = "false"))]
     pub has_joker: bool,
 }
 
@@ -44,7 +50,7 @@ impl Settings {
         }
     }
 
-    pub fn view(&self) -> Element<'static, Message> {
+    pub fn view(&self) -> Component {
         column!(
             button("Back to Main Menu").on_press(Message::ChangeScreen(Screen::Main)),
             button("Toggle Fullscreen").on_press(Message::Settings(
