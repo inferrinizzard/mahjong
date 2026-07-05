@@ -1,57 +1,47 @@
-use strum::IntoEnumIterator;
-
-use crate::{
-    consts::{Suit, TileData},
-    maps::TileFrequency,
-    notation::{trait_tile_code::TILE_CODE_MAP, types::TileHandString, ToTileCode},
-};
+use crate::{TileData, notation::structs::TileString};
 
 pub struct Serializer {}
 
 impl Serializer {
-    pub fn serialize_tiles(tiles: Vec<TileData>) -> TileHandString {
-        let tile_codes = tiles.iter().map(|tile| tile.to_tile_code()).collect();
-        merge_tile_code_list(tile_codes)
+    pub fn serialize_tiles(tiles: Vec<TileData>) -> TileString {
+        let tile_codes = tiles.iter().map(|tile| tile.code).collect();
+        merge_tile_codes(tile_codes)
     }
 
-    pub fn serialize_tile_frequency(tile_frequency: TileFrequency) -> TileHandString {
-        let mut tile_codes = vec![];
+    // pub fn serialize_tile_frequency(tile_frequency: TileFrequency) -> TileString {
+    //     let mut tile_codes = vec![];
 
-        tile_frequency.map.iter().for_each(|(tile_name, count)| {
-            let tile_code = TILE_CODE_MAP[tile_name];
-            for _ in 0..*count {
-                tile_codes.push(tile_code);
-            }
-        });
+    //     tile_frequency.map.iter().for_each(|(tile_name, count)| {
+    //         let tile_code = TILE_CODE_MAP[tile_name];
+    //         for _ in 0..*count {
+    //             tile_codes.push(tile_code);
+    //         }
+    //     });
 
-        merge_tile_code_list_str(tile_codes)
-    }
+    //     merge_tile_code_list_str(tile_codes)
+    // }
 }
 
-fn merge_tile_code_list(tile_codes: Vec<String>) -> TileHandString {
-    merge_tile_code_list_str(tile_codes.iter().map(|tile| tile.as_str()).collect())
-}
-fn merge_tile_code_list_str(tile_codes: Vec<&str>) -> TileHandString {
+fn merge_tile_codes(tile_codes: Vec<&str>) -> TileString {
     let mut tile_string = String::new();
+    let mut active_suit = String::new();
 
-    Suit::iter().for_each(|suit| {
-        // DRAGON and SEASON share same code as WIND and FLOWER, skip double process
-        if suit == Suit::DRAGON || suit == Suit::SEASON {
-            return;
+    for tile_code in tile_codes {
+        let number = tile_code.chars().next().unwrap();
+        let suit = tile_code.chars().next().unwrap().to_string();
+
+        if active_suit.is_empty() {
+            active_suit = suit.clone();
         }
 
-        let suit_code = suit.to_tile_code();
-        let tiles_of_suit = tile_codes.iter().filter(|tile| tile.ends_with(&suit_code));
-        let mut sorted_tile_values = tiles_of_suit
-            .map(|tile| tile.chars().nth(0).unwrap())
-            .collect::<Vec<char>>();
-        sorted_tile_values.sort();
-        sorted_tile_values.iter().for_each(|c| tile_string.push(*c));
-
-        if sorted_tile_values.len() > 0 {
-            tile_string.push_str(suit_code.as_str());
+        if suit != active_suit {
+            tile_string.push_str(&suit);
+            active_suit = suit.clone();
         }
-    });
 
-    tile_string
+        tile_string.push(number);
+    }
+    tile_string.push_str(&active_suit);
+
+    TileString::from(tile_string)
 }
