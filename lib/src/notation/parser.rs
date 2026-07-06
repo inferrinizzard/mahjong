@@ -1,4 +1,8 @@
-use crate::{TileData, notation::regex::TILE_CODE_REGEX, tile::TILE_MAP};
+use crate::{
+    TileData,
+    notation::{regex::TILE_CODE_REGEX, structs::TileString},
+    tile::TILE_MAP,
+};
 
 use super::tile_parse_error::TileParseError;
 
@@ -18,6 +22,14 @@ impl Parser {
             .collect();
 
         Ok(tiles)
+    }
+
+    pub fn parse_string(s: String) -> Result<Vec<TileData>, TileParseError> {
+        Self::parse_str(s.as_str())
+    }
+
+    pub fn parse_tile_string(s: TileString) -> Result<Vec<TileData>, TileParseError> {
+        Self::parse_str(s.as_str())
     }
 }
 

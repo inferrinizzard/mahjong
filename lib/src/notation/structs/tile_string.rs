@@ -1,6 +1,7 @@
 use std::ops::{Deref, DerefMut};
 
 /// mpsz format input eg. 11m22p33s44zz5f
+#[derive(Debug, PartialEq)]
 pub struct TileString {
     pub value: String,
 }

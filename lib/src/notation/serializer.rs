@@ -20,14 +20,14 @@ fn merge_tile_codes(tile_codes: Vec<&str>) -> TileString {
 
     for tile_code in tile_codes {
         let number = tile_code.chars().next().unwrap();
-        let suit = tile_code.chars().next().unwrap().to_string();
+        let suit = tile_code.chars().last().unwrap().to_string();
 
         if active_suit.is_empty() {
             active_suit = suit.clone();
         }
 
         if suit != active_suit {
-            tile_string.push_str(&suit);
+            tile_string.push_str(&active_suit);
             active_suit = suit.clone();
         }
 

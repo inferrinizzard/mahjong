@@ -6,8 +6,8 @@ use crate::{
 };
 
 #[cfg(test)]
-#[path = "tile_counts.test.rs"]
-mod tests;
+#[path = "tile_counts__test.rs"]
+mod unit_test;
 
 type TileCountArray = [usize; 34];
 
