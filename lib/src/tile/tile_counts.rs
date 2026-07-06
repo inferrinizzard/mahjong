@@ -5,8 +5,13 @@ use crate::{
     tile::TILE_MAP,
 };
 
+#[cfg(test)]
+#[path = "tile_counts.test.rs"]
+mod tests;
+
 type TileCountArray = [usize; 34];
 
+#[derive(Debug, PartialEq)]
 pub struct TileCounts {
     value: TileCountArray,
 }
@@ -18,7 +23,11 @@ impl From<TileString> for TileCounts {
         TILE_CODE_REGEX
             .find_iter(&value)
             .map(|m| m.as_str())
-            .map(|tile_code| TILE_MAP[tile_code].index as usize)
+            .flat_map(|multi_tile_code| {
+                let (numbers, suit) = multi_tile_code.split_at(multi_tile_code.len() - 1);
+                numbers.chars().map(move |c| format!("{}{}", c, suit))
+            })
+            .map(|tile_code| TILE_MAP[tile_code.as_str()].index as usize)
             .for_each(|i| array[i] += 1);
 
         TileCounts { value: array }

@@ -5,6 +5,14 @@ pub struct TileString {
     pub value: String,
 }
 
+impl From<&str> for TileString {
+    fn from(value: &str) -> Self {
+        Self {
+            value: value.to_string(),
+        }
+    }
+}
+
 impl From<String> for TileString {
     fn from(value: String) -> Self {
         Self { value }
