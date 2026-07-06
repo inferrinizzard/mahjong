@@ -5,15 +5,9 @@ pub struct TileString {
     pub value: String,
 }
 
-impl TileString {
-    pub fn new(value: String) -> Self {
-        Self { value }
-    }
-}
-
 impl From<String> for TileString {
     fn from(value: String) -> Self {
-        TileString::new(value)
+        Self { value }
     }
 }
 
