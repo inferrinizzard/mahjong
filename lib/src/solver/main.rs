@@ -1,7 +1,6 @@
-use crate::{
-    solver::shanten::{Shanten, solve_shanten},
-    tile::TileCounts,
-};
+use crate::{solver::shanten::solve_shanten, tile::TileCounts};
+
+pub type Shanten = i8;
 
 pub struct SolveResult {
     shanten: Shanten,
@@ -9,12 +8,8 @@ pub struct SolveResult {
     // ukeire: Tile
 }
 
-pub fn solve(
-    tiles: &TileCounts,
-    _unavailable_tiles: Option<&TileCounts>,
-    num_wilds: usize,
-) -> SolveResult {
-    let shanten = solve_shanten(tiles, num_wilds);
+pub fn solve(tiles: &TileCounts, _unavailable_tiles: Option<&TileCounts>) -> SolveResult {
+    let shanten = solve_shanten(tiles);
 
     SolveResult {
         shanten,
