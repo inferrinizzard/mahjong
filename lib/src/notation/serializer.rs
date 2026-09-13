@@ -3,11 +3,13 @@ use crate::{TileData, notation::structs::TileString};
 pub struct Serializer {}
 
 impl Serializer {
+    /// Serializes to merged mpsz TileString format
     pub fn serialize_tiles(tiles: Vec<TileData>) -> TileString {
         let tile_codes = tiles.iter().map(|tile| tile.code).collect();
         merge_tile_codes(tile_codes)
     }
 
+    /// Serializes to unmerged mpsz TileString format
     pub fn serialize_tiles_full(tiles: Vec<TileData>) -> TileString {
         let tile_codes: Vec<&str> = tiles.iter().map(|tile| tile.code).collect();
         TileString::from(tile_codes.join(""))

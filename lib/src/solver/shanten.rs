@@ -47,7 +47,6 @@ fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
 
 fn solve_seven_pairs_shanten(tile_counts: &TileCounts) -> Shanten {
     let max_seven_pairs_shanten = 6;
-    let mut shanten = max_seven_pairs_shanten;
 
     let num_pairs: usize = tile_counts
         .iter()
@@ -55,13 +54,12 @@ fn solve_seven_pairs_shanten(tile_counts: &TileCounts) -> Shanten {
         .map(|entry| entry / 2)
         .sum();
 
-    shanten = cmp::min(shanten, max_seven_pairs_shanten - num_pairs);
+    let shanten = max_seven_pairs_shanten - num_pairs;
     shanten as i8
 }
 
 fn solve_thirteen_orphans_shanten(tile_counts: &TileCounts) -> Shanten {
     let max_thirteen_orphans_shanten = 13;
-    let mut shanten = max_thirteen_orphans_shanten;
 
     let mut num_different_terminals = 0;
     let mut num_terminal_pairs = 0;
@@ -75,8 +73,8 @@ fn solve_thirteen_orphans_shanten(tile_counts: &TileCounts) -> Shanten {
         }
     });
 
-    shanten = cmp::min(
-        shanten,
+    let shanten = cmp::min(
+        max_thirteen_orphans_shanten,
         13 - num_different_terminals - cmp::min(num_terminal_pairs, 1),
     );
     shanten
