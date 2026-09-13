@@ -1,3 +1,5 @@
-pub mod seven_pairs;
-pub mod standard;
-pub mod thirteen_orphans;
+mod branch;
+mod seven_pairs;
+mod standard;
+mod suit_analyzer;
+mod thirteen_orphans;

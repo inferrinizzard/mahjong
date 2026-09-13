@@ -21,3 +21,7 @@ lazy_static! {
 pub const MAX_THIRTEEN_ORPHANS_SHANTEN: i8 = 13;
 pub const MAX_SEVEN_PAIRS_SHANTEN: i8 = 6;
 pub const MAX_STANDARD_SHANTEN: i8 = 8;
+
+pub const STRAIGHT_KERNEL: [usize; 3] = [1, 1, 1];
+pub const ADJ_TAATSU_KERNEL: [usize; 3] = [1, 1, 0];
+pub const SKIP_TAATSU_KERNEL: [usize; 3] = [1, 0, 1];

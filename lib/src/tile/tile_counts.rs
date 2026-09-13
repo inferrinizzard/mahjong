@@ -10,7 +10,6 @@ use crate::{
 mod unit_test;
 
 type TileCountArray = [usize; 34];
-type SuitTileCountArray = [usize; 9];
 
 #[derive(Debug, PartialEq)]
 pub struct TileCounts {
