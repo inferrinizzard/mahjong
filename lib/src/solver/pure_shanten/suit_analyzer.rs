@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::solver::{
     constants::{ADJ_TAATSU_KERNEL, SKIP_TAATSU_KERNEL, STRAIGHT_KERNEL},
-    pure_shanten::branch::Branch,
+    pure_shanten::branch::{self, Branch},
 };
 
 pub type SuitTileCounts = [usize; 9];
@@ -28,6 +28,23 @@ impl SuitAnalyzer {
         let mut suit_analyzer = SuitAnalyzer::new(hand);
         suit_analyzer.run();
         suit_analyzer.leaves
+    }
+
+    pub fn find_static_groupings(hand: &[usize]) -> Branch {
+        let mut sized_hand = [0; 9];
+        sized_hand.copy_from_slice(hand);
+        let mut branch = Branch::new(sized_hand);
+        for tile in hand {
+            match tile {
+                4 => (),
+                3 => branch.add_triple_at_index(),
+                2 => branch.add_pair_at_index(),
+                1 => branch.add_single_at_index(),
+                _ => (),
+            }
+        }
+
+        branch
     }
 
     pub fn new(hand: &SuitTileCounts) -> Self {

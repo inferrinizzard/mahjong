@@ -1,3 +1,5 @@
+use std::cmp::{self, max};
+
 use crate::solver::pure_shanten::suit_analyzer::{BranchAction, SuitTileCounts};
 
 ///
@@ -95,6 +97,29 @@ impl Branch {
         let tile = self.index;
         self.remove_tiles(&[tile]);
         self.singles.push(tile);
+    }
+
+    pub fn merge(&mut self, branch: &mut Branch) -> Branch {
+        self.melds.append(&mut branch.melds);
+        self.pairs.append(&mut branch.pairs);
+        self.taatsu.append(&mut branch.taatsu);
+        self.singles.append(&mut branch.singles);
+
+        self.clone()
+    }
+
+    pub fn calculate_shanten(&self) -> usize {
+        // 8 - (2 * groups) - min(pairs + taatsu, 4 - groups) - min(1, max(0, pairs + taatsu + groups - 4))
+        let num_melds = self.melds.len();
+        let num_pairs = self.pairs.len();
+        let num_taatsu = self.taatsu.len();
+
+        let shanten = 8
+            - (2 * num_melds)
+            - cmp::min(num_pairs, num_taatsu)
+            - cmp::min(1, max(0, num_pairs + num_taatsu + num_melds + 4));
+
+        shanten
     }
 }
 
