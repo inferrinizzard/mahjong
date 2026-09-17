@@ -1,4 +1,4 @@
-use std::cmp::{self, max};
+use std::cmp;
 
 use crate::solver::pure_shanten::suit_analyzer::{BranchAction, SuitTileCounts};
 
@@ -6,21 +6,17 @@ use crate::solver::pure_shanten::suit_analyzer::{BranchAction, SuitTileCounts};
 #[derive(Debug, Clone)]
 pub struct Branch {
     hand: SuitTileCounts,
-    index: usize,
-    num_tiles: usize,
 
-    melds: Vec<[usize; 3]>,
-    pairs: Vec<[usize; 2]>,
-    taatsu: Vec<[usize; 2]>,
-    singles: Vec<usize>,
+    pub melds: Vec<[usize; 3]>,
+    pub pairs: Vec<[usize; 2]>,
+    pub taatsu: Vec<[usize; 2]>,
+    pub singles: Vec<usize>,
 }
 
 impl Branch {
     pub fn new(hand: SuitTileCounts) -> Branch {
         Branch {
             hand,
-            index: *hand.iter().find(|x| **x > 0).unwrap(),
-            num_tiles: hand.iter().sum(),
 
             melds: vec![],
             pairs: vec![],
@@ -29,25 +25,34 @@ impl Branch {
         }
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.num_tiles == 0
+    fn get_index(&self) -> usize {
+        let next_index = self.hand.iter().position(|x| *x > 0);
+        match next_index {
+            Some(i) => i,
+            None => 0,
+        }
     }
 
-    pub fn head_value(&self) -> usize {
-        self.hand[self.index]
+    pub fn is_empty(&self) -> bool {
+        self.hand.iter().sum::<usize>() == 0
+    }
+
+    pub fn get_head_value(&self) -> usize {
+        self.hand[self.get_index()]
     }
 
     pub fn matches_kernel(&self, kernel: [usize; 3]) -> bool {
+        let start_index = self.get_index();
         kernel
             .iter()
             .enumerate()
-            .all(|(x, i)| self.hand[self.index + i] >= x)
+            .all(|(i, x)| self.hand[start_index + i] >= *x)
     }
 
     fn remove_tiles(&mut self, tiles: &[usize]) {
         for tile in tiles {
             if self.hand[*tile] == 0 {
-                panic!("Invalid tile")
+                panic!("Invalid tile");
             }
 
             self.hand[*tile] -= 1;
@@ -55,13 +60,14 @@ impl Branch {
     }
 
     pub fn add_triple_at_index(&mut self) {
-        let meld = [self.index; 3];
-        self.add_meld(meld);
+        let triple = [self.get_index(); 3];
+        self.add_meld(triple);
     }
 
     pub fn add_straight_at_index(&mut self) {
-        let meld = [self.index, self.index + 1, self.index + 2];
-        self.add_meld(meld);
+        let index = self.get_index();
+        let straight = [index, index + 1, index + 2];
+        self.add_meld(straight);
     }
 
     fn add_meld(&mut self, meld: [usize; 3]) {
@@ -70,7 +76,7 @@ impl Branch {
     }
 
     pub fn add_pair_at_index(&mut self) {
-        let pair = [self.index; 2];
+        let pair = [self.get_index(); 2];
         self.remove_tiles(&pair);
         self.pairs.push(pair);
     }
@@ -84,8 +90,8 @@ impl Branch {
         }
 
         let taatsu = match taatsu_type {
-            BranchAction::AdjTaatsu => [self.index, self.index + 1],
-            BranchAction::SkipTaatsu => [self.index, self.index + 2],
+            BranchAction::AdjTaatsu => [self.get_index(), self.get_index() + 1],
+            BranchAction::SkipTaatsu => [self.get_index(), self.get_index() + 2],
             _ => [0, 0],
         };
 
@@ -94,32 +100,23 @@ impl Branch {
     }
 
     pub fn add_single_at_index(&mut self) {
-        let tile = self.index;
+        let tile = self.get_index();
         self.remove_tiles(&[tile]);
         self.singles.push(tile);
     }
 
-    pub fn merge(&mut self, branch: &mut Branch) -> Branch {
-        self.melds.append(&mut branch.melds);
-        self.pairs.append(&mut branch.pairs);
-        self.taatsu.append(&mut branch.taatsu);
-        self.singles.append(&mut branch.singles);
-
-        self.clone()
-    }
-
-    pub fn calculate_shanten(&self) -> usize {
+    pub fn calculate_shanten(&self) -> i8 {
         // 8 - (2 * groups) - min(pairs + taatsu, 4 - groups) - min(1, max(0, pairs + taatsu + groups - 4))
-        let num_melds = self.melds.len();
-        let num_pairs = self.pairs.len();
-        let num_taatsu = self.taatsu.len();
+        let num_melds = self.melds.len() as i8;
+        let num_pairs = self.pairs.len() as i8;
+        let num_taatsu = self.taatsu.len() as i8;
 
         let shanten = 8
             - (2 * num_melds)
             - cmp::min(num_pairs, num_taatsu)
-            - cmp::min(1, max(0, num_pairs + num_taatsu + num_melds + 4));
+            - cmp::min(1, cmp::max(0, num_pairs + num_taatsu + num_melds - 4));
 
-        shanten
+        shanten as i8
     }
 }
 

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::solver::{
     constants::{ADJ_TAATSU_KERNEL, SKIP_TAATSU_KERNEL, STRAIGHT_KERNEL},
-    pure_shanten::branch::{self, Branch},
+    pure_shanten::branch::Branch,
 };
 
 pub type SuitTileCounts = [usize; 9];
@@ -17,6 +17,7 @@ pub enum BranchAction {
     Single,
 }
 
+#[derive(Debug)]
 pub struct SuitAnalyzer {
     // cache: HashMap<String, Branch>,
     queue: Vec<Branch>,
@@ -27,12 +28,13 @@ impl SuitAnalyzer {
     pub fn find_decompositions(hand: &SuitTileCounts) -> Vec<Branch> {
         let mut suit_analyzer = SuitAnalyzer::new(hand);
         suit_analyzer.run();
+        println!("{:?}, {:?}", hand, suit_analyzer);
         suit_analyzer.leaves
     }
 
     pub fn find_static_groupings(hand: &[usize]) -> Branch {
         let mut sized_hand = [0; 9];
-        sized_hand.copy_from_slice(hand);
+        sized_hand[..hand.len()].copy_from_slice(hand);
         let mut branch = Branch::new(sized_hand);
         for tile in hand {
             match tile {
@@ -68,13 +70,13 @@ impl SuitAnalyzer {
 
             // check if all tiles parsed
             if current_branch.is_empty() {
-                let key = current_branch.to_string();
+                // let key = current_branch.to_string();
                 // self.cache.insert(key, current_branch.clone());
                 self.leaves.push(current_branch.clone());
                 continue;
             }
 
-            let count = current_branch.head_value();
+            let count = current_branch.get_head_value();
 
             if count >= 4 {
                 // AAA, ABC
@@ -85,21 +87,21 @@ impl SuitAnalyzer {
                     );
                 }
                 // AAA, AB_
-                else if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
                     self.split_branch(
                         &current_branch,
                         vec![BranchAction::Triple, BranchAction::AdjTaatsu],
                     );
                 }
                 // AAA, A_C
-                else if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
                     self.split_branch(
                         &current_branch,
                         vec![BranchAction::Triple, BranchAction::SkipTaatsu],
                     );
                 }
                 // AAAA
-                else {
+                {
                     self.split_branch(&current_branch, vec![BranchAction::Quad]);
                 }
             } else if count >= 3 {
@@ -111,21 +113,21 @@ impl SuitAnalyzer {
                     );
                 }
                 // AA, AB_
-                else if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
                     self.split_branch(
                         &current_branch,
                         vec![BranchAction::Pair, BranchAction::AdjTaatsu],
                     );
                 }
                 // AA, A_C
-                else if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
                     self.split_branch(
                         &current_branch,
                         vec![BranchAction::Pair, BranchAction::SkipTaatsu],
                     );
                 }
                 // AAA
-                else {
+                {
                     self.split_branch(&current_branch, vec![BranchAction::Triple]);
                 }
             } else if count >= 2 {
@@ -137,21 +139,21 @@ impl SuitAnalyzer {
                     );
                 }
                 // A, AB_
-                else if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
                     self.split_branch(
                         &current_branch,
                         vec![BranchAction::Single, BranchAction::AdjTaatsu],
                     );
                 }
                 // A, A_C
-                else if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
                     self.split_branch(
                         &current_branch,
                         vec![BranchAction::Single, BranchAction::SkipTaatsu],
                     );
                 }
                 // AA
-                else {
+                {
                     self.split_branch(&current_branch, vec![BranchAction::Pair]);
                 }
             } else if count >= 1 {
@@ -160,15 +162,15 @@ impl SuitAnalyzer {
                     self.split_branch(&current_branch, vec![BranchAction::Straight]);
                 }
                 // AB_
-                else if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(ADJ_TAATSU_KERNEL) {
                     self.split_branch(&current_branch, vec![BranchAction::AdjTaatsu]);
                 }
                 // A_C
-                else if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
+                if current_branch.matches_kernel(SKIP_TAATSU_KERNEL) {
                     self.split_branch(&current_branch, vec![BranchAction::SkipTaatsu]);
                 }
                 // A
-                else {
+                {
                     self.split_branch(&current_branch, vec![BranchAction::Single]);
                 }
             }
