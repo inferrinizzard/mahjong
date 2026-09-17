@@ -11,10 +11,19 @@ pub fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
     //  8 - (2 * groups) - min(pairs + taatsu, 4 - groups) - min(1, max(0, pairs + taatsu + groups - 4))
 
     let man = &tile_counts[0..9].try_into().unwrap();
-    SuitAnalyzer::analyze(man);
+    let man_decompositions = SuitAnalyzer::find_decompositions(man);
     let tong = &tile_counts[18..27];
     let bamboo = &tile_counts[9..18];
     let honors = &tile_counts[27..];
+
+    // use lookup tables
+    // split by total tile count,
+    // 3-7 is most probable, 8-14, 15-17,
+
+    // prune, by score ?
+    // find all decompositions for each suit
+    // compile into hands and calculate shanten / heuristic + order
+    // calculate joker usage at hand level
 
     shanten
 }
