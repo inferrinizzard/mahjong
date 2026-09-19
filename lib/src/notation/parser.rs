@@ -1,25 +1,57 @@
-use crate::{TileData, notation::regex::TILE_CODE_REGEX, tile::TILE_MAP};
+use crate::{
+    TileData,
+    notation::regex::TILE_CODE_REGEX,
+    tile::{TILE_MAP, TileCounts},
+    types::TileCode,
+};
 
 use super::tile_parse_error::TileParseError;
 
 pub struct Parser {}
 
 impl Parser {
-    /// Parses input str, String, or TileString
-    /// Skips invalid input text and only returns matching tile codes
-    pub fn parse(input: impl AsRef<str>) -> Result<Vec<TileData>, TileParseError> {
+    fn parse_to_tile_codes(input: impl AsRef<str>) -> Result<Vec<TileCode>, TileParseError> {
         let tile_matches = TILE_CODE_REGEX
             .find_iter(input.as_ref())
             .map(|m| m.as_str())
             .collect::<Vec<&str>>();
 
-        let tiles: Vec<TileData> = tile_matches
+        let tile_codes = tile_matches
             .iter()
             .flat_map(|s| split_tile_codes(s))
-            .map(|s| TILE_MAP[s.as_str()].clone())
             .collect();
 
-        Ok(tiles)
+        Ok(tile_codes)
+    }
+
+    /// Parses input str, String, or TileString
+    /// Skips invalid input text and only returns matching tile codes
+    /// Returns Vec of full tile data for given input
+    pub fn parse(input: impl AsRef<str>) -> Result<Vec<TileData>, TileParseError> {
+        let result = Parser::parse_to_tile_codes(input);
+
+        if let Ok(tile_codes) = result {
+            let tiles: Vec<TileData> = tile_codes
+                .iter()
+                .map(|s| TILE_MAP[s.as_str()].clone())
+                .collect();
+
+            return Ok(tiles);
+        }
+
+        Err(result.unwrap_err())
+    }
+
+    /// Parses input str, String, or TileString
+    /// Skips invalid input text and only returns matching tile codes
+    /// Returns tile count array of 34 length
+    pub fn parse_to_counts(input: impl AsRef<str>) -> Result<TileCounts, TileParseError> {
+        let result = Parser::parse_to_tile_codes(input);
+
+        if let Ok(tile_codes) = result {
+            return Ok(TileCounts::from(tile_codes));
+        }
+        Err(result.unwrap_err())
     }
 }
 
