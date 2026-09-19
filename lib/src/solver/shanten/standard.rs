@@ -35,7 +35,7 @@ pub fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
 
                 let current_shanten = 8
                     - (2 * num_melds)
-                    - cmp::min(num_pairs, num_taatsu)
+                    - cmp::min(num_pairs + num_taatsu, 4 - num_melds)
                     - cmp::min(1, cmp::max(0, num_pairs + num_taatsu + num_melds - 4));
 
                 shanten = cmp::min(shanten, current_shanten)
