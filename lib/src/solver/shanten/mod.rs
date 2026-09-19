@@ -3,7 +3,7 @@ use std::cmp;
 use crate::{
     solver::{
         constants::{MAX_SEVEN_PAIRS_SHANTEN, MAX_THIRTEEN_ORPHANS_SHANTEN},
-        pure_shanten::{
+        shanten::{
             seven_pairs::solve_seven_pairs_shanten, standard::solve_standard_shanten,
             thirteen_orphans::solve_thirteen_orphans_shanten,
         },

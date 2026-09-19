@@ -246,14 +246,14 @@ impl Tile {
         value: 2,
         name: "GREEN_DRAGON",
         code: "6z",
-        index: 31,
+        index: 32,
     };
     pub const RED_DRAGON: TileData = TileData {
         suit: Suit::DRAGON,
         value: 3,
         name: "RED_DRAGON",
         code: "7z",
-        index: 32,
+        index: 33,
     };
 
     pub const PLUM_FLOWER: TileData = TileData {
@@ -370,6 +370,7 @@ impl Tile {
 }
 
 lazy_static! {
+    /// maps from TileCode str to TileData
     pub static ref TILE_MAP: HashMap<&'static str, &'static TileData> =
         HashMap::from_iter(Tile::TILE_LIST.iter().map(|tile| (tile.code, tile)));
 }

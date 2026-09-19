@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
-use crate::solver::{
-    constants::{ADJ_TAATSU_KERNEL, SKIP_TAATSU_KERNEL, STRAIGHT_KERNEL},
-    pure_shanten::branch::Branch,
-};
+use crate::solver::constants::{ADJ_TAATSU_KERNEL, SKIP_TAATSU_KERNEL, STRAIGHT_KERNEL};
+
+use super::branch::Branch;
 
 pub type SuitTileCounts = [usize; 9];
 
@@ -28,7 +27,7 @@ impl SuitAnalyzer {
     pub fn find_decompositions(hand: &SuitTileCounts) -> Vec<Branch> {
         let mut suit_analyzer = SuitAnalyzer::new(hand);
         suit_analyzer.run();
-        println!("{:?}, {:?}", hand, suit_analyzer);
+
         suit_analyzer.leaves
     }
 

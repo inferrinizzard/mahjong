@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-/// mpsz format input eg. 11m22p33s44zz5f
+/// mpsz format input ex. 11m22p33s44zz5f
 #[derive(Debug, PartialEq)]
 pub struct TileString {
     pub value: String,
@@ -30,5 +30,11 @@ impl Deref for TileString {
 impl DerefMut for TileString {
     fn deref_mut(&mut self) -> &mut String {
         &mut self.value
+    }
+}
+
+impl AsRef<str> for TileString {
+    fn as_ref(&self) -> &str {
+        &self.value.as_ref()
     }
 }

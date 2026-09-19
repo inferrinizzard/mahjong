@@ -1,8 +1,9 @@
 use std::ops::{Deref, DerefMut};
 
 use crate::{
-    notation::{regex::TILE_CODE_REGEX, structs::TileString},
+    notation::{Parser, structs::TileString},
     tile::TILE_MAP,
+    types::TileCode,
 };
 
 #[cfg(test)]
@@ -16,21 +17,27 @@ pub struct TileCounts {
     value: TileCountArray,
 }
 
-impl From<TileString> for TileCounts {
-    fn from(value: TileString) -> Self {
+impl From<Vec<TileCode>> for TileCounts {
+    fn from(value: Vec<TileCode>) -> Self {
         let mut array: TileCountArray = [0; 34];
 
-        TILE_CODE_REGEX
-            .find_iter(&value)
-            .map(|m| m.as_str())
-            .flat_map(|multi_tile_code| {
-                let (numbers, suit) = multi_tile_code.split_at(multi_tile_code.len() - 1);
-                numbers.chars().map(move |c| format!("{}{}", c, suit))
-            })
+        value
+            .iter()
             .map(|tile_code| TILE_MAP[tile_code.as_str()].index as usize)
             .for_each(|i| array[i] += 1);
 
         TileCounts { value: array }
+    }
+}
+
+// impl TryFrom<TileString> for TileCounts {}
+// TODO: throw if >4 count
+
+impl From<TileString> for TileCounts {
+    fn from(value: TileString) -> Self {
+        let tile_codes = Parser::parse_to_tile_codes(value).unwrap();
+
+        Self::from(tile_codes)
     }
 }
 
