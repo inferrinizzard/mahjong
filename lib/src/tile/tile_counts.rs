@@ -16,6 +16,9 @@ pub struct TileCounts {
     value: TileCountArray,
 }
 
+// impl TryFrom<TileString> for TileCounts {}
+// TODO: throw if >4 count
+
 impl From<TileString> for TileCounts {
     fn from(value: TileString) -> Self {
         let mut array: TileCountArray = [0; 34];

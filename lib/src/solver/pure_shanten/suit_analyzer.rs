@@ -28,7 +28,7 @@ impl SuitAnalyzer {
     pub fn find_decompositions(hand: &SuitTileCounts) -> Vec<Branch> {
         let mut suit_analyzer = SuitAnalyzer::new(hand);
         suit_analyzer.run();
-        println!("{:?}, {:?}", hand, suit_analyzer);
+
         suit_analyzer.leaves
     }
 

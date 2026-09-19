@@ -1,9 +1,10 @@
-pub mod parser;
+mod parser;
 pub mod regex;
-pub mod serializer;
+mod serializer;
 pub mod structs;
-pub mod tile_parse_error;
-pub mod types;
+mod tile_parse_error;
+mod types;
 
 pub use parser::Parser;
+pub use regex::TILE_CODE_REGEX;
 pub use serializer::Serializer;
