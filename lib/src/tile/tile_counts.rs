@@ -1,8 +1,8 @@
 use std::ops::{Deref, DerefMut};
 
 use crate::{
+    Tile,
     notation::{Parser, structs::TileString},
-    tile::TILE_MAP,
     types::TileCode,
 };
 
@@ -23,7 +23,8 @@ impl From<Vec<TileCode>> for TileCounts {
 
         value
             .iter()
-            .map(|tile_code| TILE_MAP[tile_code.as_str()].index as usize)
+            .map(Tile::get_tile_from_code)
+            .map(|tile| tile.index as usize)
             .for_each(|i| array[i] += 1);
 
         TileCounts { value: array }

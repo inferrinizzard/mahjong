@@ -1,7 +1,7 @@
 use crate::{
-    TileData,
+    Tile, TileData,
     notation::{parser_util::ParserUtil, regex::TILE_CODE_REGEX},
-    tile::{TILE_MAP, TileCounts},
+    tile::TileCounts,
     types::TileCode,
 };
 
@@ -29,10 +29,7 @@ impl Parser {
         let result = Parser::parse_to_tile_codes(input);
 
         if let Ok(tile_codes) = result {
-            let tiles: Vec<TileData> = tile_codes
-                .iter()
-                .map(|s| TILE_MAP[s.as_str()].clone())
-                .collect();
+            let tiles: Vec<TileData> = tile_codes.iter().map(Tile::get_tile_from_code).collect();
 
             return Ok(tiles);
         }

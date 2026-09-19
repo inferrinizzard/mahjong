@@ -1,3 +1,3 @@
-pub mod next;
+mod next;
 
 pub use next::Next;

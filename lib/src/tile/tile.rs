@@ -366,3 +366,10 @@ lazy_static! {
     pub static ref TILE_MAP: HashMap<&'static str, &'static TileData> =
         HashMap::from_iter(Tile::TILE_LIST.iter().map(|tile| (tile.code, tile)));
 }
+
+// Util
+impl Tile {
+    pub fn get_tile_from_code(tile_code: impl AsRef<str>) -> TileData {
+        TILE_MAP[tile_code.as_ref()].clone()
+    }
+}
