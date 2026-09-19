@@ -1,6 +1,6 @@
 use std::cmp;
 
-use crate::solver::pure_shanten::suit_analyzer::{BranchAction, SuitTileCounts};
+use crate::solver::shanten::suit_analyzer::{BranchAction, SuitTileCounts};
 
 ///
 #[derive(Debug, Clone)]
@@ -46,7 +46,7 @@ impl Branch {
         kernel
             .iter()
             .enumerate()
-            .all(|(i, x)| self.hand[start_index + i] >= *x)
+            .all(|(i, x)| self.hand.get(start_index + i).unwrap_or(&0) >= x)
     }
 
     fn remove_tiles(&mut self, tiles: &[usize]) {

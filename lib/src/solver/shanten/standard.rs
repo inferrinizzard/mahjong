@@ -1,11 +1,11 @@
 use std::cmp;
 
 use crate::{
-    solver::{
-        constants::MAX_STANDARD_SHANTEN, main::Shanten, pure_shanten::suit_analyzer::SuitAnalyzer,
-    },
+    solver::{constants::MAX_STANDARD_SHANTEN, main::Shanten},
     tile::TileCounts,
 };
+
+use super::suit_analyzer::SuitAnalyzer;
 
 pub fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
     let mut shanten = MAX_STANDARD_SHANTEN;

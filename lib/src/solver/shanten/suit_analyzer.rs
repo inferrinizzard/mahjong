@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
-use crate::solver::{
-    constants::{ADJ_TAATSU_KERNEL, SKIP_TAATSU_KERNEL, STRAIGHT_KERNEL},
-    pure_shanten::branch::Branch,
-};
+use crate::solver::constants::{ADJ_TAATSU_KERNEL, SKIP_TAATSU_KERNEL, STRAIGHT_KERNEL};
+
+use super::branch::Branch;
 
 pub type SuitTileCounts = [usize; 9];
 
