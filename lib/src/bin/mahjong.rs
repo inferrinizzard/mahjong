@@ -1,9 +1,5 @@
 use clap::Parser as ClapParser;
-use mahjong_lib::{
-    notation::{TILE_CODE_REGEX, structs::TileString},
-    solver::solve_shanten,
-    tile::TileCounts,
-};
+use mahjong_lib::{notation::Parser as MahjongParser, solver::solve_shanten};
 
 #[derive(ClapParser, Debug)]
 #[command(version, about)]
@@ -19,15 +15,15 @@ pub fn main() {
     let args = Args::parse();
     let hand = args.hand;
 
-    let is_valid_hand = TILE_CODE_REGEX.is_match(&hand);
+    let is_valid_hand = MahjongParser::is_valid(&hand);
     if !is_valid_hand {
         println!("Invalid hand: {}", hand);
         println!("Ensure it is in mpsz algebraic notation, ex: 123m456p789s55511z");
         return;
     }
 
-    let tile_string = TileString::from(hand);
-    let shanten = solve_shanten(&TileCounts::from(tile_string));
+    let tile_counts = MahjongParser::parse_to_counts(hand).unwrap();
+    let shanten = solve_shanten(&tile_counts);
 
     println!("Shanten: {}", shanten);
     if shanten == -1 {
