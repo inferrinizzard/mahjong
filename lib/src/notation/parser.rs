@@ -1,6 +1,6 @@
 use crate::{
     TileData,
-    notation::regex::TILE_CODE_REGEX,
+    notation::{parser_util::ParserUtil, regex::TILE_CODE_REGEX},
     tile::{TILE_MAP, TileCounts},
     types::TileCode,
 };
@@ -10,15 +10,13 @@ use super::tile_parse_error::TileParseError;
 pub struct Parser {}
 
 impl Parser {
-    fn parse_to_tile_codes(input: impl AsRef<str>) -> Result<Vec<TileCode>, TileParseError> {
+    pub fn parse_to_tile_codes(input: impl AsRef<str>) -> Result<Vec<TileCode>, TileParseError> {
         let tile_matches = TILE_CODE_REGEX
             .find_iter(input.as_ref())
-            .map(|m| m.as_str())
-            .collect::<Vec<&str>>();
+            .map(|m| m.as_str());
 
         let tile_codes = tile_matches
-            .iter()
-            .flat_map(|s| split_tile_codes(s))
+            .flat_map(|s| ParserUtil::split_tile_codes(s))
             .collect();
 
         Ok(tile_codes)
@@ -53,13 +51,9 @@ impl Parser {
         }
         Err(result.unwrap_err())
     }
-}
 
-fn split_tile_codes(s: &str) -> Vec<String> {
-    let (tile_numbers, suit) = s.split_at(s.len() - 1);
-
-    tile_numbers
-        .chars()
-        .map(|c| format!("{}{}", c, suit))
-        .collect()
+    /// Checks if input matchs mpsz format
+    pub fn is_valid(input: impl AsRef<str>) -> bool {
+        TILE_CODE_REGEX.is_match(input.as_ref())
+    }
 }

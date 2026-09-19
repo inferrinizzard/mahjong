@@ -1,7 +1,7 @@
 use std::ops::{Deref, DerefMut};
 
 use crate::{
-    notation::{regex::TILE_CODE_REGEX, structs::TileString},
+    notation::{Parser, structs::TileString},
     tile::TILE_MAP,
     types::TileCode,
 };
@@ -35,14 +35,7 @@ impl From<Vec<TileCode>> for TileCounts {
 
 impl From<TileString> for TileCounts {
     fn from(value: TileString) -> Self {
-        let tile_codes: Vec<TileCode> = TILE_CODE_REGEX
-            .find_iter(&value)
-            .map(|m| m.as_str())
-            .flat_map(|multi_tile_code| {
-                let (numbers, suit) = multi_tile_code.split_at(multi_tile_code.len() - 1);
-                numbers.chars().map(move |c| format!("{}{}", c, suit))
-            })
-            .collect();
+        let tile_codes = Parser::parse_to_tile_codes(value).unwrap();
 
         Self::from(tile_codes)
     }
