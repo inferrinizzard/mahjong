@@ -1,17 +1,15 @@
-use crate::{
-    TileData,
-    notation::{regex::TILE_CODE_REGEX, structs::TileString},
-    tile::TILE_MAP,
-};
+use crate::{TileData, notation::regex::TILE_CODE_REGEX, tile::TILE_MAP};
 
 use super::tile_parse_error::TileParseError;
 
 pub struct Parser {}
 
 impl Parser {
-    pub fn parse_str(s: &str) -> Result<Vec<TileData>, TileParseError> {
+    /// Parses input str, String, or TileString
+    /// Skips invalid input text and only returns matching tile codes
+    pub fn parse(input: impl AsRef<str>) -> Result<Vec<TileData>, TileParseError> {
         let tile_matches = TILE_CODE_REGEX
-            .find_iter(s)
+            .find_iter(input.as_ref())
             .map(|m| m.as_str())
             .collect::<Vec<&str>>();
 
@@ -22,14 +20,6 @@ impl Parser {
             .collect();
 
         Ok(tiles)
-    }
-
-    pub fn parse_string(s: String) -> Result<Vec<TileData>, TileParseError> {
-        Self::parse_str(s.as_str())
-    }
-
-    pub fn parse_tile_string(s: TileString) -> Result<Vec<TileData>, TileParseError> {
-        Self::parse_str(s.as_str())
     }
 }
 

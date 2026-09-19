@@ -32,3 +32,9 @@ impl DerefMut for TileString {
         &mut self.value
     }
 }
+
+impl AsRef<str> for TileString {
+    fn as_ref(&self) -> &str {
+        &self.value.as_ref()
+    }
+}

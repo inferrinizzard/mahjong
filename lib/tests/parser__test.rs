@@ -7,7 +7,7 @@ use mahjong_lib::{
 fn test_parse_hand() {
     let tile_string = TileString::from("123m");
 
-    let result = Parser::parse_tile_string(tile_string);
+    let result = Parser::parse(tile_string);
 
     assert!(result.is_ok());
 
@@ -20,7 +20,7 @@ fn test_parse_hand() {
 fn test_parse_segmented() {
     let tile_string = TileString::from("1m2m3m");
 
-    let result = Parser::parse_tile_string(tile_string);
+    let result = Parser::parse(tile_string);
 
     assert!(result.is_ok());
 
@@ -33,7 +33,7 @@ fn test_parse_segmented() {
 fn test_parse_repeated() {
     let tile_string = TileString::from("1m12m3s4p1m2333m5z1m");
 
-    let result = Parser::parse_tile_string(tile_string);
+    let result = Parser::parse(tile_string);
 
     assert!(result.is_ok());
 
@@ -55,5 +55,18 @@ fn test_parse_repeated() {
                 Tile::MAN_1,
             ]
         )
+    }
+}
+
+#[test]
+fn test_parse_disallowed_input() {
+    let tile_string = TileString::from("1x1y1z");
+
+    let result = Parser::parse(tile_string);
+
+    assert!(result.is_ok());
+
+    if let Ok(tiles) = result {
+        assert_eq!(tiles, vec![Tile::EAST_WIND])
     }
 }
