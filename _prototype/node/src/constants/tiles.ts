@@ -35,7 +35,7 @@ export const Season = Object.freeze({
 export type Flower = keyof typeof Flower;
 export const Flower = Object.freeze({
   PLUM: 'EAST',
-  LILY: 'SOUTH',
+  ORCHID: 'SOUTH',
   CHRYSANTHEMUM: 'WEST',
   BAMBOO: 'NORTH',
 } as const);
@@ -77,7 +77,7 @@ export const UnicodeTileLookup = Object.freeze({
   GREEN_DRAGON: '\u{0001F005}',
   RED_DRAGON: '\u{0001F004}',
   PLUM_FLOWER: '\u{0001F022}',
-  LILY_FLOWER: '\u{0001F023}',
+  ORCHID_FLOWER: '\u{0001F023}',
   CHRYSANTHEMUM_FLOWER: '\u{0001F024}',
   BAMBOO_FLOWER: '\u{0001F025}',
   SPRING_SEASON: '\u{0001F026}',
@@ -121,8 +121,8 @@ export const nextTileMap = Object.freeze({
   WHITE_DRAGON: 'GREEN_DRAGON',
   GREEN_DRAGON: 'RED_DRAGON',
   RED_DRAGON: 'WHITE_DRAGON',
-  PLUM_FLOWER: 'LILY_FLOWER',
-  LILY_FLOWER: 'CHRYSANTHEMUM_FLOWER',
+  PLUM_FLOWER: 'ORCHID_FLOWER',
+  ORCHID_FLOWER: 'CHRYSANTHEMUM_FLOWER',
   CHRYSANTHEMUM_FLOWER: 'BAMBOO_FLOWER',
   BAMBOO_FLOWER: 'PLUM_FLOWER',
   SPRING_SEASON: 'SUMMER_SEASON',
@@ -150,7 +150,7 @@ export const valueCodeMap = Object.freeze({
   GREEN_DRAGON: 6,
   RED_DRAGON: 7,
   PLUM_FLOWER: 1,
-  LILY_FLOWER: 2,
+  ORCHID_FLOWER: 2,
   CHRYSANTHEMUM_FLOWER: 3,
   BAMBOO_FLOWER: 4,
   SPRING_SEASON: 5,

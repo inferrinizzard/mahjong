@@ -34,7 +34,7 @@ class Season(Enum):
 
 class Flower(Enum):
     PLUM = 'EAST'
-    LILY = 'SOUTH'
+    ORCHID = 'SOUTH'
     CHRYSANTHEMUM = 'WEST'
     BAMBOO = 'NORTH'
 
@@ -75,7 +75,7 @@ UNICODE_LOOKUP = {
     'Wind.WEST_WIND': u'\U0001F002',
     'Wind.NORTH_WIND': u'\U0001F003',
     'Flower.PLUM_FLOWER': u'\U0001F022',
-    'Flower.LILY_FLOWER': u'\U0001F023',
+    'Flower.ORCHID_FLOWER': u'\U0001F023',
     'Flower.CHRYSANTHEMUM_FLOWER': u'\U0001F024',
     'Flower.BAMBOO_FLOWER': u'\U0001F025',
     'Season.SPRING_SEASON': u'\U0001F026',

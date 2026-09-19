@@ -1,0 +1,5 @@
+[workspace]
+name = "mahjong"
+version = "0.2.0"
+resolver = "3"
+members = ["game", "lib"]
