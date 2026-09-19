@@ -38,6 +38,10 @@ pub fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
                     - cmp::min(num_pairs + num_taatsu, 4 - num_melds)
                     - cmp::min(1, cmp::max(0, num_pairs + num_taatsu + num_melds - 4));
 
+                println!(
+                    "{} {} {} {}",
+                    num_melds, num_pairs, num_taatsu, current_shanten,
+                );
                 shanten = cmp::min(shanten, current_shanten)
             }
         }

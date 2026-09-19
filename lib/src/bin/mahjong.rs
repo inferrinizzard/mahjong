@@ -14,6 +14,8 @@ struct Args {
 }
 
 pub fn main() {
+    env_logger::init();
+
     let args = Args::parse();
     let hand = args.hand;
 
