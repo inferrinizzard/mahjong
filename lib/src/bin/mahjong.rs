@@ -1,5 +1,7 @@
 use clap::Parser as ClapParser;
-use mahjong_lib::{notation::Parser as MahjongParser, solver::solve_shanten};
+use mahjong_lib::{
+    notation::Parser as MahjongParser, solver::solve_shanten, tile::TILE_UNICODE_LIST,
+};
 
 #[derive(ClapParser, Debug)]
 #[command(version, about)]
@@ -23,6 +25,17 @@ pub fn main() {
     }
 
     let tile_counts = MahjongParser::parse_to_counts(hand).unwrap();
+
+    println!(
+        "Hand: {}",
+        tile_counts
+            .iter()
+            .enumerate()
+            .flat_map(|(i, count)| vec![TILE_UNICODE_LIST[i]; *count])
+            .collect::<Vec<&str>>()
+            .join("")
+    );
+
     let shanten = solve_shanten(&tile_counts);
 
     println!("Shanten: {}", shanten);
