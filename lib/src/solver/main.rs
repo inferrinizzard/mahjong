@@ -3,8 +3,8 @@ use crate::{solver::shanten::solve_shanten, tile::TileCounts};
 pub type Shanten = i8;
 
 pub struct SolveResult {
-    shanten: Shanten,
-    is_tenpai: bool,
+    pub shanten: Shanten,
+    pub is_tenpai: bool,
     // ukeire: Tile
 }
 

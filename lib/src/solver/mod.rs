@@ -1,7 +1,8 @@
-pub mod constants;
-pub mod main;
-pub mod shanten;
-pub mod ukeire;
-pub mod yaku;
+mod constants;
+mod main;
+mod shanten;
+mod ukeire;
+mod yaku;
 
+pub use main::solve;
 pub use shanten::solve_shanten;
