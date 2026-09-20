@@ -96,7 +96,7 @@ impl Branch {
         };
 
         self.remove_tiles(&taatsu);
-        self.pairs.push(taatsu);
+        self.taatsu.push(taatsu);
     }
 
     pub fn add_single_at_index(&mut self) {

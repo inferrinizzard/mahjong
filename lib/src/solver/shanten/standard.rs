@@ -22,6 +22,7 @@ pub fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
     for m in &man_decompositions {
         for t in &tong_decompositions {
             for b in &bamboo_decompositions {
+                // 8 derived from 2 x 4 groups required, use 10 for 17 (5 groups)
                 // 8 - (2 * groups) - min(pairs + taatsu, 4 - groups) - min(1, max(0, pairs + taatsu + groups - 4))
                 let num_melds = (m.melds.len()
                     + t.melds.len()
@@ -36,12 +37,17 @@ pub fn solve_standard_shanten(tile_counts: &TileCounts) -> Shanten {
                 let current_shanten = 8
                     - (2 * num_melds)
                     - cmp::min(num_pairs + num_taatsu, 4 - num_melds)
-                    - cmp::min(1, cmp::max(0, num_pairs + num_taatsu + num_melds - 4));
+                    - cmp::min(
+                        cmp::min(1, num_pairs),
+                        cmp::max(0, num_pairs + num_taatsu + num_melds - 4),
+                    );
 
-                println!(
-                    "{} {} {} {}",
-                    num_melds, num_pairs, num_taatsu, current_shanten,
+                log::debug!(
+                    "{}: {:?}",
+                    current_shanten,
+                    [num_melds, num_pairs, num_taatsu],
                 );
+
                 shanten = cmp::min(shanten, current_shanten)
             }
         }
